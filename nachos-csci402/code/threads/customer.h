@@ -12,6 +12,7 @@ class Customer {
 		char* getName();
 	private:
 		int socialSecurity;
+		int money; // either 100, 600, 1100, 1600
 		char* name; // for debugging and output purposes
 					// naming convention will be "Customer" + socialSecurity
 };

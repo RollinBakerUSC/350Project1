@@ -427,9 +427,18 @@ ApplicationClerk** appClerk; // the array of application clerks
 
 Lock* clerkLineLock; // the lock used for a customer to select a line
 
+struct CustomerData {
+	bool social;
+	bool photos;
+};
+
+CustomerData* customerData;
+
 // end of global and shared data for Part2
 
 Customer::Customer(int _socialSecurity, char* _name) : socialSecurity(_socialSecurity), name(_name) {
+	int random = rand() % 4;
+	money = 100 + random * 500;
 }
 
 char* Customer::getName() {
@@ -451,23 +460,41 @@ void Customer::Run() {
 		}
 	}
 	printf("%s has chosen line %d\n", name, myLine);
-	if(appClerk[myLine]->getState() == CLERK_BUSY) { // I have to wait in line
-		appClerk[myLine]->incrementLine();
-		printf("%s is waiting in line %d\n", name, myLine);
-		appClerk[myLine]->waitOnLineCV(); // sleep until the clerk wakes me up
-		appClerk[myLine]->decrementLine();
-	}
+	//wait in line
+	appClerk[myLine]->incrementLine(); // increase line size
+	printf("%s is waiting in line %d\n", name, myLine);
+	appClerk[myLine]->waitOnLineCV(); // sleep until the clerk wakes me up
+	appClerk[myLine]->decrementLine(); // i have been called up to clerk so line goes down
+	
 	// now I am with the clerk
 	printf("%s is with Clerk %d\n", name, myLine);
-	appClerk[myLine]->setState(CLERK_BUSY);
-	clerkLineLock->Release();
+	appClerk[myLine]->setState(CLERK_BUSY); // ensure that the clerk is busy
+	appClerk[myLine]->acquireLock(); // receive the lock so interaction with clerk is atomic
+	clerkLineLock->Release(); // allow other customers to get in line
+	// give my data to clerk
+	customerData[socialSecurity].social = true; // so the office knows i have given my social
+	printf("%s giving Clerk %d his social\n", name, myLine);
+	appClerk[myLine]->signalOnClerkCV(); // tell clerk I have given them my social
+	appClerk[myLine]->waitOnClerkCV(); // wait until clerk has "filed" my social
+	printf("%s is leaving Clerk %d\n", name, myLine);
+	appClerk[myLine]->setState(CLERK_FREE); // ensure that the clerk is now free
+	appClerk[myLine]->signalOnClerkCV(); // tell clerk I am leaving
+	appClerk[myLine]->releaseLock(); // end of the interaction with the clerk
 }
 
 Clerk::Clerk(int _id, char* _name) : id(_id), name(_name), state(CLERK_FREE) {
-	char* conditionName = new char[50];
-	strcat(conditionName, _name);
-	strcat(conditionName, " Line Condition");
-	clerkLineCV = new Condition(conditionName);
+	char* buff = new char[50];
+	strcat(buff, _name);
+	strcat(buff, " Line Condition");
+	clerkLineCV = new Condition(buff);
+	buff = new char[50];
+	strcat(buff, _name);
+	strcat(buff, " Lock");
+	clerkLock = new Lock(buff);
+	buff = new char[50];
+	strcat(buff, _name);
+	strcat(buff, " Condition");
+	clerkCV = new Condition(buff);
 }
 
 char* Clerk::getName() {
@@ -476,6 +503,10 @@ char* Clerk::getName() {
 
 int Clerk::getLineCount() {
 	return lineCount;
+}
+
+int Clerk::getBribeLineCount() {
+	return bribeLineCount;
 }
 
 ClerkState Clerk::getState() {
@@ -494,12 +525,44 @@ void Clerk::decrementLine() {
 	lineCount--;
 }
 
+void Clerk::incrementBribeLine() {
+	bribeLineCount++;
+}
+
+void Clerk::decrementBribeLine() {
+	bribeLineCount--;
+}
+
 void Clerk::waitOnLineCV() {
 	clerkLineCV->Wait(clerkLineLock);
 }
 
 void Clerk::signalOnLineCV() {
 	clerkLineCV->Signal(clerkLineLock);
+}
+
+void Clerk::waitOnBribeLineCV() {
+	clerkBribeLineCV->Wait(clerkLineLock);
+}
+
+void Clerk::signalOnBribeLineCV() {
+	clerkBribeLineCV->Signal(clerkLineLock);
+}
+
+void Clerk::waitOnClerkCV() {
+	clerkCV->Wait(clerkLock);
+}
+
+void Clerk::signalOnClerkCV() {
+	clerkCV->Signal(clerkLock);
+}
+
+void Clerk::acquireLock() {
+	clerkLock->Acquire();
+}
+
+void Clerk::releaseLock() {
+	clerkLock->Release();
 }
 
 ApplicationClerk::ApplicationClerk(int _id, char* _name) : Clerk(_id, _name) {
@@ -510,20 +573,33 @@ void ApplicationClerk::Run() {
 
 	while(true) {
 		clerkLineLock->Acquire();
-		if(getBribeLineCount() > 0){
-			signalOnBribeLineCV();
-			setState(CLERK_BUSY)
-		}
-		else if(getLineCount()>0) {
-			signalOnLineCV();
-			setState(CLERK_BUSY);
+		if(getLineCount()>0) { // if there is someone in line
+			signalOnLineCV(); // signal them to approach the clerk
+			setState(CLERK_BUSY); // make the clerk busy
 		} else {
-			setState(CLERK_FREE);
+			setState(CLERK_FREE); // if no one is in line clerk is free
 		}
-		clerkLineLock->Release();
-		currentThread->Yield();
-		if(getLineCount() == 0 && getState() == CLERK_FREE)
-			break;
+		if (getState() == CLERK_BUSY) { // if clerk is busy then we interact with customer
+			acquireLock(); // aqcuire the clerk lock so interaction is atomic
+			clerkLineLock->Release(); // allow other customers to find lines
+			waitOnClerkCV(); // wait for customer to give me social
+			// customer has now given social
+			printf("%s is filing customer social\n", getName());
+			for (int i = 0; i < 10; i++) { // make filing the social take some time
+				currentThread->Yield();
+			}
+			printf("%s has filed customer social\n", getName());
+			signalOnClerkCV(); // tell customer I have filed
+			waitOnClerkCV(); // wait on Customer to leave
+			// once customer has left the interaction is over
+			releaseLock();
+		} else { // there is no customer to interact with
+			clerkLineLock->Release(); // so allow customers to get in line
+			currentThread->Yield(); // yield the cpu
+		}
+		if (getLineCount() == 0 && getState() == CLERK_FREE) { // only here to end the thread
+			break; // will be replaced when manager is created
+		}
 	}
 }
 
@@ -541,6 +617,7 @@ void AppClerkStart(int index) {
 void Part2() {
 	numCustomers = 4;
 	numAppClerks = 2;
+	customerData = new CustomerData[numCustomers];
 	customer = new Customer*[numCustomers];
 	appClerk = new ApplicationClerk*[numAppClerks];
 	clerkLineLock = new Lock("Clerk Line Lock");
@@ -558,12 +635,12 @@ void Part2() {
 	}
 
 	Thread* t;
-	for(int i = 0; i < numCustomers; i++) {
+	for (int i = 0; i < numCustomers; i++) {
 		t = new Thread(customer[i]->getName());
-		t->Fork((VoidFunctionPtr) CustomerStart, i);
+		t->Fork((VoidFunctionPtr)CustomerStart, i);
 	}
-	for(int i = 0; i < numAppClerks; i++) {
+	for (int i = 0; i < numAppClerks; i++) {
 		t = new Thread(appClerk[i]->getName());
-		t->Fork((VoidFunctionPtr) AppClerkStart, i);
+		t->Fork((VoidFunctionPtr)AppClerkStart, i);
 	}
 }

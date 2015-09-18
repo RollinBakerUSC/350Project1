@@ -14,15 +14,24 @@ class Clerk {
 		Clerk(int _id, char* _name);
 		char* getName();
 		int getLineCount();
+		int getBribeLineCount();
 		ClerkState getState();
 
 		void setState(ClerkState _state);
 
 		void incrementLine();
 		void decrementLine();
+		void incrementBribeLine();
+		void decrementBribeLine();
 
 		void waitOnLineCV();
 		void signalOnLineCV();
+		void waitOnBribeLineCV();
+		void signalOnBribeLineCV();
+		void waitOnClerkCV();
+		void signalOnClerkCV();
+		void acquireLock();
+		void releaseLock();
 
 		virtual void Run() = 0;
 	private:
@@ -31,8 +40,12 @@ class Clerk {
 					// convention will be clerk type + id
 		ClerkState state;
 		int lineCount;
+		int bribeLineCount;
 
 		Condition* clerkLineCV;
+		Condition* clerkBribeLineCV;
+		Condition* clerkCV;
+		Lock* clerkLock;
 };
 
 #endif
