@@ -14,6 +14,7 @@
 #include "customer.h"
 #include "clerk.h"
 #include "applicationclerk.h"
+#include "pictureclerk.h"
 
 //----------------------------------------------------------------------
 // SimpleThread
