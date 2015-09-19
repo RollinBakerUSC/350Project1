@@ -616,8 +616,8 @@ void AppClerkStart(int index) {
 }
 
 void Part2() {
-	numCustomers = 4;
-	numAppClerks = 2;
+	numCustomers = 10;
+	numAppClerks = 3;
 	customerData = new CustomerData[numCustomers];
 	customer = new Customer*[numCustomers];
 	appClerk = new ApplicationClerk*[numAppClerks];
