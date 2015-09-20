@@ -15,7 +15,6 @@
 #include "clerk.h"
 #include "applicationclerk.h"
 #include "pictureclerk.h"
-#include "passportclerk.h"
 
 //----------------------------------------------------------------------
 // SimpleThread
@@ -25,6 +24,7 @@
 //	"which" is simply a number identifying the thread, for debugging
 //	purposes.
 //----------------------------------------------------------------------
+void system_test();
 
 void
 SimpleThread(int which)
@@ -422,6 +422,9 @@ void TestSuite() {
 int numCustomers; // the number of customers in the current simulation
 int numAppClerks; // the number of application clerks
 int numPicClerks; // the number of picture clerks
+int numPassClerks;
+int numCashiers;
+int numSenators;
 
 Customer** customer; // the array of customers - used in CustomerStart
 					 // initialized in Part2()
@@ -436,11 +439,6 @@ struct CustomerData {
 	bool arrived; // if the customer has shown up to the office
 	bool social;
 	bool picture;
-	CustomerData() {
-		arrived = false;
-		social = false;
-		picture = false;
-	}
 };
 
 CustomerData* customerData;
@@ -502,14 +500,6 @@ void Customer::goToAppClerk() {
 			hasBribed = true;
 		}
 	}
-	if (myLine == -1) { // in case every clerk was on break and had all customers in line
-		for (int i = 0; i < numAppClerks; i++) { // go through the clerks
-			if (appClerk[i]->getLineCount() < lineSize) { // pick the shortest line
-				myLine = i;
-				lineSize = appClerk[i]->getLineCount();
-			}
-		}
-	}
 	if (hasBribed) {
 		money -= 500;
 		//wait in line
@@ -522,7 +512,7 @@ void Customer::goToAppClerk() {
 	else {
 		//wait in line
 		appClerk[myLine]->incrementLine(); // increase line size
-		printf("%s is waiting in Application Clerk %d's line\n", name, myLine);
+		printf("%s is waiting in Application Clerk's %d line\n", name, myLine);
 		appClerk[myLine]->waitOnLineCV(); // sleep until the clerk wakes me up
 		appClerk[myLine]->decrementLine(); // i have been called up to clerk so line goes down
 	}
@@ -548,58 +538,35 @@ void Customer::goToPicClerk() {
 	clerkLineLock->Acquire();
 	int myLine = -1; // will be the index of the clerk whose line is chosen
 	int lineSize = numCustomers + 1; // the max customers that could be in any line
-	bool hasBribed = false;
 	for (int i = 0; i < numPicClerks; i++) {
 		if (picClerk[i]->getState() == CLERK_FREE && // go to a free clerk first
 			picClerk[i]->getLineCount() < lineSize) { // the shortest free clerk
 			myLine = i;
 			lineSize = picClerk[i]->getLineCount();
-			hasBribed = false;
 		}
 		else if (picClerk[i]->getState() == CLERK_BUSY && // or go to a busy clerk
 			picClerk[i]->getLineCount() + 1 < lineSize) { // that is really 1 longer
 			myLine = i;
 			lineSize = picClerk[i]->getLineCount() + 1;
-			hasBribed = false;
 		}
 		else if (picClerk[i]->getLineCount() + 2 < lineSize) { // get in a break line if its much shorter
 			myLine = i;
 			lineSize = picClerk[i]->getLineCount() + 2;
-			hasBribed = false;
-		}
-
-		// check to see if bribing is worth it
-		if (picClerk[i]->getState() != CLERK_BREAK && money >= 500 &&
-			picClerk[i]->getBribeLineCount() < lineSize) {
-			myLine = i;
-			lineSize = picClerk[i]->getBribeLineCount();
-			hasBribed = true;
 		}
 	}
-	if (myLine == -1) { // in case every clerk was on break and had all customers in line
-		for (int i = 0; i < numPicClerks; i++) { // go through the clerks
-			if (picClerk[i]->getLineCount() < lineSize) { // pick the shortest line
+	if (myLine == -1) { // in case every clerk was on break
+		for (int i = 0; i < numPicClerks; i++) {
+			if (picClerk[i]->getLineCount() < lineSize) { // select the shortest line
 				myLine = i;
 				lineSize = picClerk[i]->getLineCount();
 			}
 		}
 	}
-	if (hasBribed) { // wait in the bribe line
-		money -= 500;
-		//wait in line
-		picClerk[myLine]->incrementBribeLine(); // increase line size
-		printf("%s is bribing Picture Clerk %d\n", name, myLine);
-		printf("%s is waiting in Picture Clerk %d's Bribe line\n", name, myLine);
-		picClerk[myLine]->waitOnBribeLineCV(); // sleep until the clerk wakes me up
-		picClerk[myLine]->decrementBribeLine(); // i have been called up to clerk so line goes down
-	}
-	else {
-		//wait in line
-		picClerk[myLine]->incrementLine(); // increase line size
-		printf("%s is waiting in Picture Clerk %d's line\n", name, myLine);
-		picClerk[myLine]->waitOnLineCV(); // sleep until the clerk wakes me up
-		picClerk[myLine]->decrementLine(); // i have been called up to clerk so line goes down
-	}
+	//wait in line
+	picClerk[myLine]->incrementLine(); // increase line size
+	printf("%s is waiting in Picture Clerk %d's line\n", name, myLine);
+	picClerk[myLine]->waitOnLineCV(); // sleep until the clerk wakes me up
+	picClerk[myLine]->decrementLine(); // i have been called up to clerk so line goes down
     // now I am with the clerk
 	printf("%s is with Picture Clerk %d\n", name, myLine);
 	picClerk[myLine]->setState(CLERK_BUSY); // ensure that the clerk is busy
@@ -607,30 +574,16 @@ void Customer::goToPicClerk() {
 	clerkLineLock->Release(); // allow other customers to get in line
 							  // give my data to clerk
 	picClerk[myLine]->setToFile(socialSecurity);
-	bool picLiked = false;
-	while (!picLiked) {
-		printf("%s is getting ready with Picture Clerk %d for his picture\n", name, myLine);
-		picClerk[myLine]->signalOnClerkCV(); // tell clerk I am ready for my pic
-		picClerk[myLine]->waitOnClerkCV(); // wait until clerk has taken my picture
-		int random = rand() % 10;
-		if (random == 0) {
-			printf("%s did not like his picture from Picture Clerk %d\n", name, myLine);
-		}
-		else {
-			printf("%s liked his picture from Picture Clerk %d\n", name, myLine);
-			printf("%s is leaving Picture Clerk %d\n", name, myLine);
-			picClerk[myLine]->setPicLiked(true); // tell the clerk I liked the picture
-			picLiked = true;
-		}
-		picClerk[myLine]->signalOnClerkCV(); // tell clerk I am either leaving or want a new pic
-		picClerk[myLine]->waitOnClerkCV(); // wait for clerk to tell me theyll retake or i can go
-	}
+	printf("%s is getting ready with Picture Clerk %d for his picture\n", name, myLine);
+	picClerk[myLine]->signalOnClerkCV(); // tell clerk I am ready for my pic
+	picClerk[myLine]->waitOnClerkCV(); // wait until clerk has taken my picture
+	printf("%s is leaving Picture Clerk %d\n", name, myLine);
+	picClerk[myLine]->setState(CLERK_FREE); // ensure that the clerk is now free
+	picClerk[myLine]->signalOnClerkCV(); // tell clerk I am leaving
 	picClerk[myLine]->releaseLock(); // end of the interaction with the clerk
 }
 
 Clerk::Clerk(int _id, char* _name) : id(_id), name(_name), state(CLERK_FREE), toFile(-1) {
-	lineCount = 0;
-	bribeLineCount = 0;
 	char* buff = new char[50];
 	strcat(buff, _name);
 	strcat(buff, " Line Condition");
@@ -726,11 +679,6 @@ void Clerk::releaseLock() {
 }
 
 PictureClerk::PictureClerk(int _id, char* _name) : Clerk(_id, _name) {
-	picLiked = false;
-}
-
-void PictureClerk::setPicLiked(bool liked) { // used by the customer to tell clerk if they liked the pic
-	picLiked = liked;
 }
 
 void PictureClerk::Run() {
@@ -738,46 +686,21 @@ void PictureClerk::Run() {
 
 	while (true) {
 		clerkLineLock->Acquire();
-		if (getBribeLineCount() > 0) {
-			signalOnBribeLineCV(); // signal them to approach the clerk
-			setState(CLERK_BUSY); // make the clerk busy
-			acquireLock(); // aqcuire the clerk lock so interaction is atomic
-			clerkLineLock->Release(); // allow other customers to find lines
-			picLiked = false;
-			while (!picLiked) {
-				waitOnClerkCV(); // wait for customer to be ready to take picture
-				printf("%s is taking Customer %d's picture\n", getName(), getToFile());
-				for (int i = 0; i < 20; i++) { // make taking the picture take some time
-					currentThread->Yield();
-				}
-				printf("%s has taken Customer %d's picture\n", getName(), getToFile());
-				signalOnClerkCV(); // tell customer I have taken their picture
-				waitOnClerkCV(); // wait on Customer to either like or dislike
-				signalOnClerkCV();
-			}
-			customerData[getToFile()].picture = true;
-			releaseLock();
-			setState(CLERK_FREE);
-		} else if (getLineCount()>0) { // if there is someone in line
+		if (getLineCount()>0) { // if there is someone in line
 			signalOnLineCV(); // signal them to approach the clerk
 			setState(CLERK_BUSY); // make the clerk busy
 			acquireLock(); // aqcuire the clerk lock so interaction is atomic
 			clerkLineLock->Release(); // allow other customers to find lines
-			picLiked = false;
-			while (!picLiked) {
-				waitOnClerkCV(); // wait for customer to be ready to take picture
-				printf("%s is taking Customer %d's picture\n", getName(), getToFile());
-				for (int i = 0; i < 20; i++) { // make taking the picture take some time
-					currentThread->Yield();
-				}
-				printf("%s has taken Customer %d's picture\n", getName(), getToFile());
-				signalOnClerkCV(); // tell customer I have taken their picture
-				waitOnClerkCV(); // wait on Customer to either like or dislike
-				if(!picLiked)
-					printf("%s will retake Customer %d's picture\n", getName(), getToFile());
-				signalOnClerkCV(); // tell customer I will retake the pic
+			waitOnClerkCV(); // wait for customer to be ready to take picture
+			printf("%s is taking Customer %d's picture\n", getName(), getToFile());
+			for (int i = 0; i < 20; i++) { // make taking the picture take some time
+				currentThread->Yield();
 			}
 			customerData[getToFile()].picture = true;
+			printf("%s has taken Customer %d's picture\n", getName(), getToFile());
+			signalOnClerkCV(); // tell customer I have taken their picture
+			waitOnClerkCV(); // wait on Customer to leave
+							 // once customer has left the interaction is over
 			releaseLock();
 			setState(CLERK_FREE);
 		}
@@ -873,13 +796,13 @@ void ManagerCheckLines() {
 }
 
 bool ManagerCheckClose() { // returns true if it is okay to close the office
+	//check if every customer has arrived
+	bool allHereFlag = true;
 	//check if it is okay to close the office
 	bool doneFlag = true;
-	bool allHereFlag = true;
 	for (int i = 0; i < numCustomers; i++) {
 		if (!customerData[i].arrived) { // if any customer has not arrived
-			doneFlag = false; // set the flag to false
-			allHereFlag = false;
+			allHereFlag = false; // set the flag to false
 			break;
 		}
 		if (!customerData[i].social) { // if any social hasn't been filed it is not time to close
@@ -891,11 +814,14 @@ bool ManagerCheckClose() { // returns true if it is okay to close the office
 			break;
 		}
 	}
+	if (!allHereFlag) {
+		return false;
+	}
 	if (doneFlag) {
 		printf("Manager is closing the Passport Office\n");
 		return true;
 	}
-	else if(allHereFlag) { // if we aren't done but every customer is here lets check if we need to wake up clerks
+	else { // if we aren't done but every customer is here lets check if we need to wake up clerks
 		bool breakFlag = true;
 		for (int i = 0; i < numAppClerks; i++) { // check if all our clerks are on break
 			if (appClerk[i]->getState() != CLERK_BREAK) { 
@@ -959,10 +885,196 @@ void PicClerkStart(int index) {
 	picClerk[index]->Run();
 }
 
-void Part2() {
-	numCustomers = 10;
-	numAppClerks = 3;
-	numPicClerks = 2;
+	//Shows that a customer always gets in the shortest line
+	//and that no two customers get in the same shortest line
+void t1_shortest_line(){
+	
+}
+
+void t2_manager_money(){
+	
+}
+
+//Shows that every customer gets a passport
+//If the total passports at the end of the simulation is equal to the number of customers, then
+//the test passes
+void t3_total_passport(){
+	
+}
+
+//Shows that clerks go on break when there is no one in their line
+void t4_clerk_break(){
+	
+}
+
+//Shows that the manager wakes up workers whenever a line is too long
+void t5_manager_wakeup(){
+	
+}
+
+//Shows that total sales never suffer from a race condition
+//Money in == money out since every customer will spend all of their money
+void t6_total_sales(){
+	//Whenever a customer's money is determined, add this to a global variable
+	//At the end of the simulation, the total money from the customers should equal the total number that the manager has tallied up
+}
+
+//Shows that behavior is proper for senators
+//Once "Senator has arrived", there should only be info printed about customers finishing at a desk
+//or about the senator until the senator finished
+void t7_senators(){
+	
+}
+
+void Part2(){
+	//Test Menu
+	while(1){
+		printf("Tests\n");
+		for(int i = 0; i < 7; i++){
+			int num = i + 1;
+			printf("%d: Repeatable Test #%d\n", num, num);
+		}
+		printf("8: System Test\n");
+		printf("9: Quit\n");
+		printf("Choose a test (1-8): \n");
+		int choice = -1;
+		scanf("%d", &choice);
+		if(choice > 9 || choice < 1){
+			printf("Please choose a test between 1 and 9");
+			continue;
+		}
+		else if (choice == 9){
+			break;
+		}
+		else{
+			switch(choice){
+				case 1:
+				printf("Running Test #1\n");
+				t1_shortest_line();
+				break;
+				case 2:
+				printf("Running Test #2\n");
+				t2_manager_money();
+				break;
+				case 3:
+				printf("Running Test #3\n");
+				t3_total_passport();
+				break;
+				case 4:
+				printf("Running Test #4\n");
+				t4_clerk_break();
+				break;
+				case 5:
+				printf("Running Test #5\n");
+				t5_manager_wakeup();
+				break;
+				case 6:
+				printf("Running Test #6\n");
+				t6_total_sales();
+				break;
+				case 7:
+				printf("Running Test #7\n");
+				t7_senators();
+				break;
+				case 8:
+				printf("Running System Test\n");
+				system_test();
+				break;
+			}
+		}
+	}
+}
+void system_test() {
+	
+	//Loop to get number of customers
+	while(1){
+		numCustomers = -1;
+		printf("Please enter the number of customers: ");
+		scanf("%d", &numCustomers);
+		if(numCustomers > 50 || numCustomers < 1){
+			printf("Error: Must be between 1 and 50 customers. You entered %d \n", numCustomers);
+			continue;
+		}
+		else{
+			break;
+		}
+	}
+	
+	//Loop to get number of clerks
+	while(1){
+		numAppClerks = -1;
+		printf("Please enter the number of Application Clerks: ");
+		scanf("%d", &numAppClerks);
+		if(numAppClerks > 5 || numAppClerks < 1){
+			printf("Error: Must be between 1 and 5 clerks. You entered %d \n", numAppClerks);
+			continue;
+		}
+		else{
+			break;
+		}
+	}
+	
+	//Loop to get number of clerks
+	while(1){
+		numPicClerks = -1;
+		printf("Please enter the number of Picture Clerks: ");
+		scanf("%d", &numPicClerks);
+		if(numPicClerks > 5 || numPicClerks < 1){
+			printf("Error: Must be between 1 and 5 clerks. You entered %d \n", numPicClerks);
+			continue;
+		}
+		else{
+			break;
+		}
+	}
+	
+	//Loop to get number of clerks
+	while(1){
+		numPassClerks = -1;
+		printf("Please enter the number of Passport Clerks: ");
+		scanf("%d", &numPassClerks);
+		if(numPassClerks > 5 || numPassClerks < 1){
+			printf("Error: Must be between 1 and 5 clerks. You entered %d \n", numPassClerks);
+			continue;
+		}
+		else{
+			break;
+		}
+	}
+	
+		while(1){
+		numCashiers = -1;
+		printf("Please enter the number of Cashiers: ");
+		scanf("%d", &numCashiers);
+		if(numCashiers > 5 || numCashiers < 1){
+			printf("Error: Must be between 1 and 5 clerks. You entered %d \n", numCashiers);
+			continue;
+		}
+		else{
+			break;
+		}
+	}
+	
+	//Loop to get number of senators
+	while(1){
+		numSenators = -1;
+		printf("Please enter the number of Senators: ");
+		scanf("%d", &numSenators);
+		if(numSenators > 10 || numSenators < 0){
+			printf("Error: Must be between 1 and 5 senators. You entered %d \n", numSenators);
+			continue;
+		}
+		else{
+			break;
+		}
+	}
+	printf("Number of Customers = %d\n", numCustomers);
+	printf("Number of ApplicationClerks = %d\n", numAppClerks);
+	printf("Number of PictureClerks = %d\n", numPicClerks);
+	printf("Number of PassportClerks = %d\n", numPassClerks);
+	printf("Number of Cashiers = %d\n", numCashiers);
+	printf("Number of Senators = %d\n", numSenators);
+	
 	customerData = new CustomerData[numCustomers];
 	customer = new Customer*[numCustomers];
 	appClerk = new ApplicationClerk*[numAppClerks];
