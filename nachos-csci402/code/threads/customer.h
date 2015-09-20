@@ -18,6 +18,7 @@ class Customer {
 
 		void goToAppClerk();
 		void goToPicClerk();
+		void goToPassClerk();
 };
 
 #endif
