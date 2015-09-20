@@ -454,13 +454,25 @@ void Customer::Run() {
 	int myLine = -1; // will be the index of the clerk whose line is chosen
 	int lineSize = numCustomers+1; // the max customers that could be in any line
 	for(int i = 0; i < numAppClerks; i++) {
-		if(appClerk[i]->getLineCount() < lineSize && // if the line is shorter
-		appClerk[i]->getState() != CLERK_BREAK) { // and the clerk is not on break
+		if (appClerk[i]->getState() == CLERK_FREE && // go to a free clerk first
+		appClerk[i]->getLineCount() < lineSize) { // the shortest free clerk
 			myLine = i;
 			lineSize = appClerk[i]->getLineCount();
 		}
+		else if (appClerk[i]->getState() == CLERK_BUSY && // or go to a busy clerk
+		appClerk[i]->getLineCount() + 1 < lineSize) { // that is really 1 longer
+			myLine = i;
+			lineSize = appClerk[i]->getLineCount() + 1;
+		}
 	}
-	printf("%s has chosen line %d\n", name, myLine);
+	if (myLine == -1) { // in case every clerk was on break
+		for (int i = 0; i < numAppClerks; i++) {
+			if (appClerk[i]->getLineCount() < lineSize) { // select the shortest line
+				myLine = i;
+				lineSize = appClerk[i]->getLineCount();
+			}
+		}
+	}
 	//wait in line
 	appClerk[myLine]->incrementLine(); // increase line size
 	printf("%s is waiting in line %d\n", name, myLine);
@@ -473,7 +485,7 @@ void Customer::Run() {
 	appClerk[myLine]->acquireLock(); // receive the lock so interaction with clerk is atomic
 	clerkLineLock->Release(); // allow other customers to get in line
 	// give my data to clerk
-	customerData[socialSecurity].social = true; // so the office knows i have given my social
+	appClerk[myLine]->setToFile(socialSecurity);
 	printf("%s giving Clerk %d his social\n", name, myLine);
 	appClerk[myLine]->signalOnClerkCV(); // tell clerk I have given them my social
 	appClerk[myLine]->waitOnClerkCV(); // wait until clerk has "filed" my social
@@ -483,7 +495,7 @@ void Customer::Run() {
 	appClerk[myLine]->releaseLock(); // end of the interaction with the clerk
 }
 
-Clerk::Clerk(int _id, char* _name) : id(_id), name(_name), state(CLERK_FREE) {
+Clerk::Clerk(int _id, char* _name) : id(_id), name(_name), state(CLERK_FREE), toFile(-1) {
 	char* buff = new char[50];
 	strcat(buff, _name);
 	strcat(buff, " Line Condition");
@@ -494,7 +506,7 @@ Clerk::Clerk(int _id, char* _name) : id(_id), name(_name), state(CLERK_FREE) {
 	clerkLock = new Lock(buff);
 	buff = new char[50];
 	strcat(buff, _name);
-	strcat(buff, " Condition");
+	strcat(buff, " Clerk Condition");
 	clerkCV = new Condition(buff);
 }
 
@@ -516,6 +528,14 @@ ClerkState Clerk::getState() {
 
 void Clerk::setState(ClerkState _state) {
 	state = _state;
+}
+
+void Clerk::setToFile(int num) {
+	toFile = num;
+}
+
+int Clerk::getToFile() {
+	return toFile;
 }
 
 void Clerk::incrementLine() {
@@ -577,33 +597,93 @@ void ApplicationClerk::Run() {
 		if(getLineCount()>0) { // if there is someone in line
 			signalOnLineCV(); // signal them to approach the clerk
 			setState(CLERK_BUSY); // make the clerk busy
-		} else {
-			setState(CLERK_FREE); // if no one is in line clerk is free
-		}
-		if (getState() == CLERK_BUSY) { // if clerk is busy then we interact with customer
 			acquireLock(); // aqcuire the clerk lock so interaction is atomic
 			clerkLineLock->Release(); // allow other customers to find lines
 			waitOnClerkCV(); // wait for customer to give me social
 			// customer has now given social
-			printf("%s is filing customer social\n", getName());
-			for (int i = 0; i < 10; i++) { // make filing the social take some time
+			printf("%s is filing Customer %d's social\n", getName(), getToFile());
+			customerData[getToFile()].social = true; // so the office knows i have given my social
+			for (int i = 0; i < 50; i++) { // make filing the social take some time
 				currentThread->Yield();
 			}
-			printf("%s has filed customer social\n", getName());
+			printf("%s has filed Customer %d's social\n", getName(), getToFile());
 			signalOnClerkCV(); // tell customer I have filed
 			waitOnClerkCV(); // wait on Customer to leave
 			// once customer has left the interaction is over
 			releaseLock();
-		} else { // there is no customer to interact with
-			clerkLineLock->Release(); // so allow customers to get in line
-			currentThread->Yield(); // yield the cpu
-		}
-		if (getLineCount() == 0 && getState() == CLERK_FREE) { // only here to end the thread
-			break; // will be replaced when manager is created
+			setState(CLERK_FREE);
+		} else { // no one is in line
+			setState(CLERK_BREAK); // if no one is in line clerk goes on break
+			clerkLineLock->Release();
+			acquireLock(); // get the clerk lock so we can wait
+			printf("%s is going on break\n", getName());
+			waitOnClerkCV(); // go to sleep until the manager wakes us
+			printf("%s is off of break\n", getName());
+			// we are now woken up
+			setState(CLERK_FREE);
+			releaseLock();
 		}
 	}
 }
 
+void ManagerCheckLines() {
+	for (int i = 0; i < numAppClerks; i++) { // cycle through the Application Clerks
+		if (appClerk[i]->getState() == CLERK_BREAK && appClerk[i]->getLineCount() > 3) { // if the clerk is on break and we must wake it
+			appClerk[i]->acquireLock(); // get the lock
+			printf("Manager is waking Application Clerk %d from break\n", i);
+			appClerk[i]->signalOnClerkCV(); // wake the clerk
+			appClerk[i]->releaseLock(); // release the lock
+		}
+	}
+}
+
+bool ManagerCheckClose() { // returns true if it is okay to close the office
+	//check if it is okay to close the office
+	bool doneFlag = true;
+	for (int i = 0; i < numCustomers; i++) {
+		if (!customerData[i].social) { // if any social hasn't been filed it is not time to close
+			doneFlag = false;
+			break;
+		}
+	}
+	if (doneFlag) {
+		printf("Manager is closing the Passport Office\n");
+		return true;
+	}
+	else { // if we aren't done lets wake up the clerks if they're all on break
+		bool breakFlag = true;
+		for (int i = 0; i < numAppClerks; i++) { // check if all our clerks are on break
+			if (appClerk[i]->getState() != CLERK_BREAK) { // if one clerk isn't on break let them keep going without waking others
+				breakFlag = false;
+				break;
+			}
+		}
+		if (breakFlag) { // if every clerk is on break and we aren't done
+			for (int i = 0; i < numAppClerks; i++) { // go through the clerks
+				if (appClerk[i]->getLineCount() > 0) { // if they have someone in line but are on break
+					appClerk[i]->acquireLock(); // get the lock
+					printf("Manager is waking Application Clerk %d from break\n", i);
+					appClerk[i]->signalOnClerkCV(); // wake the clerk
+					appClerk[i]->releaseLock(); // release the lock
+				}
+			}
+		}
+	}
+	return false;
+}
+
+void Manager() {
+	while (true) {
+		for (int k = 0; k < 50; k++) {
+			ManagerCheckLines();
+			for (int i = 0; i < 50; i++) {
+				currentThread->Yield(); // to slow down the manager thread
+			}
+		}
+		if (ManagerCheckClose())
+			break;
+	}
+}
 
 // following funtions are used to with Thread->Fork() to begin the clerks and customers processes
 // e.g. the function used to kick off a customer thread
@@ -617,7 +697,7 @@ void AppClerkStart(int index) {
 
 void Part2() {
 	numCustomers = 10;
-	numAppClerks = 3;
+	numAppClerks = 2;
 	customerData = new CustomerData[numCustomers];
 	customer = new Customer*[numCustomers];
 	appClerk = new ApplicationClerk*[numAppClerks];
@@ -636,12 +716,17 @@ void Part2() {
 	}
 
 	Thread* t;
-	for (int i = 0; i < numCustomers; i++) {
-		t = new Thread(customer[i]->getName());
-		t->Fork((VoidFunctionPtr)CustomerStart, i);
-	}
+	t = new Thread("Manager");
+	t->Fork((VoidFunctionPtr)Manager, 0);
 	for (int i = 0; i < numAppClerks; i++) {
 		t = new Thread(appClerk[i]->getName());
 		t->Fork((VoidFunctionPtr)AppClerkStart, i);
+	}
+	for (int i = 0; i < numCustomers; i++) {
+		t = new Thread(customer[i]->getName());
+		t->Fork((VoidFunctionPtr)CustomerStart, i);
+		for (int j = 0; j < 50; j++) {
+			currentThread->Yield();
+		}
 	}
 }

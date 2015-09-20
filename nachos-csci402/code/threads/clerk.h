@@ -18,6 +18,8 @@ class Clerk {
 		ClerkState getState();
 
 		void setState(ClerkState _state);
+		void setToFile(int num);
+		int getToFile();
 
 		void incrementLine();
 		void decrementLine();
@@ -41,6 +43,7 @@ class Clerk {
 		ClerkState state;
 		int lineCount;
 		int bribeLineCount;
+		int toFile; // the id of the user who the clerk is interacting with
 
 		Condition* clerkLineCV;
 		Condition* clerkBribeLineCV;
