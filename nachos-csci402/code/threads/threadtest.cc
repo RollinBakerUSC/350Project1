@@ -25,6 +25,7 @@
 //	"which" is simply a number identifying the thread, for debugging
 //	purposes.
 //----------------------------------------------------------------------
+void system_test();
 
 void
 SimpleThread(int which)
@@ -419,9 +420,15 @@ void TestSuite() {
 #endif
 
 // global and shared data for Part2
+Lock* SystemLock; // so the menu won't pop up in the middle of system test
+Condition* SystemCondition;
+
 int numCustomers; // the number of customers in the current simulation
 int numAppClerks; // the number of application clerks
 int numPicClerks; // the number of picture clerks
+int numPassClerks; // the number of passport clerks
+int numCashiers; // the number of cashiers
+int numSenators; // the number of senators
 
 Customer** customer; // the array of customers - used in CustomerStart
 					 // initialized in Part2()
@@ -940,8 +947,12 @@ void Manager() {
 				currentThread->Yield(); // to slow down the manager thread
 			}
 		}
-		if (ManagerCheckClose())
+		if (ManagerCheckClose()) {
+			SystemLock->Acquire();
+			SystemCondition->Signal(SystemLock); // tell the system that the test is over
+			SystemLock->Release();
 			break;
+		}
 	}
 }
 
@@ -958,11 +969,200 @@ void AppClerkStart(int index) {
 void PicClerkStart(int index) {
 	picClerk[index]->Run();
 }
+	//Shows that a customer always gets in the shortest line
+	//and that no two customers get in the same shortest line
+void t1_shortest_line(){
+	
+}
 
-void Part2() {
-	numCustomers = 10;
-	numAppClerks = 3;
-	numPicClerks = 2;
+void t2_manager_money(){
+	
+}
+
+//Shows that every customer gets a passport
+//If the total passports at the end of the simulation is equal to the number of customers, then
+//the test passes
+void t3_total_passport(){
+	
+}
+
+//Shows that clerks go on break when there is no one in their line
+void t4_clerk_break(){
+	
+}
+
+//Shows that the manager wakes up workers whenever a line is too long
+void t5_manager_wakeup(){
+	
+}
+
+//Shows that total sales never suffer from a race condition
+//Money in == money out since every customer will spend all of their money
+void t6_total_sales(){
+	//Whenever a customer's money is determined, add this to a global variable
+	//At the end of the simulation, the total money from the customers should equal the total number that the manager has tallied up
+}
+
+//Shows that behavior is proper for senators
+//Once "Senator has arrived", there should only be info printed about customers finishing at a desk
+//or about the senator until the senator finished
+void t7_senators(){
+	
+}
+
+void Part2(){
+	//Test Menu
+	while(1){
+		printf("Tests\n");
+		for(int i = 0; i < 7; i++){
+			int num = i + 1;
+			printf("%d: Repeatable Test #%d\n", num, num);
+		}
+		printf("8: System Test\n");
+		printf("9: Quit\n");
+		printf("Choose a test (1-8): \n");
+		int choice = -1;
+		scanf("%d", &choice);
+		if(choice > 9 || choice < 1){
+			printf("Please choose a test between 1 and 9");
+			continue;
+		}
+		else if (choice == 9){
+			break;
+		}
+		else{
+			SystemLock = new Lock("System Lock");
+			SystemCondition = new Condition("System Condition");
+			SystemLock->Acquire();
+			switch(choice){
+				case 1:
+				printf("Running Test #1\n");
+				t1_shortest_line();
+				break;
+				case 2:
+				printf("Running Test #2\n");
+				t2_manager_money();
+				break;
+				case 3:
+				printf("Running Test #3\n");
+				t3_total_passport();
+				break;
+				case 4:
+				printf("Running Test #4\n");
+				t4_clerk_break();
+				break;
+				case 5:
+				printf("Running Test #5\n");
+				t5_manager_wakeup();
+				break;
+				case 6:
+				printf("Running Test #6\n");
+				t6_total_sales();
+				break;
+				case 7:
+				printf("Running Test #7\n");
+				t7_senators();
+				break;
+				case 8:
+				printf("Running System Test\n");
+				system_test();
+				break;
+			}
+			SystemCondition->Wait(SystemLock); // wait until whichever test you selected is done
+			SystemLock->Release();
+		}
+	}
+}
+void system_test() {
+	//Loop to get number of customers
+	while(1){
+		numCustomers = -1;
+		printf("Please enter the number of customers: ");
+		scanf("%d", &numCustomers);
+		if(numCustomers > 50 || numCustomers < 1){
+			printf("Error: Must be between 1 and 50 customers. You entered %d \n", numCustomers);
+			continue;
+		}
+		else{
+			break;
+		}
+	}
+	
+	//Loop to get number of clerks
+	while(1){
+		numAppClerks = -1;
+		printf("Please enter the number of Application Clerks: ");
+		scanf("%d", &numAppClerks);
+		if(numAppClerks > 5 || numAppClerks < 1){
+			printf("Error: Must be between 1 and 5 clerks. You entered %d \n", numAppClerks);
+			continue;
+		}
+		else{
+			break;
+		}
+	}
+	
+	//Loop to get number of clerks
+	while(1){
+		numPicClerks = -1;
+		printf("Please enter the number of Picture Clerks: ");
+		scanf("%d", &numPicClerks);
+		if(numPicClerks > 5 || numPicClerks < 1){
+			printf("Error: Must be between 1 and 5 clerks. You entered %d \n", numPicClerks);
+			continue;
+		}
+		else{
+			break;
+		}
+	}
+	
+	//Loop to get number of clerks
+	while(1){
+		numPassClerks = -1;
+		printf("Please enter the number of Passport Clerks: ");
+		scanf("%d", &numPassClerks);
+		if(numPassClerks > 5 || numPassClerks < 1){
+			printf("Error: Must be between 1 and 5 clerks. You entered %d \n", numPassClerks);
+			continue;
+		}
+		else{
+			break;
+		}
+	}
+	
+		while(1){
+		numCashiers = -1;
+		printf("Please enter the number of Cashiers: ");
+		scanf("%d", &numCashiers);
+		if(numCashiers > 5 || numCashiers < 1){
+			printf("Error: Must be between 1 and 5 clerks. You entered %d \n", numCashiers);
+			continue;
+		}
+		else{
+			break;
+		}
+	}
+	
+	//Loop to get number of senators
+	while(1){
+		numSenators = -1;
+		printf("Please enter the number of Senators: ");
+		scanf("%d", &numSenators);
+		if(numSenators > 10 || numSenators < 0){
+			printf("Error: Must be between 1 and 5 senators. You entered %d \n", numSenators);
+			continue;
+		}
+		else{
+			break;
+		}
+	}
+	printf("Number of Customers = %d\n", numCustomers);
+	printf("Number of ApplicationClerks = %d\n", numAppClerks);
+	printf("Number of PictureClerks = %d\n", numPicClerks);
+	printf("Number of PassportClerks = %d\n", numPassClerks);
+	printf("Number of Cashiers = %d\n", numCashiers);
+	printf("Number of Senators = %d\n", numSenators);
+	
 	customerData = new CustomerData[numCustomers];
 	customer = new Customer*[numCustomers];
 	appClerk = new ApplicationClerk*[numAppClerks];
