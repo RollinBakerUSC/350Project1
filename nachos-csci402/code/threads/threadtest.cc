@@ -420,17 +420,21 @@ void TestSuite() {
 // global and shared data for Part2
 int numCustomers; // the number of customers in the current simulation
 int numAppClerks; // the number of application clerks
+int numPicClerks; // the number of picture clerks
 
 Customer** customer; // the array of customers - used in CustomerStart
 					 // initialized in Part2()
 
 ApplicationClerk** appClerk; // the array of application clerks
 
+PictureClerk** picClerk; // the array of picture clerks
+
 Lock* clerkLineLock; // the lock used for a customer to select a line
 
 struct CustomerData {
+	bool arrived; // if the customer has shown up to the office
 	bool social;
-	bool photos;
+	bool picture;
 };
 
 CustomerData* customerData;
@@ -448,21 +452,36 @@ char* Customer::getName() {
 
 void Customer::Run() {
 	printf("In %s\n", name);
-	// first acquire the lock so we know the line won't change
-	// after we select it but before we get in line
+	customerData[socialSecurity].arrived = true;
+	int random = rand() % 2; // to decide if we go pic or app first
+	if (random) {
+		goToAppClerk();
+		goToPicClerk();
+	} else {
+		goToPicClerk();
+		goToAppClerk();
+	}
+}
+
+void Customer::goToAppClerk() {
+	// first we acquire the line lock
 	clerkLineLock->Acquire();
 	int myLine = -1; // will be the index of the clerk whose line is chosen
-	int lineSize = numCustomers+1; // the max customers that could be in any line
-	for(int i = 0; i < numAppClerks; i++) {
+	int lineSize = numCustomers + 1; // the max customers that could be in any line
+	for (int i = 0; i < numAppClerks; i++) {
 		if (appClerk[i]->getState() == CLERK_FREE && // go to a free clerk first
-		appClerk[i]->getLineCount() < lineSize) { // the shortest free clerk
+			appClerk[i]->getLineCount() < lineSize) { // the shortest free clerk
 			myLine = i;
 			lineSize = appClerk[i]->getLineCount();
 		}
 		else if (appClerk[i]->getState() == CLERK_BUSY && // or go to a busy clerk
-		appClerk[i]->getLineCount() + 1 < lineSize) { // that is really 1 longer
+			appClerk[i]->getLineCount() + 1 < lineSize) { // that is really 1 longer
 			myLine = i;
 			lineSize = appClerk[i]->getLineCount() + 1;
+		}
+		else if (appClerk[i]->getLineCount() + 2 < lineSize) { // get in a break line if its much shorter
+			myLine = i;
+			lineSize = appClerk[i]->getLineCount() + 2;
 		}
 	}
 	if (myLine == -1) { // in case every clerk was on break
@@ -475,24 +494,74 @@ void Customer::Run() {
 	}
 	//wait in line
 	appClerk[myLine]->incrementLine(); // increase line size
-	printf("%s is waiting in line %d\n", name, myLine);
+	printf("%s is waiting in Application Clerk's %d line\n", name, myLine);
 	appClerk[myLine]->waitOnLineCV(); // sleep until the clerk wakes me up
 	appClerk[myLine]->decrementLine(); // i have been called up to clerk so line goes down
-	
+
 	// now I am with the clerk
-	printf("%s is with Clerk %d\n", name, myLine);
+	printf("%s is with Application Clerk %d\n", name, myLine);
 	appClerk[myLine]->setState(CLERK_BUSY); // ensure that the clerk is busy
 	appClerk[myLine]->acquireLock(); // receive the lock so interaction with clerk is atomic
 	clerkLineLock->Release(); // allow other customers to get in line
-	// give my data to clerk
+							  // give my data to clerk
 	appClerk[myLine]->setToFile(socialSecurity);
-	printf("%s giving Clerk %d his social\n", name, myLine);
+	printf("%s is giving Application Clerk %d his application and social\n", name, myLine);
 	appClerk[myLine]->signalOnClerkCV(); // tell clerk I have given them my social
 	appClerk[myLine]->waitOnClerkCV(); // wait until clerk has "filed" my social
-	printf("%s is leaving Clerk %d\n", name, myLine);
+	printf("%s is leaving Application Clerk %d\n", name, myLine);
 	appClerk[myLine]->setState(CLERK_FREE); // ensure that the clerk is now free
 	appClerk[myLine]->signalOnClerkCV(); // tell clerk I am leaving
 	appClerk[myLine]->releaseLock(); // end of the interaction with the clerk
+}
+
+void Customer::goToPicClerk() {
+	// first acquire the lock so we know the line won't change
+	clerkLineLock->Acquire();
+	int myLine = -1; // will be the index of the clerk whose line is chosen
+	int lineSize = numCustomers + 1; // the max customers that could be in any line
+	for (int i = 0; i < numPicClerks; i++) {
+		if (picClerk[i]->getState() == CLERK_FREE && // go to a free clerk first
+			picClerk[i]->getLineCount() < lineSize) { // the shortest free clerk
+			myLine = i;
+			lineSize = picClerk[i]->getLineCount();
+		}
+		else if (picClerk[i]->getState() == CLERK_BUSY && // or go to a busy clerk
+			picClerk[i]->getLineCount() + 1 < lineSize) { // that is really 1 longer
+			myLine = i;
+			lineSize = picClerk[i]->getLineCount() + 1;
+		}
+		else if (picClerk[i]->getLineCount() + 2 < lineSize) { // get in a break line if its much shorter
+			myLine = i;
+			lineSize = picClerk[i]->getLineCount() + 2;
+		}
+	}
+	if (myLine == -1) { // in case every clerk was on break
+		for (int i = 0; i < numPicClerks; i++) {
+			if (picClerk[i]->getLineCount() < lineSize) { // select the shortest line
+				myLine = i;
+				lineSize = picClerk[i]->getLineCount();
+			}
+		}
+	}
+	//wait in line
+	picClerk[myLine]->incrementLine(); // increase line size
+	printf("%s is waiting in Picture Clerk %d's line\n", name, myLine);
+	picClerk[myLine]->waitOnLineCV(); // sleep until the clerk wakes me up
+	picClerk[myLine]->decrementLine(); // i have been called up to clerk so line goes down
+    // now I am with the clerk
+	printf("%s is with Picture Clerk %d\n", name, myLine);
+	picClerk[myLine]->setState(CLERK_BUSY); // ensure that the clerk is busy
+	picClerk[myLine]->acquireLock(); // receive the lock so interaction with clerk is atomic
+	clerkLineLock->Release(); // allow other customers to get in line
+							  // give my data to clerk
+	picClerk[myLine]->setToFile(socialSecurity);
+	printf("%s is getting ready with Picture Clerk %d for his picture\n", name, myLine);
+	picClerk[myLine]->signalOnClerkCV(); // tell clerk I am ready for my pic
+	picClerk[myLine]->waitOnClerkCV(); // wait until clerk has taken my picture
+	printf("%s is leaving Picture Clerk %d\n", name, myLine);
+	picClerk[myLine]->setState(CLERK_FREE); // ensure that the clerk is now free
+	picClerk[myLine]->signalOnClerkCV(); // tell clerk I am leaving
+	picClerk[myLine]->releaseLock(); // end of the interaction with the clerk
 }
 
 Clerk::Clerk(int _id, char* _name) : id(_id), name(_name), state(CLERK_FREE), toFile(-1) {
@@ -586,6 +655,46 @@ void Clerk::releaseLock() {
 	clerkLock->Release();
 }
 
+PictureClerk::PictureClerk(int _id, char* _name) : Clerk(_id, _name) {
+}
+
+void PictureClerk::Run() {
+	printf("In %s\n", getName());
+
+	while (true) {
+		clerkLineLock->Acquire();
+		if (getLineCount()>0) { // if there is someone in line
+			signalOnLineCV(); // signal them to approach the clerk
+			setState(CLERK_BUSY); // make the clerk busy
+			acquireLock(); // aqcuire the clerk lock so interaction is atomic
+			clerkLineLock->Release(); // allow other customers to find lines
+			waitOnClerkCV(); // wait for customer to be ready to take picture
+			printf("%s is taking Customer %d's picture\n", getName(), getToFile());
+			for (int i = 0; i < 20; i++) { // make taking the picture take some time
+				currentThread->Yield();
+			}
+			customerData[getToFile()].picture = true;
+			printf("%s has taken Customer %d's picture\n", getName(), getToFile());
+			signalOnClerkCV(); // tell customer I have taken their picture
+			waitOnClerkCV(); // wait on Customer to leave
+							 // once customer has left the interaction is over
+			releaseLock();
+			setState(CLERK_FREE);
+		}
+		else { // no one is in line
+			setState(CLERK_BREAK); // if no one is in line clerk goes on break
+			clerkLineLock->Release();
+			acquireLock(); // get the clerk lock so we can wait
+			printf("%s is going on break\n", getName());
+			waitOnClerkCV(); // go to sleep until the manager wakes us
+			printf("%s is off of break\n", getName());
+			// we are now woken up
+			setState(CLERK_FREE);
+			releaseLock();
+		}
+	}
+}
+
 ApplicationClerk::ApplicationClerk(int _id, char* _name) : Clerk(_id, _name) {
 }
 
@@ -601,12 +710,12 @@ void ApplicationClerk::Run() {
 			clerkLineLock->Release(); // allow other customers to find lines
 			waitOnClerkCV(); // wait for customer to give me social
 			// customer has now given social
-			printf("%s is filing Customer %d's social\n", getName(), getToFile());
-			customerData[getToFile()].social = true; // so the office knows i have given my social
+			printf("%s is filing Customer %d's application and social\n", getName(), getToFile());
 			for (int i = 0; i < 50; i++) { // make filing the social take some time
 				currentThread->Yield();
 			}
-			printf("%s has filed Customer %d's social\n", getName(), getToFile());
+			customerData[getToFile()].social = true; // so the office knows i have given my social
+			printf("%s has filed Customer %d's application and social\n", getName(), getToFile());
 			signalOnClerkCV(); // tell customer I have filed
 			waitOnClerkCV(); // wait on Customer to leave
 			// once customer has left the interaction is over
@@ -635,25 +744,53 @@ void ManagerCheckLines() {
 			appClerk[i]->releaseLock(); // release the lock
 		}
 	}
+	for (int i = 0; i < numPicClerks; i++) { // cycle through the Picture Clerks
+		if (picClerk[i]->getState() == CLERK_BREAK && picClerk[i]->getLineCount() > 3) { // if the clerk is on break and we must wake it
+			picClerk[i]->acquireLock(); // get the lock
+			printf("Manager is waking Picture Clerk %d from break\n", i);
+			picClerk[i]->signalOnClerkCV(); // wake the clerk
+			picClerk[i]->releaseLock(); // release the lock
+		}
+	}
 }
 
 bool ManagerCheckClose() { // returns true if it is okay to close the office
+	//check if every customer has arrived
+	bool allHereFlag = true;
 	//check if it is okay to close the office
 	bool doneFlag = true;
 	for (int i = 0; i < numCustomers; i++) {
+		if (!customerData[i].arrived) { // if any customer has not arrived
+			allHereFlag = false; // set the flag to false
+			break;
+		}
 		if (!customerData[i].social) { // if any social hasn't been filed it is not time to close
 			doneFlag = false;
 			break;
 		}
+		if (!customerData[i].picture) { // if any photo hasn't been taken it is not time to close
+			doneFlag = false;
+			break;
+		}
+	}
+	if (!allHereFlag) {
+		return false;
 	}
 	if (doneFlag) {
 		printf("Manager is closing the Passport Office\n");
 		return true;
 	}
-	else { // if we aren't done lets wake up the clerks if they're all on break
+	else { // if we aren't done but every customer is here lets check if we need to wake up clerks
 		bool breakFlag = true;
 		for (int i = 0; i < numAppClerks; i++) { // check if all our clerks are on break
-			if (appClerk[i]->getState() != CLERK_BREAK) { // if one clerk isn't on break let them keep going without waking others
+			if (appClerk[i]->getState() != CLERK_BREAK) { 
+			// if one clerk isn't on break let them keep going without waking others
+				breakFlag = false;
+				break;
+			}
+		}
+		for (int i = 0; i < numPicClerks; i++) {
+			if (picClerk[i]->getState() != CLERK_BREAK) {
 				breakFlag = false;
 				break;
 			}
@@ -667,6 +804,14 @@ bool ManagerCheckClose() { // returns true if it is okay to close the office
 					appClerk[i]->releaseLock(); // release the lock
 				}
 			}
+			for (int i = 0; i < numPicClerks; i++) { // go through the clerks
+				if (picClerk[i]->getLineCount() > 0) { // if they have someone in line but are on break
+					picClerk[i]->acquireLock(); // get the lock
+					printf("Manager is waking Picture Clerk %d from break\n", i);
+					picClerk[i]->signalOnClerkCV(); // wake the clerk
+					picClerk[i]->releaseLock(); // release the lock
+				}
+			}
 		}
 	}
 	return false;
@@ -676,7 +821,7 @@ void Manager() {
 	while (true) {
 		for (int k = 0; k < 50; k++) {
 			ManagerCheckLines();
-			for (int i = 0; i < 50; i++) {
+			for (int i = 0; i < 60; i++) {
 				currentThread->Yield(); // to slow down the manager thread
 			}
 		}
@@ -695,12 +840,18 @@ void AppClerkStart(int index) {
 	appClerk[index]->Run();
 }
 
+void PicClerkStart(int index) {
+	picClerk[index]->Run();
+}
+
 void Part2() {
-	numCustomers = 10;
-	numAppClerks = 2;
+	numCustomers = 20;
+	numAppClerks = 3;
+	numPicClerks = 2;
 	customerData = new CustomerData[numCustomers];
 	customer = new Customer*[numCustomers];
 	appClerk = new ApplicationClerk*[numAppClerks];
+	picClerk = new PictureClerk*[numPicClerks];
 	clerkLineLock = new Lock("Clerk Line Lock");
 
 	char* name;
@@ -714,6 +865,11 @@ void Part2() {
 		sprintf(name, "Application Clerk %d", i);
 		appClerk[i] = new ApplicationClerk(i, name);
 	}
+	for (int i = 0; i < numPicClerks; i++) {
+		name = new char[10];
+		sprintf(name, "Picture Clerk %d", i);
+		picClerk[i] = new PictureClerk(i, name);
+	}
 
 	Thread* t;
 	t = new Thread("Manager");
@@ -722,10 +878,16 @@ void Part2() {
 		t = new Thread(appClerk[i]->getName());
 		t->Fork((VoidFunctionPtr)AppClerkStart, i);
 	}
+	for (int i = 0; i < numPicClerks; i++) {
+		t = new Thread(picClerk[i]->getName());
+		t->Fork((VoidFunctionPtr)PicClerkStart, i);
+	}
+	int random;
 	for (int i = 0; i < numCustomers; i++) {
 		t = new Thread(customer[i]->getName());
 		t->Fork((VoidFunctionPtr)CustomerStart, i);
-		for (int j = 0; j < 50; j++) {
+		random = rand() % 30;
+		for (int j = 0; j < random; j++) { // give time between customers
 			currentThread->Yield();
 		}
 	}
