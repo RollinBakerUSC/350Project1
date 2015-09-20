@@ -10,7 +10,9 @@ class PictureClerk : public Clerk {
 	public:
 		PictureClerk(int _id, char* _name);
 		void Run(); // the function used to actually run the clerk's processes
+		void setPicLiked(bool liked);
 	private:
+		bool picLiked;
 };
 
 #endif
