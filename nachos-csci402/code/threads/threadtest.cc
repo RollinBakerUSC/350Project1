@@ -454,7 +454,7 @@ void Customer::Run() {
 	printf("In %s\n", name);
 	customerData[socialSecurity].arrived = true;
 	int random = rand() % 2; // to decide if we go pic or app first
-	if (random) {
+	if (random == 0) {
 		goToAppClerk();
 		goToPicClerk();
 	} else {
@@ -468,35 +468,50 @@ void Customer::goToAppClerk() {
 	clerkLineLock->Acquire();
 	int myLine = -1; // will be the index of the clerk whose line is chosen
 	int lineSize = numCustomers + 1; // the max customers that could be in any line
+	bool hasBribed = false;
 	for (int i = 0; i < numAppClerks; i++) {
 		if (appClerk[i]->getState() == CLERK_FREE && // go to a free clerk first
 			appClerk[i]->getLineCount() < lineSize) { // the shortest free clerk
 			myLine = i;
 			lineSize = appClerk[i]->getLineCount();
+			hasBribed = false;
 		}
 		else if (appClerk[i]->getState() == CLERK_BUSY && // or go to a busy clerk
 			appClerk[i]->getLineCount() + 1 < lineSize) { // that is really 1 longer
 			myLine = i;
 			lineSize = appClerk[i]->getLineCount() + 1;
+			hasBribed = false;
 		}
 		else if (appClerk[i]->getLineCount() + 2 < lineSize) { // get in a break line if its much shorter
 			myLine = i;
 			lineSize = appClerk[i]->getLineCount() + 2;
+			hasBribed = false;
+		}
+
+		// check to see if bribing is worth it
+		if (appClerk[i]->getState() != CLERK_BREAK && money >= 500 &&
+		appClerk[i]->getBribeLineCount() < lineSize) {
+			myLine = i;
+			lineSize = appClerk[i]->getBribeLineCount();
+			hasBribed = true;
 		}
 	}
-	if (myLine == -1) { // in case every clerk was on break
-		for (int i = 0; i < numAppClerks; i++) {
-			if (appClerk[i]->getLineCount() < lineSize) { // select the shortest line
-				myLine = i;
-				lineSize = appClerk[i]->getLineCount();
-			}
-		}
+	if (hasBribed) {
+		money -= 500;
+		//wait in line
+		appClerk[myLine]->incrementBribeLine(); // increase line size
+		printf("%s is bribing Application Clerk %d\n", name, myLine);
+		printf("%s is waiting in Application Clerk %d's Bribe line\n", name, myLine);
+		appClerk[myLine]->waitOnBribeLineCV(); // sleep until the clerk wakes me up
+		appClerk[myLine]->decrementBribeLine(); // i have been called up to clerk so line goes down
 	}
-	//wait in line
-	appClerk[myLine]->incrementLine(); // increase line size
-	printf("%s is waiting in Application Clerk's %d line\n", name, myLine);
-	appClerk[myLine]->waitOnLineCV(); // sleep until the clerk wakes me up
-	appClerk[myLine]->decrementLine(); // i have been called up to clerk so line goes down
+	else {
+		//wait in line
+		appClerk[myLine]->incrementLine(); // increase line size
+		printf("%s is waiting in Application Clerk's %d line\n", name, myLine);
+		appClerk[myLine]->waitOnLineCV(); // sleep until the clerk wakes me up
+		appClerk[myLine]->decrementLine(); // i have been called up to clerk so line goes down
+	}
 
 	// now I am with the clerk
 	printf("%s is with Application Clerk %d\n", name, myLine);
@@ -577,6 +592,10 @@ Clerk::Clerk(int _id, char* _name) : id(_id), name(_name), state(CLERK_FREE), to
 	strcat(buff, _name);
 	strcat(buff, " Clerk Condition");
 	clerkCV = new Condition(buff);
+	buff = new char[50];
+	strcat(buff, _name);
+	strcat(buff, " Bribe Line Condition");
+	clerkBribeLineCV = new Condition(buff);
 }
 
 char* Clerk::getName() {
@@ -703,7 +722,25 @@ void ApplicationClerk::Run() {
 
 	while(true) {
 		clerkLineLock->Acquire();
-		if(getLineCount()>0) { // if there is someone in line
+		if (getBribeLineCount() > 0) { // if there is someone in our bribe line
+			signalOnBribeLineCV(); // signal them to approach the clerk
+			setState(CLERK_BUSY); // make the clerk busy
+			acquireLock(); // aqcuire the clerk lock so interaction is atomic
+			clerkLineLock->Release(); // allow other customers to find lines
+			waitOnClerkCV(); // wait for customer to give me social
+							 // customer has now given social
+			printf("%s is filing Customer %d's application and social\n", getName(), getToFile());
+			for (int i = 0; i < 50; i++) { // make filing the social take some time
+				currentThread->Yield();
+			}
+			customerData[getToFile()].social = true; // so the office knows i have given my social
+			printf("%s has filed Customer %d's application and social\n", getName(), getToFile());
+			signalOnClerkCV(); // tell customer I have filed
+			waitOnClerkCV(); // wait on Customer to leave
+							 // once customer has left the interaction is over
+			releaseLock();
+			setState(CLERK_FREE);
+		} else if(getLineCount()>0) { // if there is someone in line
 			signalOnLineCV(); // signal them to approach the clerk
 			setState(CLERK_BUSY); // make the clerk busy
 			acquireLock(); // aqcuire the clerk lock so interaction is atomic
@@ -845,9 +882,9 @@ void PicClerkStart(int index) {
 }
 
 void Part2() {
-	numCustomers = 20;
-	numAppClerks = 3;
-	numPicClerks = 2;
+	numCustomers = 10;
+	numAppClerks = 2;
+	numPicClerks = 1;
 	customerData = new CustomerData[numCustomers];
 	customer = new Customer*[numCustomers];
 	appClerk = new ApplicationClerk*[numAppClerks];
