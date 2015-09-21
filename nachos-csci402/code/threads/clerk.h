@@ -15,11 +15,15 @@ class Clerk {
 		char* getName();
 		int getLineCount();
 		int getBribeLineCount();
+		bool getSenatorInLine();
+		void setSenatorInLine(bool b);
 		ClerkState getState();
 
 		void setState(ClerkState _state);
 		void setToFile(int num);
 		int getToFile();
+		int getMoney();
+		void addMoney(int m);
 
 		void incrementLine();
 		void decrementLine();
@@ -28,8 +32,11 @@ class Clerk {
 
 		void waitOnLineCV();
 		void signalOnLineCV();
+		void broadcastOnLineCV();
 		void waitOnBribeLineCV();
 		void signalOnBribeLineCV();
+		void waitOnSenatorLineCV();
+		void signalOnSenatorLineCV();
 		void waitOnClerkCV();
 		void signalOnClerkCV();
 		void acquireLock();
@@ -43,8 +50,11 @@ class Clerk {
 		ClerkState state;
 		int lineCount;
 		int bribeLineCount;
+		bool senatorInLine;
 		int toFile; // the id of the user who the clerk is interacting with
+		int money; // the money this clerk has collected
 
+		Condition* senatorLineCV;
 		Condition* clerkLineCV;
 		Condition* clerkBribeLineCV;
 		Condition* clerkCV;

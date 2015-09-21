@@ -20,6 +20,7 @@ class Customer {
 		void goToPicClerk();
 		void goToPassClerk();
 		void goToCashier();
+		void checkSenator();
 };
 
 #endif
