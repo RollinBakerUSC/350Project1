@@ -460,12 +460,14 @@ Condition* customersCV; // so the senator can wait until all clerks have finishe
 
 struct CustomerData {
 	bool arrived; // if the customer has shown up to the office
+	bool outside;
 	bool social;
 	bool picture;
 	bool passport;
 	bool paid;
 	CustomerData() {
 		arrived = false;
+		outside = false;
 		social = false;
 		picture = false;
 		passport = false;
@@ -491,6 +493,7 @@ void Customer::checkSenator() {
 	if (senatorFlag) { // if a senator appeared while I was in line
 		printf("%s is going outside the Passport Office because there is a Senator present.\n", name);
 		outsideLock->Acquire();
+		customerData[socialSecurity].outside = true;
 		senatorCV->Wait(outsideLock); // sleep until senator leaves
 		outsideLock->Release();
 	}
@@ -576,6 +579,7 @@ void Customer::goToAppClerk() {
 				printf("%s is going outside the Passport Office because there is a Senator present.\n", name);
 				clerkLineLock->Release();
 				outsideLock->Acquire();
+				customerData[socialSecurity].outside = true;
 				senatorCV->Wait(outsideLock); // sleep until senator leaves
 				outsideLock->Release();
 			}
@@ -593,6 +597,7 @@ void Customer::goToAppClerk() {
 				printf("%s is going outside the Passport Office because there is a Senator present.\n", name);
 				clerkLineLock->Release();
 				outsideLock->Acquire();
+				customerData[socialSecurity].outside = true;
 				senatorCV->Wait(outsideLock); // sleep until senator leaves
 				outsideLock->Release();
 			}
@@ -677,6 +682,7 @@ void Customer::goToPicClerk() {
 				printf("%s is going outside the Passport Office because there is a Senator present.\n", name);
 				clerkLineLock->Release();
 				outsideLock->Acquire();
+				customerData[socialSecurity].outside = true;
 				senatorCV->Wait(outsideLock); // sleep until senator leaves
 				outsideLock->Release();
 			}
@@ -694,6 +700,7 @@ void Customer::goToPicClerk() {
 				printf("%s is going outside the Passport Office because there is a Senator present.\n", name);
 				clerkLineLock->Release();
 				outsideLock->Acquire();
+				customerData[socialSecurity].outside = true;
 				senatorCV->Wait(outsideLock); // sleep until senator leaves
 				outsideLock->Release();
 			}
@@ -789,6 +796,7 @@ void Customer::goToPassClerk() {
 				printf("%s is going outside the Passport Office because there is a Senator present.\n", name);
 				clerkLineLock->Release();
 				outsideLock->Acquire();
+				customerData[socialSecurity].outside = true;
 				senatorCV->Wait(outsideLock); // sleep until senator leaves
 				outsideLock->Release();
 			}
@@ -806,6 +814,7 @@ void Customer::goToPassClerk() {
 				printf("%s is going outside the Passport Office because there is a Senator present.\n", name);
 				clerkLineLock->Release();
 				outsideLock->Acquire();
+				customerData[socialSecurity].outside = true;
 				senatorCV->Wait(outsideLock); // sleep until senator leaves
 				outsideLock->Release();
 			}
@@ -889,6 +898,7 @@ void Customer::goToCashier() {
 				printf("%s is going outside the Passport Office because there is a Senator present.\n", name);
 				clerkLineLock->Release();
 				outsideLock->Acquire();
+				customerData[socialSecurity].outside = true;
 				senatorCV->Wait(outsideLock); // sleep until senator leaves
 				outsideLock->Release();
 			}
@@ -906,6 +916,7 @@ void Customer::goToCashier() {
 				printf("%s is going outside the Passport Office because there is a Senator present.\n", name);
 				clerkLineLock->Release();
 				outsideLock->Acquire();
+				customerData[socialSecurity].outside = true;
 				senatorCV->Wait(outsideLock); // sleep until senator leaves
 				outsideLock->Release();
 			}
@@ -1649,6 +1660,11 @@ void ManagerCheckLines() {
 			cashier[i]->releaseLock(); // release the lock
 		}
 		if (cashier[i]->getState() == CLERK_BUSY) {
+			customersGone = false;
+		}
+	}
+	for (int i = 0; i < numCustomers; i++) {
+		if (customerData[i].arrived && !customerData[i].outside) {
 			customersGone = false;
 		}
 	}
