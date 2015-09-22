@@ -1,0 +1,690 @@
+
+Title:	Writeup for Project 1, Fall 2015
+Date:	09/20/15
+Group:	Rollin Baker	rollinba@usc.edu
+	Sloan Swieso	swieso@usc.edu
+	Jiwoo Kim	jiwookim@usc.edu
+ 
+I. Requirements:
+
+For the first part, the goal is to implement Lock and Condition class using either semaphores or primitive thread routines. The Lock class has Acquire and Release, and Condition class has Wait, Signal, and Broadcast. The implementation must be able to detect various cases to retain the rules of mutual exclusion. In the Condition class, the Lock acts as a simulator for monitor.
+
+The purpose of the Lock is to control thread access to a critical section. Acquire function will acquire the lock and do its purpose whereas Release function will set the lock free so that the next thread can wake up and use the lock to gain an access to a critical section.
+
+For Part 2, US Passport Office will be simulated. When customer comes in, they randomly choose whether to take a picture with PictureClerk or to turn in an application to the ApplicationClerk. When chosen which clerk to visit first, the customer will choose the shortest line. After having taken picture and given the application, the customers will visit PassportClerk who checks that the customers have visited both ApplicationClerk and PictureClerk prior to sending them to the cashiers. Cashiers take money from customers and transaction continues. Customers can also bribe using their randomly given money to move up to the line. The managers manage the line by bringing clerks from their breaks and printing out the amount of money each type of clerk has earned thus far. Lastly, there is a Senator. When Senator comes in, all customers in line will ?leave? and come back until Senator has finished his visits with every clerk and cashier. 
+
+II. Assumptions:
+	We assumed that the Customer would never be able to bribe a Clerk on break as that Clerk is not at their counter. We also assumed that if the Passport Office was in a state of deadlock where all Customers had not finished but all Clerks were on break, the Manager would wake Clerks from their break if they had anyone in their lines. We assumed that the Manager would be the last thread running, and would close the Passport Office once everything has finished.
+
+III. Design:
+
+Part 1:
+
+Class designs for part 1:
+
+Class Lock
+	public:
+		Lock(char* lockName)
+		~Lock();
+		char* getname() { return name; }
+		void Acquire();
+		void Release();
+		bool isHeldByCurrentThread();
+	private:
+		char* name;
+		LockState state;
+		Thread *owner;
+		List *waitQueue;
+
+Class Condition
+	public:
+		Condition(char* debugName);
+		~Condition();
+		char* getName() { return name; }
+		void Wait(Lock *conditionLock);
+		void Signal(Lock *conditionLock);
+		void BroadCast(Lock * conditionLock);
+	private:
+		char* name;
+		Lock *waitingLock;
+		List * waitQueue;
+
+For Lock and Condition in Part 1, every function should start by disabling interrupts and restoring them before it exits the function run.
+
+For the Acquire function, the lock must first ensure that the lock is available. If the thread that is  trying to acquire the lock is already the lock owner, then the function will exit. If not, and the lock is available, the current thread will be the new owner of the lock and the lock will be set to busy. If the lock is already owned by another thread, the current thread will sleep.
+
+For the Release function, the lock ensures that the thread that is releasing is the actual owner. If it is not, error happens and function returns. The waiting queue of the lock is checked and see if the queue is not empty. If it is not empty, we make the popped thread of the queue the new owner and make it ready to run. If the queue is empty, lock becomes available and owner is set to null.
+
+The Wait function attempts to set the Condition object?s waiting lock to the lock passed in the call. If the lock passed in is null or not a lock, it is an error. If error does not happen, we add the current thread to the Condition?s waiting queue. Now we release the passed in lock and put the current thread to sleep. The passed in lock is reacquired afterwards. 
+
+Signal function first checks if the waiting queue is empty. If so, we return. If not, we remove a thread from the queue and and make it ready to run.
+
+Broadcast function checks for lock errors and will signal until the waiting queue is empty.
+
+Part 2:
+
+When the program starts, the user will be prompted to input the number of customer, each type of clerk, cashier, and senator. The simulation will start afterwards. 
+
+The Thread.Fork() function does not allow a member function of a class to be passed as a parameter. To resolve this, we pass in a globally-defined function that takes in an integer argument. This function calls the Run() method of the specific thread ID given as the argument to Fork().
+To implement the situation where a customer arrives at an Application Clerk or Cashier before his papers have been properly ?filed,? we included a 5% chance using a random number that this would happen. In this case, the customer will go to the back of the line, and then the simulation continues normally.
+
+Customer?s Run function will first randomize between ApplicationClerk and PictureClerk to decide where the customer goes first. This function will then call other functions that simulate the customer getting in the line and interacting with the clerks. The order goes from application or picture, passport, and then cashier.
+
+For each clerk/cashier, the customer first acquires clerkLineLock and check for the shortest line to go to that has a clerk not on break, there is also another conditional statement at the end to see if the bribing is worth it by checking the customer?s money and line count. If the current line count is larger than bribe line count, customer will go to bribe line. Customer class will also set correct clerk to busy and have it acquire clerkLock while releasing clerkLineLock.
+
+ApplicationClerk?s job is simulated by receiving socialSecurity integer. Then the clerk uses its Condition to signal and wait to simulate doing job and is set free afterwards. To ensure that customers have actually visited each type of clerks, there will be customer data with boolean variables to keep track of their visits in the office. After the customers visit to ApplicationClerk, their corresponding boolean variable will be set to true.
+
+PictureClerk is very similar to ApplicationClerk and will operate the same way in regards to getting in line and getting served. However, the customers have a probability not to like a picture and have to repeat the process again. This can be simulated by having a while loop with its condition being a boolean variable that states whether the picture taken was liked or not. Inside the while loop, we use the condition of the boolean variable so it repeats until the picture was liked. The probability of not liking can be hard set to 5 or 10 percent. When the picture is liked and the code escapes while loop, the duty can be finished.
+
+PassportClerk is similar to the other clerks described above with different duty. When the customer comes, PassportClerk will check whether the customer being served has already visited ApplicationClerk and PictureClerk. This is done by checking the customer data?s two boolean variables that represent their visit to PictureClerk and ApplicationClerk. If both of them are set to true, PassportClerk will record that the customer been ?certified? to pay at the cashier.
+
+Customers arriving at passportClerk without having visited application or picture clerk will be simulated by a random chance of getting back to the line in the passportclerk.
+
+Cashiers? job is to make sure the customers being served have been certified. Cashiers will take $100 from the customers and record that the customers have paid. There is no bribe line in cashiers line.
+
+In the simulation, Managers must periodically check how much money the clerks have made, and add up the amounts for each type of clerk, as well as the total amount. To facilitate this and avoid race conditions, we use a lock that controls access to all money reserves.
+
+To ensure that the senators cause the correct behavior, we keep a global flag that indicates if there is at least one senator present. This flag is controlled by its own lock. If the flag is true, no one new is allowed into the passport office, and the customers in line are not allowed to proceed to a clerk. ?Outside? the office, there is now just a single line for all customers who show up while a senator is inside. If a second senator shows up while one is already inside, he enters his own special ?priority line?. When a senator finishes, the manager checks the length of the senator line. If the line is empty, the manager changes the flag to false, the customers get back in line, and the simulation continues.
+
+IV. Implementation:
+	+ Files Modified
+		synch.cc
+		synch.h
+		threadtest.cc
+
+	+ Files added
+		applicationclerk.h
+		clerk.h
+		cashier.h
+		customer.h
+		passportclerk.h
+		picturelerk.h
+		senator.h
+
+	+ Data Structures added, and the file they were added to.
+
+/* We have added separate .h files for each class in part 2, but implemented them in  threadtest.cc to make it easier to compile. */
+
+struct CustomerData { -- in threadtest.cc
+	bool arrived;
+	bool social;
+	bool picture;
+	bool passport;
+	bool paid;
+	CustomerData() {
+		arrived, social, picture, passport = false;
+	}
+}
+
+		Customer Class { -- in customer.h
+			public:
+Customer(int _socialSecurity, char* _name);
+				void Run();
+				char* getName();
+			private:
+				int socialSecurity;
+				int money;
+				char* name;
+
+				void goToAppClerk();
+				void goToPicClerk();
+				void goToPassClerk();
+				void goToCashier();
+				void checkSenator();
+}
+
+Clerk Class { -- in clerk.h
+	public:
+				Clerk(int _id, char* _name);
+				char* getName();
+				int getLineCount();
+				int getBribeLineCount();
+				ClerkState getState();
+				void setState(ClerkState _state);
+				void setToFile(int num);
+				int getToFile();
+				void incrementLine();
+				void decrementLine();
+				void incrementBribeLine();
+				void decrementBribeLine();
+				void waitOnLineCV();
+				void waitOnBribeLineCV();
+				voi signalOnBribeLineCV();
+				void signalOnLineCV();
+				void acquireLock();
+				void releaseLock();
+				virtual void Run() = 0;
+			private:
+				int id;
+				char* name;
+				ClerkState state;
+				int lineCount;
+				int bribeLineCount;
+				bool senatorInLine;
+				int money;
+				int toFile;
+				Condition* senatorLineCV;
+				Condition* clerkLineCV;
+				Condition* clerkBribeLineCV;
+				Condtiion* clerkCV;
+				Lock clerkLock;
+		}
+
+ApplicationClerk Class inherits Clerk { -- in applicationclerk.h
+	public:
+				ApplicationClerk(int _id, char* name);
+				void Run();
+			private:
+		}
+
+PictureClerk Class inherits Clerk { -- in pictureclerk.h
+			public:
+				PictureClerk(int _id, char* name);
+				void Run();
+				void setPicLiked(bool liked);
+			private:
+				bool picLiked;
+		}
+PassportClerk Class inherits Clerk { -- in passportclerk.h
+	public:
+		PassportCLerk(int _id, char* name);
+				void Run();
+			private:
+		}
+
+Cashier Class inherits Clerk { -- in cashier.h
+			public:
+				Cashier(int _id, char* name);
+				void Run();
+			private:
+		}
+Senator Class { -- in senator.h
+			public:
+				Senator(int _SocialSecurity, char* _name);
+				void Run();
+				char* getName();
+			private:
+				int socialSecurity;
+				char* name;
+				void goToAppClerk();
+				void goToPicClerk();
+				void goToPassClerk();
+				void goToCashier();
+		}
+	+ Data Structures modified, and the file they were added to.
+		Class Lock { -- in synch.h
+			public:
+				Lock(char* lockName) //constructor
+				~Lock(); //destructor
+				char* getname() { return name; }
+				void Acquire();
+				void Release();											bool isHeldByCurrentThread();
+	private:
+				char* name; // not necessary but useful
+				LockState state; // free/busy
+				Thread *owner; // owner thread
+				List *waitQueue; // queue for the next threads to use the lock
+		}
+
+Class Condition { -- in synch.h
+			public:
+				Condition(char* debugName); // constructor
+				~Condition(); // destrcutor
+				char* getName() { return name; }
+				void Wait(Lock *conditionLock);									void Signal(Lock *conditionLock);
+				void BroadCast(Lock * conditionLock);
+			private:
+				char* name;
+				Lock *waitingLock;
+				List * waitQueue;
+
+	+ Functions added and in which file.
+		bool Lock::isHeldByCurrentThread() { -- In synch.cc
+return (owner == currentThread);
+		};
+
+		void Customer::Run() { -- in threadtest.cc
+			before customer goes to any clerk, call checkSenator function
+			set arrived to true;
+			randomly choose to go to ApplicationClerk or PictureClerk first
+			go to PassportClerk;
+			go to Cashier;
+		}
+		void Customer::goToAppClerk() { -- threadtest.cc
+			clerkLineLock->Acquire();
+			for (every ApplicationClerk) {
+				try to go to the shortest line with an active clerk
+				try to go to the shortest line with a busy clerk
+				try to go to a short line with a clerk on break
+				if (money>=500 && bribeline is shorter) {
+					go to the bribe line. set the bribe flag to true;
+				}
+			}
+			if (every clerk was on break and had all customers) {
+				go to the shortest line
+			}
+			if (bribed) {
+				money-=500
+				increment/decrement bribeline and signal/wait the bribe condition
+				if there is a senator, release line lock and acquire outsideLock
+				sleep until outsideLock is released
+			}
+			else {
+				increment/decrement line and signal/wait the regular condition
+				if there is a senator, release line lock and acquire outsideLock
+				sleep until outsideLock is released
+			}
+			set the corresponding clerk to busy and have it acquire clerkLock
+			release clerkLineLock
+			give the social security number to the clerk
+			signal/wait on condition to simulate the interaction
+			set the clerk to free and have it release the clerkLock
+		}
+
+		void ApplicationClerk::Run() { -- in threadtest.cc
+			while (true) {
+				clerkLineLock->Acquire();
+				if (there is a senator) {
+					do the work for senator like any other customer
+				}
+				else if (there are customers in bribe line) {
+					signal bribe line and be busy
+					acquire clerkLock;
+					release clerkLineLock
+					wait for social security
+					simulate work by yielding currentThread for 50 iterations
+					signal and ClerkCV to allow customer to leave
+					release ClerkLock and be free
+				}
+				else if (someone in regular line) {
+					do the same as above, signaling regular line instead
+				}
+				else {
+					go on break
+					release clerklineLock
+					acquire clerkLock to simulate sleeping
+					wait on wake up condition
+					be in free state and release clerkLock
+				}
+			}
+		}
+		void PictureClerk::Run() {
+			while (true) {
+				if (there is a senator) {
+					treat senator like a customer and finish work
+				}
+				if (customers are in bribe line) {
+					do the same as Application Clerk
+					bool picLiked = false;
+					while (picture not liked) {
+						repeat the picture taking process until pic is liked
+					}
+					change customer data accordingly
+					release clerkLock and be free
+				}
+				else if (customers in regular line) {
+do the same as above
+}
+else {
+go on break until woken up
+}
+}
+		}
+
+void Customer::goToPicClerk() { -- in threadtest.cc
+			clerkLineLock->Acquire();
+			set bribe flag to false;
+			for (every ApplicationClerk) {
+				try to go to the shortest line with an active clerk
+				try to go to the shortest line with a busy clerk
+				try to go to a short line with a clerk on break
+				if (money>=500 && bribeline is shorter) {
+					go to the bribe line. set the bribe flag to true;
+				}
+			}
+			if (every clerk was on break and had all customers) {
+				go to the shortest line
+			}
+			if (bribed) {
+				money-=500
+				increment/decrement bribeline and signal/wait the bribe condition
+			}
+			make the clerk busy and acquire clerkLock and release the clerkLineLock
+			bool picLiked = false;
+			while (!picLiked) {
+				tell clerk to take the picture
+				if (1/10 times true) {
+					customer does not like the picture. must loop again
+				}
+				else {
+					picLiked = true; escape the while loop
+				}
+			}
+			clerk will release clerkLock to get ready for the next customer
+		}
+
+void Customer::goToPassClerk() { -- in threadtest.cc
+			clerkLineLock->Acquire();
+			use the same method as the other clerks to get on a line or bribe line
+			set the clerk to busy and have it acquire clerkLock
+			release clerkLineLock
+			if there is a senator, stop everything, drop the locks, and go to sleep
+			signal the clerk and wait on clerk
+			set the clerk free, signal the clerk again and have it release clerkLock
+		}
+		void PassportCLerk::Run() { -- in threadtest.cc
+			while (true) {
+				clerkLineLock->Acquire()
+				check the bribe line and simulate work like other clerks
+				check the regualr line and simulate work
+				if noone is in line, go on break
+		}
+
+		void Customer::goToCashier() { -- in threadtest.cc
+			use the same method as the other clerks to get on a line or a bribe line	
+set cashier to busy and have it acquire clerkLock
+release clerkLineLock
+signal and wait on condition to simulate work
+customer pays $100
+}
+
+		void Cashier::Run() { -- in threadtest.cc
+			while (true) {
+				check bribe line first and then regular line for customers
+				simulate work and set paid to true for customer
+				if noone is in line
+					go on break
+			}
+		}
+
+		void Customer::checkSenator() {
+			if (senatorFlag) {
+				outsideLock->Acquire();
+				senatorCV->Wait(outsideLock);
+				outsideLock->Release();
+		}
+
+		void AppClerkStart(int index) { -- in threadtest.cc
+			ApplicationClerk[index]->Run();
+		}
+
+		void PicClerkStart(int index) { -- in threadtest.cc
+			picClerk[index]->Run();
+		}
+
+		void PassClerkStart(int index) { -- in threadtest.cc
+			passClerk[index]->Run();
+		}
+
+		void CashierStart(int index) { -- in threadtest.cc
+			cashier[index]->Run();
+		}
+
+		void ManagerCheckLines() { -- in threadteset.cc
+			for number of ApplicationClerks {
+				if (the clerk is on break and line count is greater than 3) {
+					clerk acquires clerkLock
+					signal ClerkCV
+					release clerkLock
+				}
+			}
+			for number of PictureClerks{
+				if (the clerk is on break and line count is greater than 3) {
+					clerk acquires clerkLock
+					signal ClerkCV
+					release clerkLock
+				}
+			}
+			for number of PassportClerks{
+				if (the clerk is on break and line count is greater than 3) {
+					clerk acquires clerkLock
+					signal ClerkCV
+					release clerkLock
+				}
+			}
+			for number of cashiers{
+				if (the cahsier is on break and line count is greater than 3) {
+					cashier acquires clerkLock
+					signal ClerkCV
+					release clerkLock
+				}
+			}
+		}
+
+		void ManagerCheckClose() { -- in threadtest.cc
+			bool done = false;
+			bool allHere = true;
+			for the total number of customers {
+				if (customer missed a visit to any type of clerk) {
+					done = false;
+				}
+				if (any customer has not arrived) {
+					allhere = false;
+				}
+			}
+			if (done) {
+				return true; office closes
+			else if (allHere) {
+				bool flag = true;
+				for every clerk in the office {
+					if (clerk is not on break) {
+						flag = false;
+						break;
+					}
+				}
+				if (flag) {
+					for number of clerks in each type of clerk {
+						if (the line count is greater than 0) {
+							wake up the clerk
+						}
+					}
+				}
+			}
+			return false;
+		}
+		void Manager() {
+			while (true) {
+				for (50 iterations) {
+					ManagerCheckLines();
+					for (60 iterations) {
+						currentThread->Yield();
+					}
+				}
+				if (ManagerCheckClose()) {
+					tell the system that the test is over
+					break;
+				}
+			}
+		}
+		void Senator::goTo<>Clerk () {
+	clerkLineLock->Acquire();
+	get in the first line since it should be empty
+	setSenatorInLine to true
+	clerk->waitOnSenatorLineCV();
+	clerk->setSenatorinline to false
+	set clerk busy
+	acquire clerkLock
+	release line lock
+	proceed like normal customer to finish duty
+}	
+
+	+ Functions modified and in which file.
+		void Lock::Acquire() { -- in synch.cc
+			disable interrupts;
+			if (held by current thread) restore interrupts and return;
+			if (lock is free) {
+				set state to busy and make current thread owner;
+			}
+			else {
+				append current thread to waitQueue;
+				put current thread to sleep;
+			} restore interrupts;
+		};
+		void Lock::Release() { -- in synch.cc
+			disable interrupts;
+			if (lock is not held by current thread) {
+				print error message, restore interrupts, and return;
+			}
+			if (waitqueue is not empty) {
+				the next thread in the queue becomes new owner;
+				make the new owner readytorun;
+			}
+			else {
+				set lock?s state to free and owner to null;
+			}
+			restore interrupts and return;
+		};
+
+		void Condition::Wait(Lock *conditionLock) { -- in synch.cc
+			disable interrupts;
+			if (conditionLock is null) {
+				print error message, restore, and return;
+			}
+			if  (waitingLock is null) {
+				set waitingLock to conditionLock;
+			}
+			else if (conditionock is not waitingLock) {
+				print error, restore, and return;
+			}
+			append current thread to waitQueue;	
+			release conditionLock;
+			put currentThread to sleep;
+			acquire conditionLock;
+			restore and return;
+		}
+		void Signal(Lock *conditionLock) { -- in synch.cc
+			disable interrupts;
+			if (conditionLock is null) error, restore, return;
+			if (waitQueue is empty) {
+				restore and return;
+			}
+			if (conditionLock is not waitingLock) {
+				error, restore, return;
+			}
+			remove thread from waitingQueue and make it ready to run
+			if (waitingQueue is empty) {
+				set waitingLock to null;
+			}
+			restore and return;
+		}
+		void Condition::BroadCast(Lock * conditionLock) { -- in synch.cc
+			disable interrupts;
+			if (conditionLock is null) error, restore, return;
+			if (condiitionLock is not waitingLock) error, restore, return;
+			restore interrupts;
+			while (waitingQueue is not empty) {
+				Signal(conditionLock);
+			}
+		}		
+
+V. Testing:  (For each test case, you must show)
+	+ How to test
+- How to run the test cases, the commands, the arguments and so on.
+		Part 1: type in ?nachos -T?
+		Part 2: 
+	+ Test Output
+	-Call ?nachos -P2 -rs <integer>? and a menu of test choices will appear
+	-Enter the integer number of the desired test (1 through 8 inclusive)
+	-For Test 1:
+		This test shows that customers will always take the shortest line and also that no more than one customer at a time will take the shortest line. In this test, one of the clerk?s line count will start as 2, and another clerk?s line count will start at 0. When the test starts, two customers will take the line that starts with 0 customers. These two customers do not take the line at the same time. One of them will take the line, and another will take the line again since 2 is still greater than 1.
+	-For Test 2:
+		This test ensures that the Manager doesn?t accidentally overcount the money due to race conditions. To make sure the manager reads each payment only once, the total sales displayed from each clerk should equal the total sales whenever the Manager prints the statement. The simulation is run with 10 Customers and 1 of each Clerk. If the simulation completes, then the test passes.
+	-For Test 3:
+		This test essentially proves that every Customer receives a passport, and that no Cashier started serving a Customer before the previous one received their passport. To track this, every time a Customer receives a passport and prints the line ?Cashier [identifier] has recorded that Customer[identifier] has been given their completed passport? we count it. If at the end of the simulation the number of passports counted equals the number of customers, the test passes.
+	-For Test 4:
+		This test shows that clerks will go on break when there is no customer in their line. When a wave of customers are done with a type of clerk, it will be shown that every clerk of that type will go on break since no customer needs to visit that type of clerk. This test starts with 1 customer and 3 of each clerk. It will show that when the customer is not in line, the clerks will be on break.
+	-For Test 5:
+		Test 5 shows that a Manager will always wake up a Clerk if a line is too long. To prove this, we create a simulation where the manager will be forced to wake up a sleeping Clerk, and him doing so will indicate a successful test. In this test, there will be one of each clerk and 4 customers to show that when 4 or more customers get in line, the clerks will get off break. So the desired result will be that the clerk will be on break until all 4 customers get in their line, at which point the manager will wake the clerk.
+	-For Test 6:
+		This test ensures that the total sales of the office never suffer from race conditions. The way the program is designed, every customer will spend at least $100 of his money by the time he leaves the office. Therefore, the sum of all the money customers have given to clerks through bribes and payments should equal the amount tallied by the manager at the end of the simulation. Whenever a customer spends any amount of money, add it to a global variable. Once the simulation is about to terminate, compare this value with the total sales calculated by the manager. If these two values are equal, then the test passes.
+	-For Test 7:
+		This test proves that Passport Office behavior is correct for Senators. A Senator will ?arrive?, and the only messages that will be printed will be either a Clerk finishing with an existing customer or regarding the Senator. The order of this sequence will indicate a successful test. This test will follow the behavior of the senator as defined by the assignment.
+	-For System Test:
+		New prompts will appear asking for the desired number of customers (between 1 and 50), clerks (between 1 and 5 of each type), and senators (between 1 and 5). Enter a single integer value for each of these prompts. Once you have supplied a value for each parameter the simulation will run with the values entered.
+		
+	
+
+
+
+
+VI. Discussion: //Explain output of testing
+	+ Experiment expectation.  (What is supposed to happen.)
+	Test 1:
+		Customer 0 and Customer 1 will both go to ApplicationClerk 1 as Application Clerk 0 had their line manually lengthened.
+	Test 2:
+		The simulation will terminate without triggering the total sales assert
+
+	Test 3:
+		The simulation will terminate without triggering the total passports assert
+
+	Test 4:
+		The simulation will run with all Clerks being on break except for when the one Customer appears in their line.
+	Test 5:
+		The simulation will run with the Clerks only being woken when the 4 Customers reach their line.
+	Test 6:
+		The simulation will run without triggering the total spent assert.
+Test 7:
+Once the Senator has appeared and is waiting outside the Passport Office, the only actions Customers will take are to finish interacting with a Clerk or going outside to wait. The Senator will be the only Customer interacting with the Clerks until he has left the office. Once the Senator has left the office, the regular Customers will get back in line and run until completion.
+System Test:
+	The Passport Office simulation will run as a whole.
+
+The expectation is that when our simulation is run under any integer seed for -rs that all tests will succeed, proving the correctness of our simulation.
+
+	+ Experiment result.  (What actually happened.)
+	Test 1:
+		Customer 0 and 1 both go to the regular line of AppClerk 1
+		
+	Test 2:
+		The simulation finishes without triggering the assert
+	Test 3:
+		The simulation ends without triggering the assert
+	Test 4:
+		The Clerks are always on break when no Customer is in their line.
+	Test 5:
+	The Clerks are woken by the Manager when 4 Customers get in their line
+or if the simulation has reached a deadlock with Customers waiting in line.
+	Test 6:
+		The simulation finishes without triggering the assert.
+	Test 7:
+		The Customers follow all proper interactions with the Senator.
+Test 8:
+
+	+ Explanation
+	Test 1:
+		The line counts for ApplicationClerk 0 and 1 are initialized to 0 and 2 respectively. There are only two customers, and they will both choose ApplicationClerk 1, showing that they will choose the smallest line.
+
+	Test 2:
+		Whenever the manager prints his total, there will be an assert that the total sales are equal to the sum of each clerk group. A successful termination of the simulation means that the assert was never triggered, so the Manager always properly counted and summed up each sale without suffering from race conditions. Also note that whenever the Manager prints sales, it does just one for each clerk group. 
+	
+	Test 3:
+		As the clerks ensure a customer has received a passport, they increment the number of total passports issued. If the clerks properly counted these and issued them correctly, then the total number of passports should equal the number of customers at the end of the simulation. To check this, there is an assert statement checking this condition that runs when the manager closes the restaurant. Therefore, a successful run of test 3 indicates that the passports were processed in the correct order.
+
+	Test 4:
+		As the clerks start before the customers, there is no one in their lines so they immediately go on break. Only one of each type of clerk will wake up to serve the single Customer, after which the clerk will immediately go back onto break. The clerk will stay on break after serving the Customer through the end of the simulation.
+
+	Test 5:
+		As with the above test, the Clerks immediately go on break because they start before any Customers arrive. The Clerks will then wake up only when either 4 Customers join their line, or when the office has reached a deadlock such as when there are 2 lines of 2 Customers each with no more Customers coming.
+
+	Test 6:
+		At any point in the simulation when a Customer spends money on either a bribe or paying a Cashier, the totalSpent variable is increased by the amount spent. Whenever the Manager counts the money collected by the office, there is an assert statement saying that the total spent must equal the total collected. A successful run of this test then means that the money never enters a race condition with the Manager.
+
+	Test 7:
+		The Customers start before the Senator which allows them to reach a line or possibly a Clerk before the Senator arrives. However, once the Senator arrives the only actions a Customer should take are to go outside or finish with a Clerk. This will be shown by the output after the line ?Senator 0 is waiting to get inside the Passport Office.? The Customers will only resume their actions which are shown in the output after the line ?Senator 0 is leaving the Passport Office.?
+
+
+VIII. Miscellaneous:
+
+Possibility of Customers Not Finishing
+There was a case in the simulation, where there are only two customers left, but all the clerks of a specific type are on break, that could result in the customers never finishing. We solved this by having the manager check if all the customers have arrived yet. If this is true, and all the clerks of a specific type are on break, then the manager will wake up a clerk.
+
+Customer Being Sent to the Back of the Line
+If a customer is sent to the back of the Passport Clerk line or the Cashier line due to arriving too early, if they had previously bribed to get into the ?bribe line? then they go back to the end of the bribe line. Otherwise, they get sent to the back of the regular line.
+
+Output Message Will Not Appear
+
+
+
+
+
+
+
