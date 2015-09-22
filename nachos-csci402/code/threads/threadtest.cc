@@ -1570,9 +1570,11 @@ void Cashier::Run() {
 				senatorData[getToFile()].paid = true;
 				signalOnClerkCV(); // tell customer I have taken their paymetn
 				printf("%s has recorded that Senator %d has been given their completed passport.\n", getName(), getToFile());
-				passPortLock->Acquire();
-				numPassports++;
-				passPortLock->Release();
+				if(choice == 3){
+					passPortLock->Acquire();
+					numPassports++;
+					passPortLock->Release();
+				}
 				waitOnClerkCV(); // wait on Customer to leave
 				releaseLock();
 				setState(CLERK_FREE);
@@ -1609,9 +1611,11 @@ void Cashier::Run() {
 			customerData[getToFile()].paid = true;
 			signalOnClerkCV(); // tell customer I have taken their paymetn
 			printf("%s has recorded that Customer %d has been given their completed passport.\n", getName(), getToFile());
-			passPortLock->Acquire();
-			numPassports++;
-			passPortLock->Release();
+			if(choice == 3){
+				passPortLock->Acquire();
+				numPassports++;
+				passPortLock->Release();
+			}
 			waitOnClerkCV(); // wait on Customer to leave
 			releaseLock();
 			setState(CLERK_FREE);
@@ -1636,9 +1640,11 @@ void Cashier::Run() {
 			customerData[getToFile()].paid = true;
 			signalOnClerkCV(); // tell customer I have taken their payment
 			printf("%s has recorded that Customer %d has been given their completed passport.\n", getName(), getToFile());
-			passPortLock->Acquire();
-			numPassports++;
-			passPortLock->Release();
+			if(choice == 3){
+				passPortLock->Acquire();
+				numPassports++;
+				passPortLock->Release();
+			}
 			waitOnClerkCV(); // wait on Customer to leave
 			releaseLock();
 			setState(CLERK_FREE);
@@ -1806,6 +1812,8 @@ bool ManagerCheckClose() { // returns true if it is okay to close the office
 		printf("Manager is closing the Passport Office.\n");
 		if(choice == 3){
 			ASSERT(numPassports == numCustomers); //For test 3
+			//reset numPassports
+			numPassports = 0;
 		}
 		return true;
 	}
@@ -1956,8 +1964,9 @@ void t3_total_passport(){
 	numCashiers = 2;
 	numSenators = 0;
 	system_test();
-	printf("numCustomers %d. numPassports %d.", numCustomers, numPassports);
 	
+	//reset numPasspo
+	numPassports = 0;
 	//ASSERT(numCustomers == numPassports);
 }
 
