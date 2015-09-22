@@ -43,7 +43,7 @@ class Clerk {
 		void releaseLock();
 
 		virtual void Run() = 0;
-	private:
+	protected:
 		int id; // a unique identifier for each clerk
 		char* name; // used in debugging and output
 					// convention will be clerk type + id
