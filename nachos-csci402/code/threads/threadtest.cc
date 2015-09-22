@@ -1965,8 +1965,6 @@ void t3_total_passport(){
 	numSenators = 0;
 	system_test();
 	
-	//reset numPasspo
-	numPassports = 0;
 	//ASSERT(numCustomers == numPassports);
 }
 
