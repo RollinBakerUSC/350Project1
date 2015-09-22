@@ -435,6 +435,7 @@ int numCashiers; // the number of cashiers
 int numSenators; // the number of senators
 int choice;
 int numPassports = 0;
+int totalSpent;
 
 Customer** customer; // the array of customers - used in CustomerStart
 					 // initialized in Part2()
@@ -578,6 +579,7 @@ void Customer::goToAppClerk() {
 		}
 		if (hasBribed) {
 			money -= 500;
+			totalSpent += 500;
 			moneyLock->Acquire();
 			appClerk[myLine]->addMoney(500);
 			moneyLock->Release();
@@ -688,6 +690,7 @@ void Customer::goToPicClerk() {
 		}
 		if (hasBribed) { // wait in the bribe line
 			money -= 500;
+			totalSpent += 500;
 			moneyLock->Acquire();
 			picClerk[myLine]->addMoney(500);
 			moneyLock->Release();
@@ -799,6 +802,7 @@ void Customer::goToPassClerk() {
 		}
 		if (hasBribed) {
 			money -= 500;
+			totalSpent += 500;
 			moneyLock->Acquire();
 			passClerk[myLine]->addMoney(500);
 			moneyLock->Release();
@@ -898,6 +902,7 @@ void Customer::goToCashier() {
 		}
 		if (hasBribed) {
 			money -= 500;
+			totalSpent += 500;
 			moneyLock->Acquire();
 			cashier[myLine]->addMoney(500);
 			moneyLock->Release();
@@ -947,6 +952,7 @@ void Customer::goToCashier() {
 	cashier[myLine]->signalOnClerkCV(); // tell clerk I have given them my social
 	printf("%s has given Cashier %d $100.\n", name, myLine);
 	money -= 100;
+	totalSpent += 100;
 	cashier[myLine]->waitOnClerkCV(); // wait until clerk has "filed" my social
 	cashier[myLine]->setState(CLERK_FREE); // ensure that the clerk is now free
 	cashier[myLine]->signalOnClerkCV(); // tell clerk I am leaving
@@ -1086,6 +1092,7 @@ void Senator::goToCashier() {
 	cashier[myLine]->signalOnClerkCV(); // tell clerk I have given them my social
 	printf("%s has given Cashier %d $100.\n", name, myLine);
 	money -= 100;
+	totalSpent += 100;
 	cashier[myLine]->waitOnClerkCV(); // wait until clerk has "filed" my social
 	cashier[myLine]->setState(CLERK_FREE); // ensure that the clerk is now free
 	cashier[myLine]->signalOnClerkCV(); // tell clerk I am leaving
@@ -1190,7 +1197,7 @@ void Clerk::signalOnLineCV() {
 
 void Clerk::broadcastOnLineCV() {
 	clerkLineCV->Broadcast(clerkLineLock);
-	clerkBribeLineCV->Broadcast(clerkLineLock);
+	if(getBribeLineCount() > 0) clerkBribeLineCV->Broadcast(clerkLineLock);
 }
 
 void Clerk::waitOnBribeLineCV() {
@@ -1755,6 +1762,9 @@ void ManagerCountMoney(int &appMoney, int &picMoney, int &passMoney, int &cashMo
 	int total = appMoney + picMoney + passMoney + cashMoney;
 	printf("Manager has counted a total of $%d for the passport office.\n", total);
 	ASSERT(total == appMoney + picMoney + passMoney + cashMoney);
+	if (choice == 6) {
+		ASSERT(total == totalSpent);
+	}
 	moneyLock->Release();
 }
 
@@ -1970,26 +1980,52 @@ void t3_total_passport(){
 
 //Shows that clerks go on break when there is no one in their line
 void t4_clerk_break(){
-	
+	numCustomers = 1;
+	numPicClerks = 3;
+	numAppClerks = 3;
+	numPassClerks = 3;
+	numCashiers = 3;
+	numSenators = 0;
+	system_test();
 }
 
 //Shows that the manager wakes up workers whenever a line is too long
 void t5_manager_wakeup(){
-	
+	numCustomers = 4;
+	numPicClerks = 1;
+	numAppClerks = 1;
+	numPassClerks = 1;
+	numCashiers = 1;
+	numSenators = 0;
+	system_test();
 }
 
 //Shows that total sales never suffer from a race condition
 //Money in == money out since every customer will spend all of their money
 void t6_total_sales(){
+	totalSpent = 0;
 	//Whenever a customer's money is determined, add this to a global variable
 	//At the end of the simulation, the total money from the customers should equal the total number that the manager has tallied up
+	numCustomers = 3;
+	numPicClerks = 1;
+	numAppClerks = 1;
+	numPassClerks = 1;
+	numCashiers = 1;
+	numSenators = 0;
+	system_test();
 }
 
 //Shows that behavior is proper for senators
 //Once "Senator has arrived", there should only be info printed about customers finishing at a desk
 //or about the senator until the senator finished
 void t7_senators(){
-	
+	numCustomers = 5;
+	numPicClerks = 1;
+	numAppClerks = 1;
+	numPassClerks = 1;
+	numCashiers = 1;
+	numSenators = 1;
+	system_test();
 }
 
 void Part2(){
