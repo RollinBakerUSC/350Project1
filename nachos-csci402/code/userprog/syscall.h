@@ -29,6 +29,7 @@
 #define SC_Close	8
 #define SC_Fork		9
 #define SC_Yield	10
+#define SC_CreateLock 11
 
 #define MAXFILENAME 256
 
@@ -124,7 +125,12 @@ void Fork(void (*func)());
 /* Yield the CPU to another runnable thread, whether in this address space 
  * or not. 
  */
-void Yield();		
+void Yield();
+
+/* Create a Lock and store it in the kernal lock table, return the index of the lock in the kernal lock table.
+   Arugments are the lock name and length of lock name
+ */	
+int CreateLock(char *name, int length);
 
 #endif /* IN_ASM */
 

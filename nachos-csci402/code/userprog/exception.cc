@@ -231,6 +231,27 @@ void Close_Syscall(int fd) {
     }
 }
 
+int CreateLock_Syscall(unsigned int vaddr, int length) {
+  char* buf = new char[length+1];
+
+  if(!buf) return -1;
+
+  if( copyin(vaddr,length,buf) == -1 ) {
+    printf("%s","Bad pointer passed to CreateLock\n");
+    delete buf;
+    return -1;
+  }
+
+  buf[length] = '\0';
+
+  printf("Creating lock %s.\n", buf);
+  /*KernelLock* newLock = new KernelLock();
+  newLock->lock = new Lock(buf);
+  newLock->isToBeDeleted = false;
+  kernelLockTable.insert(newLock);*/
+  return 0;
+}
+
 void ExceptionHandler(ExceptionType which) {
     int type = machine->ReadRegister(2); // Which syscall?
     int rv=0; 	// the return value from a syscall
@@ -267,6 +288,14 @@ void ExceptionHandler(ExceptionType which) {
 		DEBUG('a', "Close syscall.\n");
 		Close_Syscall(machine->ReadRegister(4));
 		break;
+      case SC_Yield:
+    DEBUG('a', "Yield syscall.\n");
+    currentThread->Yield();
+    break;
+      case SC_CreateLock:
+    DEBUG('a', "Create Lock syscall.\n");
+    rv = CreateLock_Syscall(machine->ReadRegister(4), machine->ReadRegister(5));
+    break;
 	}
 
 	// Put in the return value and increment the PC
