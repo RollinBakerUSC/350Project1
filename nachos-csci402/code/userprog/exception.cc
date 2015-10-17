@@ -253,7 +253,7 @@ int CreateLock_Syscall(unsigned int vaddr, int length) {
 }
 
 void Acquire_Syscall(int index) {
-  if(index >= 0 && index < kernelLockTable->size()) {
+  if(index >= 0 && static_cast<unsigned int>(index) < kernelLockTable->size()) {
     printf("Acquiring lock at index %d.\n", index);
     KernelLock* toAcquire = kernelLockTable->at(index);
     toAcquire->lock->Acquire();
@@ -261,7 +261,7 @@ void Acquire_Syscall(int index) {
 }
 
 void Release_Syscall(int index) {
-  if(index >= 0 && index < kernelLockTable->size()) {
+  if(index >= 0 && static_cast<unsigned int>(index) < kernelLockTable->size()) {
     printf("Releasing lock at index %d.\n", index);
     KernelLock* toRelease = kernelLockTable->at(index);
     toRelease->lock->Release();
@@ -269,7 +269,7 @@ void Release_Syscall(int index) {
 }
 
 void DestroyLock_Syscall(int index) {
-  if(index >= 0 && index < kernelLockTable->size()) {
+  if(index >= 0 && static_cast<unsigned int>(index) < kernelLockTable->size()) {
     printf("Destroying lock at index %d.\n", index);
 
   }
@@ -297,10 +297,10 @@ int CreateCondition_Syscall(unsigned int vaddr, int length) {
 }
 
 void Wait_Syscall(int lockIndex, int conditionIndex) {
-  if(lockIndex < 0 || lockIndex >= kernelLockTable->size()) {
+  if(lockIndex < 0 || static_cast<unsigned int>(lockIndex) >= kernelLockTable->size()) {
     return;
   }
-  if(conditionIndex < 0 || conditionIndex >= kernelConditionTable->size()) {
+  if(conditionIndex < 0 || static_cast<unsigned int>(conditionIndex) >= kernelConditionTable->size()) {
     return;
   }
   printf("Waiting on condition at index %d.\n", conditionIndex);
@@ -311,10 +311,10 @@ void Wait_Syscall(int lockIndex, int conditionIndex) {
 }
 
 void Signal_Syscall(int lockIndex, int conditionIndex) {
-  if(lockIndex < 0 || lockIndex >= kernelLockTable->size()) {
+  if(lockIndex < 0 || static_cast<unsigned int>(lockIndex) >= kernelLockTable->size()) {
     return;
   }
-  if(conditionIndex < 0 || conditionIndex >= kernelConditionTable->size()) {
+  if(conditionIndex < 0 || static_cast<unsigned int>(conditionIndex) >= kernelConditionTable->size()) {
     return;
   }
   printf("Signalling on condition at index %d.\n", conditionIndex);
@@ -325,10 +325,10 @@ void Signal_Syscall(int lockIndex, int conditionIndex) {
 }
 
 void Broadcast_Syscall(int lockIndex, int conditionIndex) {
-  if(lockIndex < 0 || lockIndex >= kernelLockTable->size()) {
+  if(lockIndex < 0 || static_cast<unsigned int>(lockIndex) >= kernelLockTable->size()) {
     return;
   }
-  if(conditionIndex < 0 || conditionIndex >= kernelConditionTable->size()) {
+  if(conditionIndex < 0 || static_cast<unsigned int>(conditionIndex) >= kernelConditionTable->size()) {
     return;
   }
   printf("Broadcasting on condition at index %d.\n", conditionIndex);
@@ -339,7 +339,7 @@ void Broadcast_Syscall(int lockIndex, int conditionIndex) {
 }
 
 void DestroyCondition_Syscall(int index) {
-  if(index >= 0 && index < kernelConditionTable->size()) {
+  if(index >= 0 && static_cast<unsigned int>(index) < kernelConditionTable->size()) {
     printf("Destroying condition at index %d.\n", index);
 
   }
