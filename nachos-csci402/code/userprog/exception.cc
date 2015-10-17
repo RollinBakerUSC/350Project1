@@ -232,6 +232,7 @@ void fork_thread(int vaddr /* */) {
 
 void Fork_Syscall(int vaddr /* */) {
 	Thread *t = new Thread("Forked thread"); // create a new thread
+  currentThread->space->AllocateStack();
 	t->space = currentThread->space; // give it space same as parent's
 
 
