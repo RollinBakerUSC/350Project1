@@ -220,6 +220,65 @@ int Read_Syscall(unsigned int vaddr, int len, int id) {
     return len;
 }
 
+void fork_thread(int vaddr /* */) {
+	currentThread->space->InitRegisters(); //
+	//int regValue = machine->ReadRegister(4); // get reg 4 value
+	machine->WriteRegister(PCReg, vaddr);
+	machine->WriteRegister(NextPCReg, vaddr + 4);
+	//machine->WriteRegister(StackReg, currentThread->space->getNumPages * PageSize - 16); // error here
+	currentThread->space->RestoreState();
+	machine->Run();
+}
+
+void Fork_Syscall(int vaddr /* */) {
+	Thread *t = new Thread("Forked thread"); // create a new thread
+	t->space = currentThread->space; // give it space same as parent's
+
+
+	//int regValue = machine->ReadRegister(4);
+	t->Fork((VoidFunctionPtr)fork_thread, vaddr); // thread Fork takes in voinfuncptr and int
+}
+
+void exec_thread(int vaddr) {
+	//machine->WriteRegister(PCReg, 0);
+	//machine->WriteRegister(NextPCReg, 4);
+	//machine->WriteRegister(StackReg, currentThread->space->getNumPages * PageSize - 16);
+	currentThread->space->InitRegisters();
+	currentThread->space->RestoreState();
+	machine->Run();
+}
+
+void Exec_Syscall(char* name, int vaddr) {
+	Thread *t = new Thread("Exec thread"); // create a new thread
+	OpenFile *executable = fileSystem->Open(name);
+   	AddrSpace *space;
+
+    	if (executable == NULL) {
+		printf("Unable to open file %s\n", name);
+		return;
+   	}
+   
+   	space = new AddrSpace(executable);
+
+   	currentThread->space = space;
+
+   	delete executable;			// close file
+
+   	space->InitRegisters();		// set the initial register values
+   	space->RestoreState();		// load page table register
+
+   	t->Fork(exec_thread, vaddr); // 2nd argument needs to be changed. not sure
+   	// ASSERT(FALSE);
+}
+
+void Exit_Syscall(int status) {
+	// not the last executing thread calls Exit
+	
+	// the last executing thread in last process calls Exit
+	
+	// the last executing thread in nonlast process calls Exit
+}
+
 void Close_Syscall(int fd) {
     // Close the file associated with id fd.  No error reporting.
     OpenFile *f = (OpenFile *) currentThread->space->fileTable.Remove(fd);
