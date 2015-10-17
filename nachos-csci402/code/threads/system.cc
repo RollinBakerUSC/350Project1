@@ -144,7 +144,7 @@ Initialize(int argc, char **argv)
 
     threadToBeDestroyed = NULL;
 
-    bitMap = new BitMap(NumPhysPages * PageSize);
+    bitMap = new BitMap(NumPhysPages);
     bitMapLock = new Lock("BitMapLock");
     kernelLockTable = new std::vector<KernelLock*>;
     kernelConditionTable = new std::vector<KernelCondition*>;
