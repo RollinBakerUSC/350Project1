@@ -8,6 +8,7 @@
 
 #include "copyright.h"
 #include "bitmap.h"
+#include "synch.h"
 
 //----------------------------------------------------------------------
 // BitMap::BitMap
@@ -33,6 +34,7 @@ BitMap::BitMap(int nitems)
 
 BitMap::~BitMap()
 { 
+    bitMapLock->Acquire();
     delete map;
 }
 
@@ -46,8 +48,10 @@ BitMap::~BitMap()
 void
 BitMap::Mark(int which) 
 { 
+    bitMapLock->Acquire();
     ASSERT(which >= 0 && which < numBits);
     map[which / BitsInWord] |= 1 << (which % BitsInWord);
+    bitMapLock->Release();
 }
     
 //----------------------------------------------------------------------
@@ -60,8 +64,10 @@ BitMap::Mark(int which)
 void 
 BitMap::Clear(int which) 
 {
+    bitMapLock->Acquire();
     ASSERT(which >= 0 && which < numBits);
     map[which / BitsInWord] &= ~(1 << (which % BitsInWord));
+    bitMapLock->Release();
 }
 
 //----------------------------------------------------------------------
@@ -74,12 +80,17 @@ BitMap::Clear(int which)
 bool 
 BitMap::Test(int which)
 {
+    bitMapLock->Acquire();
     ASSERT(which >= 0 && which < numBits);
     
-    if (map[which / BitsInWord] & (1 << (which % BitsInWord)))
-	return TRUE;
-    else
-	return FALSE;
+    if (map[which / BitsInWord] & (1 << (which % BitsInWord))){
+        bitMapLock->Release();
+        return TRUE;
+    }
+    else{
+        bitMapLock->Release();
+	   return FALSE;
+    }
 }
 
 //----------------------------------------------------------------------
@@ -94,11 +105,14 @@ BitMap::Test(int which)
 int 
 BitMap::Find() 
 {
+    bitMapLock->Acquire();
     for (int i = 0; i < numBits; i++)
 	if (!Test(i)) {
 	    Mark(i);
+        bitMapLock->Release();
 	    return i;
 	}
+    bitMapLock->Release();
     return -1;
 }
 
@@ -111,10 +125,12 @@ BitMap::Find()
 int 
 BitMap::NumClear() 
 {
+    bitMapLock->Acquire();
     int count = 0;
 
     for (int i = 0; i < numBits; i++)
 	if (!Test(i)) count++;
+    bitMapLock->Release();
     return count;
 }
 
@@ -129,11 +145,13 @@ BitMap::NumClear()
 void
 BitMap::Print() 
 {
+    bitMapLock->Acquire();
     printf("Bitmap set:\n"); 
     for (int i = 0; i < numBits; i++)
 	if (Test(i))
 	    printf("%d, ", i);
     printf("\n"); 
+    bitMapLock->Release();
 }
 
 // These aren't needed until the FILESYS assignment
@@ -148,7 +166,9 @@ BitMap::Print()
 void
 BitMap::FetchFrom(OpenFile *file) 
 {
+    bitMapLock->Acquire();
     file->ReadAt((char *)map, numWords * sizeof(unsigned), 0);
+    bitMapLock->Release();
 }
 
 //----------------------------------------------------------------------
@@ -161,5 +181,7 @@ BitMap::FetchFrom(OpenFile *file)
 void
 BitMap::WriteBack(OpenFile *file)
 {
+   bitMapLock->Acquire();
    file->WriteAt((char *)map, numWords * sizeof(unsigned), 0);
+   bitMapLock->Release();
 }

@@ -7,6 +7,8 @@
 
 #include "copyright.h"
 #include "system.h"
+#include "../userprog/addrspace.h"
+#include "../userprog/table.h"
 
 // This defines *all* of the global data structures used by Nachos.
 // These are all initialized and de-allocated by this file.
@@ -18,6 +20,8 @@ Interrupt *interrupt;			// interrupt status
 Statistics *stats;			// performance metrics
 Timer *timer;				// the hardware timer device,
 					// for invoking context switches
+BitMap *bitMap;
+Lock *bitMapLock;
 
 std::vector<KernelLock*>* kernelLockTable;
 std::vector<KernelCondition*>* kernelConditionTable;
@@ -140,6 +144,8 @@ Initialize(int argc, char **argv)
 
     threadToBeDestroyed = NULL;
 
+    bitMap = new BitMap(NumPhysPages * PageSize);
+    bitMapLock = new Lock("BitMapLock");
     kernelLockTable = new std::vector<KernelLock*>;
     kernelConditionTable = new std::vector<KernelCondition*>;
 
@@ -196,7 +202,8 @@ Cleanup()
     delete timer;
     delete scheduler;
     delete interrupt;
-
+    delete bitMap;
+    delete bitMapLock;
     delete kernelLockTable;
     delete kernelConditionTable;
     

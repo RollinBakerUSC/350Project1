@@ -16,6 +16,7 @@
 #include "stats.h"
 #include "timer.h"
 #include "synch.h"
+#include "../userprog/bitmap.h"
 
 #include <vector>
 
@@ -31,6 +32,8 @@ extern Scheduler *scheduler;			// the ready list
 extern Interrupt *interrupt;			// interrupt status
 extern Statistics *stats;			// performance metrics
 extern Timer *timer;				// the hardware alarm clock
+extern BitMap *bitMap;				// Bitmap for physical page table
+extern Lock* bitMapLock;
 
 struct KernelLock {
 	KernelLock(char* name) {
