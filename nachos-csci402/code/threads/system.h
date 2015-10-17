@@ -15,6 +15,7 @@
 #include "interrupt.h"
 #include "stats.h"
 #include "timer.h"
+#include "synch.h"
 
 #include <vector>
 
@@ -32,12 +33,27 @@ extern Statistics *stats;			// performance metrics
 extern Timer *timer;				// the hardware alarm clock
 
 struct KernelLock {
+	KernelLock(char* name) {
+		lock = new Lock(name);
+		isToBeDeleted = false;
+	}
 	Lock* lock;
 	//Addrspace* addrspace;
 	bool isToBeDeleted;
 };
 
-extern std::vector<KernelLock*> kernelLockTable;
+struct KernelCondition {
+	KernelCondition(char* name) {
+		condition = new Condition(name);
+		isToBeDeleted = false;
+	}
+	Condition* condition;
+	//Addrspace* addrspace;
+	bool isToBeDeleted;
+};
+
+extern std::vector<KernelLock*>* kernelLockTable;
+extern std::vector<KernelCondition*>* kernelConditionTable;
 
 #ifdef USER_PROGRAM
 #include "machine.h"

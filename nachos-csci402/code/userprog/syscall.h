@@ -30,6 +30,15 @@
 #define SC_Fork		9
 #define SC_Yield	10
 #define SC_CreateLock 11
+#define SC_Acquire 	12
+#define SC_Release 	13
+#define SC_DestroyLock 14
+#define SC_CreateCondition 15
+#define SC_Wait		16
+#define SC_Signal	17
+#define SC_Broadcast 18
+#define SC_DestroyCondition 19
+#define SC_Print	20
 
 #define MAXFILENAME 256
 
@@ -127,10 +136,36 @@ void Fork(void (*func)());
  */
 void Yield();
 
+/* Mutual exclusion system calls: CreateLock, Acquire, Release, DestroyLock, CreateCondition, Wait, Signal, Broadcast, DestroyCondition
+*/
+
 /* Create a Lock and store it in the kernal lock table, return the index of the lock in the kernal lock table.
    Arugments are the lock name and length of lock name
  */	
 int CreateLock(char *name, int length);
+
+/* Acquire the lock in the kernel lock table at the position defined by index
+*/
+void Acquire(int index);
+
+/* Release the lock in the kernel lock table at the position defined by index
+*/
+void Release(int index);
+
+/* Destroy the lock in the kernel lock table at the position defined by index if it is not in use.
+   If in use, mark it to be destroyed when not in use
+*/
+void DestroyLock(int index);
+
+int CreateCondition(char *name, int length);
+
+void Wait(int lockIndex, int conditionIndex);
+
+void Signal(int lockIndex, int conditionIndex);
+
+void Broadcast(int lockIndex, int conditionIndex);
+
+void DestroyCondition(int index);
 
 #endif /* IN_ASM */
 

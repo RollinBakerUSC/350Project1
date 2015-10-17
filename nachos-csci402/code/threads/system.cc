@@ -19,7 +19,8 @@ Statistics *stats;			// performance metrics
 Timer *timer;				// the hardware timer device,
 					// for invoking context switches
 
-std::vector<KernelLock*> kernelLockTable;
+std::vector<KernelLock*>* kernelLockTable;
+std::vector<KernelCondition*>* kernelConditionTable;
 
 #ifdef FILESYS_NEEDED
 FileSystem  *fileSystem;
@@ -36,7 +37,6 @@ Machine *machine;	// user program memory and registers
 #ifdef NETWORK
 PostOffice *postOffice;
 #endif
-
 
 // External definition, to allow us to take a pointer to this function
 extern void Cleanup();
@@ -140,7 +140,8 @@ Initialize(int argc, char **argv)
 
     threadToBeDestroyed = NULL;
 
-    //kernelLockTable = new std::vector<KernelLock*>;
+    kernelLockTable = new std::vector<KernelLock*>;
+    kernelConditionTable = new std::vector<KernelCondition*>;
 
     // We didn't explicitly allocate the current thread we are running in.
     // But if it ever tries to give up the CPU, we better have a Thread
@@ -196,7 +197,8 @@ Cleanup()
     delete scheduler;
     delete interrupt;
 
-    //delete kernelLockTable;
+    delete kernelLockTable;
+    delete kernelConditionTable;
     
     Exit(0);
 }

@@ -245,11 +245,104 @@ int CreateLock_Syscall(unsigned int vaddr, int length) {
   buf[length] = '\0';
 
   printf("Creating lock %s.\n", buf);
-  /*KernelLock* newLock = new KernelLock();
-  newLock->lock = new Lock(buf);
-  newLock->isToBeDeleted = false;
-  kernelLockTable.insert(newLock);*/
-  return 0;
+
+  KernelLock* newLock = new KernelLock(buf);
+  kernelLockTable->push_back(newLock);
+
+  return kernelLockTable->size()-1;
+}
+
+void Acquire_Syscall(int index) {
+  if(index >= 0 && index < kernelLockTable->size()) {
+    printf("Acquiring lock at index %d.\n", index);
+    KernelLock* toAcquire = kernelLockTable->at(index);
+    toAcquire->lock->Acquire();
+  }
+}
+
+void Release_Syscall(int index) {
+  if(index >= 0 && index < kernelLockTable->size()) {
+    printf("Releasing lock at index %d.\n", index);
+    KernelLock* toRelease = kernelLockTable->at(index);
+    toRelease->lock->Release();
+  }
+}
+
+void DestroyLock_Syscall(int index) {
+  if(index >= 0 && index < kernelLockTable->size()) {
+    printf("Destroying lock at index %d.\n", index);
+
+  }
+}
+
+int CreateCondition_Syscall(unsigned int vaddr, int length) {
+  char* buf = new char[length+1];
+
+  if(!buf) return -1;
+
+  if( copyin(vaddr,length,buf) == -1 ) {
+    printf("%s","Bad pointer passed to CreateCondition\n");
+    delete buf;
+    return -1;
+  }
+
+  buf[length] = '\0';
+
+  printf("Creating condition %s.\n", buf);
+
+  KernelCondition* newCondition = new KernelCondition(buf);
+  kernelConditionTable->push_back(newCondition);
+
+  return kernelConditionTable->size()-1;
+}
+
+void Wait_Syscall(int lockIndex, int conditionIndex) {
+  if(lockIndex < 0 || lockIndex >= kernelLockTable->size()) {
+    return;
+  }
+  if(conditionIndex < 0 || conditionIndex >= kernelConditionTable->size()) {
+    return;
+  }
+  printf("Waiting on condition at index %d.\n", conditionIndex);
+  KernelCondition* c = kernelConditionTable->at(conditionIndex);
+  KernelLock* l = kernelLockTable->at(lockIndex);
+
+  c->condition->Wait(l->lock);
+}
+
+void Signal_Syscall(int lockIndex, int conditionIndex) {
+  if(lockIndex < 0 || lockIndex >= kernelLockTable->size()) {
+    return;
+  }
+  if(conditionIndex < 0 || conditionIndex >= kernelConditionTable->size()) {
+    return;
+  }
+  printf("Signalling on condition at index %d.\n", conditionIndex);
+  KernelCondition* c = kernelConditionTable->at(conditionIndex);
+  KernelLock* l = kernelLockTable->at(lockIndex);
+
+  c->condition->Signal(l->lock);
+}
+
+void Broadcast_Syscall(int lockIndex, int conditionIndex) {
+  if(lockIndex < 0 || lockIndex >= kernelLockTable->size()) {
+    return;
+  }
+  if(conditionIndex < 0 || conditionIndex >= kernelConditionTable->size()) {
+    return;
+  }
+  printf("Broadcasting on condition at index %d.\n", conditionIndex);
+  KernelCondition* c = kernelConditionTable->at(conditionIndex);
+  KernelLock* l = kernelLockTable->at(lockIndex);
+
+  c->condition->Broadcast(l->lock);
+}
+
+void DestroyCondition_Syscall(int index) {
+  if(index >= 0 && index < kernelConditionTable->size()) {
+    printf("Destroying condition at index %d.\n", index);
+
+  }
 }
 
 void ExceptionHandler(ExceptionType which) {
@@ -295,6 +388,38 @@ void ExceptionHandler(ExceptionType which) {
       case SC_CreateLock:
     DEBUG('a', "Create Lock syscall.\n");
     rv = CreateLock_Syscall(machine->ReadRegister(4), machine->ReadRegister(5));
+    break;
+      case SC_Acquire:
+    DEBUG('a', "Acquire syscall.\n");
+    Acquire_Syscall(machine->ReadRegister(4));
+    break;
+      case SC_Release:
+    DEBUG('a', "Release syscall.\n");
+    Release_Syscall(machine->ReadRegister(4));
+    break;
+      case SC_DestroyLock:
+    DEBUG('a', "Destroy Lock syscall.\n");
+    DestroyLock_Syscall(machine->ReadRegister(4));
+    break;
+      case SC_CreateCondition:
+    DEBUG('a', "Create Condition syscall.\n");
+    rv = CreateCondition_Syscall(machine->ReadRegister(4), machine->ReadRegister(5));
+    break;
+      case SC_Wait:
+    DEBUG('a', "Wait syscall.\n");
+    Wait_Syscall(machine->ReadRegister(4), machine->ReadRegister(5));
+    break;
+      case SC_Signal:
+    DEBUG('a', "Signal syscall.\n");
+    Signal_Syscall(machine->ReadRegister(4), machine->ReadRegister(5));
+    break;
+      case SC_Broadcast:
+    DEBUG('a', "Broadcast syscall.\n");
+    Broadcast_Syscall(machine->ReadRegister(4), machine->ReadRegister(5));
+    break;
+      case SC_DestroyCondition:
+    DEBUG('a', "Destroy Condition syscall.\n");
+    DestroyCondition_Syscall(machine->ReadRegister(4));
     break;
 	}
 
