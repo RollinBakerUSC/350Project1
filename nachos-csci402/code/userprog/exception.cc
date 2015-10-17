@@ -13,7 +13,7 @@
 //
 //	Interrupts (which can also cause control to transfer from user
 //	code into the Nachos kernel) are handled elsewhere.
-//
+//fo
 // For now, this only handles the Halt() system call.
 // Everything else core dumps.
 //
@@ -236,7 +236,7 @@ void Fork_Syscall(int vaddr /* */) {
 	t->space = currentThread->space; // give it space same as parent's
 
 
-	//int regValue = machine->ReadRegister(4);
+	// int regValue = machine->ReadRegister(4);
 	t->Fork((VoidFunctionPtr)fork_thread, vaddr); // thread Fork takes in voinfuncptr and int
 }
 
