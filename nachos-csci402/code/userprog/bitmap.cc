@@ -9,7 +9,7 @@
 #include "copyright.h"
 #include "bitmap.h"
 #include "synch.h"
-
+#include "system.h"
 //----------------------------------------------------------------------
 // BitMap::BitMap
 // 	Initialize a bitmap with "nitems" bits, so that every bit is clear.

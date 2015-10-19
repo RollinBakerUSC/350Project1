@@ -250,7 +250,7 @@ void AddrSpace::RestoreState()
 void AddrSpace::AllocateStack() {
     numPages += 8;
     TranslationEntry* newPageTable = new TranslationEntry[numPages];
-    for(int i = 0; i < numPages - 8; i++) {
+    for(unsigned int i = 0; i < numPages - 8; i++) {
         newPageTable[i].virtualPage = pageTable[i].virtualPage;
         newPageTable[i].physicalPage = pageTable[i].physicalPage;
         newPageTable[i].valid = pageTable[i].valid;
@@ -258,7 +258,7 @@ void AddrSpace::AllocateStack() {
         newPageTable[i].dirty = pageTable[i].dirty;
         newPageTable[i].readOnly = pageTable[i].readOnly;
     }
-    for(int i = numPages - 8; i < numPages; i++) {
+    for(unsigned int i = numPages - 8; i < numPages; i++) {
         newPageTable[i].virtualPage = i;
         newPageTable[i].physicalPage = bitMap->Find();
         newPageTable[i].valid = TRUE;
