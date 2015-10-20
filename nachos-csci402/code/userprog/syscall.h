@@ -29,6 +29,18 @@
 #define SC_Close	8
 #define SC_Fork		9
 #define SC_Yield	10
+#define SC_CreateLock 11
+#define SC_DestroyLock 12
+#define SC_Acquire	13
+#define SC_Release	14
+#define SC_CreateCondition 15
+#define SC_DestroyCondition 16
+#define SC_Wait		17
+#define SC_Signal	18
+#define SC_Broadcast 19
+#define SC_Print	20
+#define SC_PrintInt	21
+#define SC_GetID	22
 
 #define MAXFILENAME 256
 
@@ -59,7 +71,7 @@ typedef int SpaceId;
 /* Run the executable, stored in the Nachos file "name", and return the 
  * address space identifier
  */
-SpaceId Exec(char *name);
+SpaceId Exec(char *name, int size);
  
 /* Only return once the the user program "id" has finished.  
  * Return the exit status.
@@ -119,12 +131,52 @@ void Close(OpenFileId id);
 /* Fork a thread to run a procedure ("func") in the *same* address space 
  * as the current thread.
  */
-void Fork(void (*func)());
+void Fork(void (*func)(), char *name, int size, int id);
 
 /* Yield the CPU to another runnable thread, whether in this address space 
  * or not. 
  */
-void Yield();		
+void Yield();
+
+/* Mutual Exclusion Syscalls, locks and condition variables */
+
+/* returns the index position of the lock in the kernelLockTable */
+int CreateLock(char *name, int size);
+
+/* destroy the lock located at index in the kernelLockTable */
+void DestroyLock(int index);
+
+/* acquire the lock located at index */
+void Acquire(int index);
+
+/* release the lock located at index */
+void Release(int index);
+
+/* create a condition and return its position in the kernelCVTable */
+int CreateCondition(char* name, int size);
+
+/* destroy the condition located at the index */
+void DestroyCondition(int index);
+
+/* wait on the condition at condIndex with lock at lockIndex */
+void Wait(int condIndex, int lockIndex);
+
+/* Signal on the condition at condIndex with the lock at lockIndex */
+void Signal(int condIndex, int lockIndex);
+
+/* Broadcast on the condition at condIndex with the lock at lockIndex */
+void Broadcast(int condIndex, int lockIndex);
+
+/* end of mutual exclusion syscalls */
+
+/* print out string that is length size */
+void Print(char* string, int size);
+
+/* print out an integer */
+void PrintInt(int toPrint);
+
+/* return the ending int ID of a thread's name */
+int GetID();
 
 #endif /* IN_ASM */
 

@@ -15,6 +15,49 @@
 #include "interrupt.h"
 #include "stats.h"
 #include "timer.h"
+#include "synch.h"
+#include "addrspace.h"
+
+#include <vector>
+
+struct KernelLock {
+	KernelLock(char* name, AddrSpace* _addrspace) {
+		lock = new Lock(name);
+		isToBeDeleted = false;
+		numThreads = 0;
+		addrspace = _addrspace;
+		valid = true;
+	}
+	Lock* lock;
+	AddrSpace* addrspace;
+	bool isToBeDeleted;
+	bool valid;
+	int numThreads;
+};
+
+struct KernelCondition {
+	KernelCondition(char* name, AddrSpace* _addrspace) {
+		condition = new Condition(name);
+		isToBeDeleted = false;
+		numThreads = 0;
+		addrspace = _addrspace;
+		valid = true;
+	}
+	Condition* condition;
+	AddrSpace* addrspace;
+	bool isToBeDeleted;
+	bool valid;
+	int numThreads;
+};
+
+struct Process {
+	Process(AddrSpace* _space) {
+		space = _space;
+		numThreads = 1; // initialize to 1 for the thread who made the process
+	}
+	AddrSpace* space;
+	int numThreads;
+};
 
 // Initialization and cleanup routines
 extern void Initialize(int argc, char **argv); 	// Initialization,
@@ -28,6 +71,17 @@ extern Scheduler *scheduler;			// the ready list
 extern Interrupt *interrupt;			// interrupt status
 extern Statistics *stats;			// performance metrics
 extern Timer *timer;				// the hardware alarm clock
+
+extern std::vector<KernelLock*>* kernelLockTable;
+extern Lock* kernelLockLock;
+extern std::vector<KernelCondition*>* kernelCVTable;
+extern Lock* kernelCVLock;
+
+extern BitMap* mainMemoryBitMap;
+extern Lock* bitMapLock;
+
+extern std::vector<Process*>* processTable;
+extern Lock* processLock;
 
 #ifdef USER_PROGRAM
 #include "machine.h"

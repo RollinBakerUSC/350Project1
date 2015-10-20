@@ -19,6 +19,17 @@ Statistics *stats;			// performance metrics
 Timer *timer;				// the hardware timer device,
 					// for invoking context switches
 
+std::vector<KernelLock*>* kernelLockTable;
+Lock* kernelLockLock;
+std::vector<KernelCondition*>* kernelCVTable;
+Lock* kernelCVLock;
+
+Lock* bitMapLock;
+BitMap* mainMemoryBitMap;
+
+std::vector<Process*>* processTable;
+Lock* processLock;
+
 #ifdef FILESYS_NEEDED
 FileSystem  *fileSystem;
 #endif
@@ -138,6 +149,17 @@ Initialize(int argc, char **argv)
 
     threadToBeDestroyed = NULL;
 
+    kernelLockTable = new std::vector<KernelLock*>;
+    kernelLockLock = new Lock("Kernel Lock Lock");
+    kernelCVTable = new std::vector<KernelCondition*>;
+    kernelCVLock = new Lock("Kernel CV Lock");
+
+    mainMemoryBitMap = new BitMap(NumPhysPages);
+    bitMapLock = new Lock("BitMap Lock");
+
+    processTable = new std::vector<Process*>;
+    processLock = new Lock("Process Table Lock");
+
     // We didn't explicitly allocate the current thread we are running in.
     // But if it ever tries to give up the CPU, we better have a Thread
     // object to save its state. 
@@ -191,7 +213,28 @@ Cleanup()
     delete timer;
     delete scheduler;
     delete interrupt;
-    
+
+    for(unsigned int i = 0; i < kernelLockTable->size(); i++) {
+        if(kernelLockTable->at(i)->lock != NULL) {
+            delete kernelLockTable->at(i)->lock;
+        }
+        delete kernelLockTable->at(i);
+    }
+    delete kernelLockTable;
+    for(unsigned int i = 0; i < kernelCVTable->size(); i++) {
+        if(kernelCVTable->at(i)->condition != NULL) {
+            delete kernelCVTable->at(i)->condition;
+        }
+        delete kernelCVTable->at(i);
+    }
+    delete kernelCVTable;
+
+    delete mainMemoryBitMap;
+    delete bitMapLock;
+
+    delete processTable;
+    delete processLock;
+
     Exit(0);
 }
 

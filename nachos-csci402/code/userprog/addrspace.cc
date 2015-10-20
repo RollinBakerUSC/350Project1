@@ -148,21 +148,29 @@ AddrSpace::AddrSpace(OpenFile *executable) : fileTable(MaxOpenFiles) {
     pageTable = new TranslationEntry[numPages];
     for (i = 0; i < numPages; i++) {
 	pageTable[i].virtualPage = i;	// for now, virtual page # = phys page #
-	pageTable[i].physicalPage = i;
+    bitMapLock->Acquire();
+	pageTable[i].physicalPage = mainMemoryBitMap->Find();
+    bitMapLock->Release();
+    if(pageTable[i].physicalPage == -1) {
+        printf("Nachos is out of memory.\n");
+        interrupt->Halt();
+    }
 	pageTable[i].valid = TRUE;
 	pageTable[i].use = FALSE;
 	pageTable[i].dirty = FALSE;
 	pageTable[i].readOnly = FALSE;  // if the code segment was entirely on 
 					// a separate page, we could set its 
 					// pages to be read-only
+    bzero(&machine->mainMemory[pageTable[i].physicalPage*PageSize], PageSize);
+    executable->ReadAt(&machine->mainMemory[pageTable[i].physicalPage*PageSize], PageSize, 40 + i*PageSize);
     }
     
 // zero out the entire address space, to zero the unitialized data segment 
 // and the stack segment
-    bzero(machine->mainMemory, size);
+   // bzero(machine->mainMemory, size);
 
 // then, copy in the code and data segments into memory
-    if (noffH.code.size > 0) {
+/*    if (noffH.code.size > 0) {
         DEBUG('a', "Initializing code segment, at 0x%x, size %d\n", 
 			noffH.code.virtualAddr, noffH.code.size);
         executable->ReadAt(&(machine->mainMemory[noffH.code.virtualAddr]),
@@ -174,7 +182,7 @@ AddrSpace::AddrSpace(OpenFile *executable) : fileTable(MaxOpenFiles) {
         executable->ReadAt(&(machine->mainMemory[noffH.initData.virtualAddr]),
 			noffH.initData.size, noffH.initData.inFileAddr);
     }
-
+*/
 }
 
 //----------------------------------------------------------------------
@@ -244,4 +252,16 @@ void AddrSpace::RestoreState()
 {
     machine->pageTable = pageTable;
     machine->pageTableSize = numPages;
+}
+
+void AddrSpace::clearMem() {
+    for(unsigned int i = 0; i < numPages; i++) {
+        if(pageTable[i].valid) {
+            bitMapLock->Acquire();
+            mainMemoryBitMap->Clear(pageTable[i].physicalPage);
+            bzero(&machine->mainMemory[pageTable[i].physicalPage*PageSize], PageSize);
+            bitMapLock->Release();
+            pageTable[i].valid = false;
+        }
+    }
 }

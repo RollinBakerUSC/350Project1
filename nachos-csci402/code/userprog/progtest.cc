@@ -37,6 +37,11 @@ StartProcess(char *filename)
 
     currentThread->space = space;
 
+    Process* newProcess = new Process(currentThread->space);
+    processLock->Acquire();
+    processTable->push_back(newProcess);
+    processLock->Release();
+
     delete executable;			// close file
 
     space->InitRegisters();		// set the initial register values

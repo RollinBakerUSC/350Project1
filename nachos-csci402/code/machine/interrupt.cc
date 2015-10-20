@@ -20,10 +20,10 @@
 // All rights reserved.  See copyright.h for copyright notice and limitation 
 // of liability and disclaimer of warranty provisions.
 #include <stdio.h>
-#include <iostream>
 #include "copyright.h"
 #include "interrupt.h"
 #include "system.h"
+#include <iostream>
 using namespace std;
 // String definitions for debugging messages
 #include <stdio.h>

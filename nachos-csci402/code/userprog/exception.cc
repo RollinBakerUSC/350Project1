@@ -26,6 +26,7 @@
 #include "syscall.h"
 #include <stdio.h>
 #include <iostream>
+#include <string>
 
 using namespace std;
 
@@ -231,6 +232,289 @@ void Close_Syscall(int fd) {
     }
 }
 
+void Exec_Thread() {
+  cout << "In exec thread" << endl;
+  currentThread->space->InitRegisters();
+  currentThread->space->RestoreState();
+  machine->Run();
+  ASSERT(false);
+}
+
+int Exec_Syscall(unsigned int vaddr, int size) {
+  processLock->Acquire();
+  char* buf = new char[size+1];
+  if(!buf) {
+    return -1;
+  }
+  if(copyin(vaddr, size, buf) == -1) {
+    printf("Unable to read file name for Exec.\n");
+    delete buf;
+    return -1;
+  }
+
+  OpenFile* executable = fileSystem->Open(buf);
+
+  if(executable == NULL) {
+    printf("Unable to open file - %s - for Exec.\n", buf);
+    delete buf;
+    return -1;
+  }
+
+  AddrSpace* space = new AddrSpace(executable);
+
+  Process* newProcess = new Process(space);
+  processTable->push_back(newProcess);
+  processLock->Release();
+
+  Thread* t = new Thread(buf);
+  t->space = space;
+
+  delete executable;
+  cout << "here" << endl;
+  t->Fork((VoidFunctionPtr)Exec_Thread, 0);
+
+  return 0;
+}
+
+void Fork_Syscall(unsigned int addr, unsigned int vaddr, int size, int id) {
+
+}
+
+int CreateLock_Syscall(unsigned int vaddr, int size) {
+  char* buf = new char[size+1];
+
+  if(!buf) {
+    return -1;
+  }
+  if(copyin(vaddr, size, buf) == -1) {
+    printf("Bad pointer passed to CreateLock.\n");
+    delete buf;
+    return -1;
+  }
+
+  buf[size] = '\0';
+
+  KernelLock* newLock = new KernelLock(buf, currentThread->space);
+  kernelLockLock->Acquire();
+  kernelLockTable->push_back(newLock);
+  int toReturn = kernelLockTable->size()-1;
+  kernelLockLock->Release();
+  return toReturn;
+}
+
+void DestroyLock_Syscall(unsigned int index) {
+  kernelLockLock->Acquire();
+  if(index < kernelLockTable->size()) {
+    KernelLock* lock = kernelLockTable->at(index);
+    if(currentThread->space == lock->addrspace && lock->valid) {
+      if(lock->numThreads == 0) {
+        lock->valid = false;
+        lock->isToBeDeleted = false;
+        lock->addrspace = NULL;
+        delete lock->lock;
+        lock->lock = NULL;
+      }
+      else {
+        lock->isToBeDeleted = true;
+      }
+    }
+  }
+  kernelLockLock->Release();
+}
+
+void Acquire_Syscall(unsigned int index) {
+  kernelLockLock->Acquire();
+  if(index < kernelLockTable->size()) {
+    KernelLock* lock = kernelLockTable->at(index);
+    if(currentThread->space == lock->addrspace && lock->valid) {
+      lock->numThreads++;
+      lock->lock->Acquire();
+    }
+  }
+  kernelLockLock->Release();
+}
+
+void Release_Syscall(unsigned int index) {
+  kernelLockLock->Acquire();
+  if(index < kernelLockTable->size()) {
+    KernelLock* lock = kernelLockTable->at(index);
+    if(currentThread->space == lock->addrspace && lock->valid) {
+      lock->numThreads--;
+      lock->lock->Release();
+      /* check if the lock has no one waiting for it and is to be deleted */
+      if(lock->numThreads == 0 && lock->isToBeDeleted) {
+        lock->valid = false;
+        lock->isToBeDeleted = false;
+        lock->addrspace = NULL;
+        delete lock->lock;
+        lock->lock = NULL;
+      }
+    }
+  }
+  kernelLockLock->Release();
+}
+
+int CreateCondition_Syscall(unsigned int vaddr, int size) {
+  char* buf = new char[size+1];
+
+  if(!buf) {
+    return -1;
+  }
+  if(copyin(vaddr, size, buf) == -1) {
+    printf("Bad pointer passed to CreateCondition.\n");
+    delete buf;
+    return -1;
+  }
+
+  buf[size] = '\0';
+
+  KernelCondition* newCondition = new KernelCondition(buf, currentThread->space);
+  kernelCVLock->Acquire();
+  kernelCVTable->push_back(newCondition);
+  int toReturn = kernelCVTable->size()-1;
+  kernelCVLock->Release();
+  return toReturn;
+}
+
+void DestroyCondition_Syscall(unsigned int index) {
+  kernelCVLock->Acquire();
+  if(index < kernelCVTable->size()) {
+    KernelCondition* cv = kernelCVTable->at(index);
+    if(currentThread->space == cv->addrspace && cv->valid) {
+      if(cv->numThreads == 0) {
+        cv->valid = false;
+        cv->isToBeDeleted = false;
+        cv->addrspace = NULL;
+        delete cv->condition;
+        cv->condition = NULL;
+      }
+      else {
+        cv->isToBeDeleted = true;
+      }
+    }
+  }
+  kernelCVLock->Release();
+}
+
+void Wait_Syscall(unsigned int cvIndex, unsigned int lockIndex) {
+  kernelCVLock->Acquire();
+  kernelLockLock->Acquire();
+  if(cvIndex < kernelCVTable->size() && lockIndex < kernelLockTable->size()) {
+    KernelCondition* cv = kernelCVTable->at(cvIndex);
+    KernelLock* lock = kernelLockTable->at(lockIndex);
+    if(currentThread->space == cv->addrspace &&
+      currentThread->space == lock->addrspace &&
+      cv->valid && lock->valid) {
+      cv->numThreads++;
+      cv->condition->Wait(lock->lock);
+      cv->numThreads--;
+    }
+  }
+  kernelCVLock->Release();
+  kernelLockLock->Release();
+}
+
+void Signal_Syscall(unsigned int cvIndex, unsigned int lockIndex) {
+  kernelCVLock->Acquire();
+  kernelLockLock->Acquire();
+  if(cvIndex < kernelCVTable->size() && lockIndex < kernelLockTable->size()) {
+    KernelCondition* cv = kernelCVTable->at(cvIndex);
+    KernelLock* lock = kernelLockTable->at(lockIndex);
+    if(currentThread->space == cv->addrspace &&
+      currentThread->space == lock->addrspace &&
+      cv->valid && lock->valid) {
+      cv->condition->Signal(lock->lock);
+    }
+  }
+  kernelCVLock->Release();
+  kernelLockLock->Release();
+}
+
+void Broadcast_Syscall(unsigned int cvIndex, unsigned int lockIndex) {
+  kernelCVLock->Acquire();
+  kernelLockLock->Acquire();
+  if(cvIndex < kernelCVTable->size() && lockIndex < kernelLockTable->size()) {
+    KernelCondition* cv = kernelCVTable->at(cvIndex);
+    KernelLock* lock = kernelLockTable->at(lockIndex);
+    if(currentThread->space == cv->addrspace &&
+      currentThread->space == lock->addrspace &&
+      cv->valid && lock->valid) {
+      cv->condition->Broadcast(lock->lock);
+    }
+  }
+  kernelCVLock->Release();
+  kernelLockLock->Release();
+}
+
+void Print_Syscall(unsigned int vaddr, int size) {
+  char* buf = new char[size+1];
+
+  copyin(vaddr, size, buf);
+
+  buf[size] = '\0';
+
+  cout << buf;
+}
+
+void PrintInt_Syscall(int toPrint) {
+  cout << toPrint;
+}
+
+/* used solely for the passport office */
+int GetID_Syscall() {
+  string name = currentThread->getName();
+  char c = name[name.length()-1];
+  int id = c - '0';
+  return id;
+}
+
+void Exit_Syscall(int status) {
+  processLock->Acquire();
+  Process* myProcess;
+  int myIndex;
+  // find your process in the process table
+  for(unsigned int i = 0; i < processTable->size(); i++) {
+    if(currentThread->space == processTable->at(i)->space) {
+      myProcess = processTable->at(i);
+      myIndex = i;
+      break;
+    }
+  }
+  // thread who called exit is not the last thread in the process
+  if(myProcess->numThreads > 1) {
+
+  }
+  // else this thread is the last thread of a process
+  else { 
+    // if this is the last thread of the last process
+    if(processTable->size() == 1) {
+      interrupt->Halt();
+    }
+    // else the last thread of some process
+    else {
+      myProcess->space->clearMem();
+      kernelLockLock->Acquire();
+      for(unsigned int i = 0; i < kernelLockTable->size(); i++) {
+        if(kernelLockTable->at(i)->addrspace == myProcess->space) {
+          DestroyLock_Syscall(i);
+        }
+      }
+      kernelLockLock->Release();
+      kernelCVLock->Acquire();
+      for(unsigned int i = 0; i < kernelCVTable->size(); i++) {
+        if(kernelCVTable->at(i)->addrspace == myProcess->space) {
+          DestroyCondition_Syscall(i);
+        }
+      }
+      kernelCVLock->Release();
+      delete myProcess->space;
+      processTable->erase(processTable->begin() + myIndex);
+      delete myProcess;
+      currentThread->Finish();
+    }
+  }
+}
+
 void ExceptionHandler(ExceptionType which) {
     int type = machine->ReadRegister(2); // Which syscall?
     int rv=0; 	// the return value from a syscall
@@ -243,6 +527,14 @@ void ExceptionHandler(ExceptionType which) {
 		DEBUG('a', "Shutdown, initiated by user program.\n");
 		interrupt->Halt();
 		break;
+      case SC_Exit:
+    DEBUG('a', "Exit syscall.\n");
+    Exit_Syscall(machine->ReadRegister(4));
+    break;
+      case SC_Exec:
+    DEBUG('a', "Exec syscall.\n");
+    rv = Exec_Syscall(machine->ReadRegister(4), machine->ReadRegister(5));
+    break;
 	    case SC_Create:
 		DEBUG('a', "Create syscall.\n");
 		Create_Syscall(machine->ReadRegister(4), machine->ReadRegister(5));
@@ -267,6 +559,66 @@ void ExceptionHandler(ExceptionType which) {
 		DEBUG('a', "Close syscall.\n");
 		Close_Syscall(machine->ReadRegister(4));
 		break;
+      case SC_Fork:
+    DEBUG('a', "Fork syscall.\n");
+    Fork_Syscall(machine->ReadRegister(4),
+            machine->ReadRegister(5),
+            machine->ReadRegister(6),
+            machine->ReadRegister(7));
+    break;
+      case SC_Yield:
+    DEBUG('a', "Yield Syscall.\n");
+    currentThread->Yield();
+    break;
+      case SC_CreateLock:
+    DEBUG('a', "CreateLock syscall.\n");
+    rv = CreateLock_Syscall(machine->ReadRegister(4),
+                machine->ReadRegister(5));
+    break;
+      case SC_DestroyLock:
+    DEBUG('a', "DestroyLock syscall.\n");
+    DestroyLock_Syscall(machine->ReadRegister(4));
+    break;
+      case SC_Acquire:
+    DEBUG('a', "Acquire syscall.\n");
+    Acquire_Syscall(machine->ReadRegister(4));
+    break;
+      case SC_Release:
+    DEBUG('a', "Release syscall.\n");
+    Release_Syscall(machine->ReadRegister(4));
+    break;
+      case SC_CreateCondition:
+    DEBUG('a', "CreateCondition syscall.\n");
+    rv = CreateCondition_Syscall(machine->ReadRegister(4), machine->ReadRegister(5));
+    break;
+      case SC_DestroyCondition:
+    DEBUG('a', "DestroyCondition syscall.\n");
+    DestroyCondition_Syscall(machine->ReadRegister(4));
+    break;
+      case SC_Wait:
+    DEBUG('a', "Wait syscall.\n");
+    Wait_Syscall(machine->ReadRegister(4), machine->ReadRegister(5));
+    break;
+      case SC_Signal:
+    DEBUG('a', "Signal syscall.\n");
+    Signal_Syscall(machine->ReadRegister(4), machine->ReadRegister(5));
+    break;
+      case SC_Broadcast:
+    DEBUG('a', "Broadcast syscall.\n");
+    Broadcast_Syscall(machine->ReadRegister(4), machine->ReadRegister(5));
+    break;
+      case SC_Print:
+    DEBUG('a', "Print syscall.\n");
+    Print_Syscall(machine->ReadRegister(4), machine->ReadRegister(5));
+    break;
+      case SC_PrintInt:
+    DEBUG('a', "PrintInt syscall.\n");
+    PrintInt_Syscall(machine->ReadRegister(4));
+    break;
+      case SC_GetID:
+    DEBUG('a', "GetID syscall.\n");
+    rv = GetID_Syscall();
+    break;
 	}
 
 	// Put in the return value and increment the PC
