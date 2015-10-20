@@ -469,7 +469,6 @@ int GetID_Syscall() {
 
 void Exit_Syscall(int status) {
   processLock->Acquire();
-  cout << "In exit, processTable size is " << processTable->size() << endl;
   Process* myProcess;
   int myIndex;
   // find your process in the process table
@@ -488,7 +487,6 @@ void Exit_Syscall(int status) {
   else { 
     // if this is the last thread of the last process
     if(processTable->size() == 1) {
-      //currentThread->Finish();
       interrupt->Halt();
     }
     // else the last thread of some process
@@ -511,7 +509,6 @@ void Exit_Syscall(int status) {
       delete myProcess->space;
       processTable->erase(processTable->begin() + myIndex);
       delete myProcess;
-      cout << "HERE" << endl;
       processLock->Release();
       currentThread->Finish();
     }
