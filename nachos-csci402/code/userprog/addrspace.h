@@ -16,6 +16,7 @@
 #include "copyright.h"
 #include "filesys.h"
 #include "table.h"
+#include <queue>
 
 #define UserStackSize		1024 	// increase this as necessary!
 
@@ -32,6 +33,8 @@ class AddrSpace {
     void InitRegisters();		// Initialize user-level CPU registers,
 					// before jumping to user code
     void clearMem(); // clear out the memory upon completion
+    void allocateStack();
+    int getNumPages();
     void SaveState();			// Save/restore address space-specific
     void RestoreState();		// info on a context switch
     Table fileTable;			// Table of openfiles
@@ -39,8 +42,12 @@ class AddrSpace {
  private:
     TranslationEntry *pageTable;	// Assume linear page table translation
 					// for now!
+    Lock* pageLock; // so multiple threads in the same addrspace do not
+                    // mess with the page table at the same time
     unsigned int numPages;		// Number of pages in the virtual 
 					// address space
+    std::queue<int>* numPageQueue;
+    Lock* queueLock;
 };
 
 #endif // ADDRSPACE_H

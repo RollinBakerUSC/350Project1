@@ -118,6 +118,9 @@ SwapHeader (NoffHeader *noffH)
 //----------------------------------------------------------------------
 
 AddrSpace::AddrSpace(OpenFile *executable) : fileTable(MaxOpenFiles) {
+    pageLock = new Lock("Page Table Lock");
+    numPageQueue = new std::queue<int>;
+    queueLock = new Lock("Queue Lock");
     NoffHeader noffH;
     unsigned int i, size;
 
@@ -146,6 +149,7 @@ AddrSpace::AddrSpace(OpenFile *executable) : fileTable(MaxOpenFiles) {
 					numPages, size);
 // first, set up the translation 
     pageTable = new TranslationEntry[numPages];
+
     for (i = 0; i < numPages; i++) {
 	pageTable[i].virtualPage = i;	// for now, virtual page # = phys page #
     bitMapLock->Acquire();
@@ -195,6 +199,7 @@ AddrSpace::AddrSpace(OpenFile *executable) : fileTable(MaxOpenFiles) {
 AddrSpace::~AddrSpace()
 {
     delete pageTable;
+    delete numPageQueue;
 }
 
 //----------------------------------------------------------------------
@@ -264,4 +269,45 @@ void AddrSpace::clearMem() {
             pageTable[i].valid = false;
         }
     }
+}
+
+void AddrSpace::allocateStack() {
+    pageLock->Acquire();
+    queueLock->Acquire();
+    numPages += 8;
+    int n = numPages;
+    numPageQueue->push(n);
+    queueLock->Release();
+
+    TranslationEntry* newPageTable = new TranslationEntry[numPages];
+    for(unsigned int i = 0; i < numPages - 8; i++) {
+        newPageTable[i].virtualPage = pageTable[i].virtualPage;
+        newPageTable[i].physicalPage = pageTable[i].physicalPage;
+        newPageTable[i].valid = pageTable[i].valid;
+        newPageTable[i].use = pageTable[i].use;
+        newPageTable[i].dirty = pageTable[i].dirty;
+        newPageTable[i].readOnly = pageTable[i].readOnly;
+    }
+    for(unsigned int i = numPages - 8; i < numPages; i++) {
+        newPageTable[i].virtualPage = i;
+        bitMapLock->Acquire();
+        newPageTable[i].physicalPage = mainMemoryBitMap->Find();
+        bitMapLock->Release();
+        newPageTable[i].valid = TRUE;
+        newPageTable[i].use = FALSE;
+        newPageTable[i].dirty = FALSE;
+        newPageTable[i].readOnly = FALSE;
+    }
+    delete pageTable;
+    pageTable = newPageTable;
+    machine->pageTable = newPageTable;
+    pageLock->Release();
+}
+
+int AddrSpace::getNumPages() {
+    queueLock->Acquire();
+    int n = numPageQueue->front();
+    numPageQueue->pop();
+    queueLock->Release();
+    return n;
 }

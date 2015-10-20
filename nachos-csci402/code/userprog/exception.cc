@@ -250,6 +250,7 @@ int Exec_Syscall(unsigned int vaddr, int size) {
     delete buf;
     return -1;
   }
+  buf[size] = '\0';
 
   OpenFile* executable = fileSystem->Open(buf);
 
@@ -275,8 +276,38 @@ int Exec_Syscall(unsigned int vaddr, int size) {
   return 0;
 }
 
-void Fork_Syscall(unsigned int addr, unsigned int vaddr, int size, int id) {
+void Fork_Thread(unsigned int vaddr) {
+  currentThread->space->InitRegisters();
+  currentThread->space->RestoreState();
+  machine->WriteRegister(PCReg, vaddr);
+  machine->WriteRegister(NextPCReg, vaddr+4);
+  int stack = currentThread->space->getNumPages()*PageSize - 16;
+  machine->WriteRegister(StackReg, stack);
+  machine->Run();
+}
 
+void Fork_Syscall(unsigned int addr, unsigned int vaddr, int size, int id) {
+  // first update the process table
+  processLock->Acquire();
+  for(unsigned int i = 0; i < processTable->size(); i++) {
+    if(currentThread->space == processTable->at(i)->space) {
+      processTable->at(i)->numThreads++;
+      break;
+    }
+  }
+  processLock->Release();
+
+  char* buf = new char[size+3];
+  copyin(vaddr, size, buf);
+  buf[size] = ' ';
+  buf[size+1] = (char)(id+48);
+  buf[size+2] = '\0';
+
+  Thread* t = new Thread(buf);
+  currentThread->space->allocateStack();
+  t->space = currentThread->space;
+
+  t->Fork((VoidFunctionPtr)Fork_Thread, addr);
 }
 
 int CreateLock_Syscall(unsigned int vaddr, int size) {
@@ -481,7 +512,9 @@ void Exit_Syscall(int status) {
   }
   // thread who called exit is not the last thread in the process
   if(myProcess->numThreads > 1) {
-
+    myProcess->numThreads--;
+    processLock->Release();
+    currentThread->Finish();
   }
   // else this thread is the last thread of a process
   else { 
