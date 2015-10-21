@@ -31,7 +31,7 @@ CPP = $(GCCDIR)cpp
 INCDIR =-I../userprog -I../threads
 CFLAGS = -G 0 -c $(INCDIR)
 
-all: halt matmult sort testfiles locksandcvs exec print fork
+all: halt matmult sort testfiles locksandcvs exec print fork passportoffice
 
 start.o: start.s ../userprog/syscall.h
 	$(CPP) $(CPPFLAGS) start.s > strt.s
@@ -85,6 +85,12 @@ fork.o: fork.c
 fork: fork.o start.o
 	$(LD) $(LDFLAGS) start.o fork.o -o fork.coff
 	../bin/coff2noff fork.coff fork
+
+passportoffice.o: passportoffice.c
+	$(CC) $(CFLAGS) -c passportoffice.c
+passportoffice: passportoffice.o start.o
+	$(LD) $(LDFLAGS) start.o passportoffice.o -o passportoffice.coff
+	../bin/coff2noff passportoffice.coff passportoffice
 
 clean:
 	rm -f *.o *.coff
