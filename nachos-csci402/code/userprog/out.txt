@@ -1,2219 +1,393 @@
-Scheduling interrupt handler the timer at time = 1e
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0xa, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 1e
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x14, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 1e
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x1e, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 1e
-End of pending interrupts
-Invoking interrupt handler for the timer at time 1e
-Scheduling interrupt handler the timer at time = d1
-Time: 0x1e, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9f8)
-Interrupt handler timer, scheduled at d1
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-Yielding thread "main"
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x28, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9f8)
-Interrupt handler timer, scheduled at d1
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x32, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9f8)
-Interrupt handler timer, scheduled at d1
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x3c, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9f8)
-Interrupt handler timer, scheduled at d1
-End of pending interrupts
-	interrupts: off -> on
-Initializing address space, num pages 14, size 1792
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x46, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9f8)
-Interrupt handler timer, scheduled at d1
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x50, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9f8)
-Interrupt handler timer, scheduled at d1
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x5a, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9f8)
-Interrupt handler timer, scheduled at d1
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x64, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9f8)
-Interrupt handler timer, scheduled at d1
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x6e, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9f8)
-Interrupt handler timer, scheduled at d1
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x78, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9f8)
-Interrupt handler timer, scheduled at d1
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x82, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9f8)
-Interrupt handler timer, scheduled at d1
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x8c, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9f8)
-Interrupt handler timer, scheduled at d1
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x96, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9f8)
-Interrupt handler timer, scheduled at d1
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0xa0, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9f8)
-Interrupt handler timer, scheduled at d1
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0xaa, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9f8)
-Interrupt handler timer, scheduled at d1
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0xb4, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9f8)
-Interrupt handler timer, scheduled at d1
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0xbe, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9f8)
-Interrupt handler timer, scheduled at d1
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0xc8, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9f8)
-Interrupt handler timer, scheduled at d1
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0xd2, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9f8)
-Interrupt handler timer, scheduled at d1
-End of pending interrupts
-Invoking interrupt handler for the timer at time d1
-Scheduling interrupt handler the timer at time = de
-Time: 0xd2, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5aa18)
-Interrupt handler timer, scheduled at de
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-Yielding thread "main"
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0xdc, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5aa18)
-Interrupt handler timer, scheduled at de
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0xe6, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5aa18)
-Interrupt handler timer, scheduled at de
-End of pending interrupts
-Invoking interrupt handler for the timer at time de
-Scheduling interrupt handler the timer at time = 17f
-Time: 0xe6, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 17f
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-Yielding thread "main"
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0xf0, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 17f
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0xfa, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 17f
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x104, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 17f
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x10e, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 17f
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x118, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 17f
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x122, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 17f
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x12c, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 17f
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x136, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 17f
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x140, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 17f
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x14a, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 17f
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x154, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 17f
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x15e, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 17f
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x168, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 17f
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x172, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 17f
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x17c, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 17f
-End of pending interrupts
-	interrupts: off -> on
-Initializing stack register to 6f0
-Starting thread "main" at time 17c
-Reading VA 0x0, size 4
-	Translate 0x0, read: phys addr = 0x0
-	value read = 0c000082
-At PC = 0x0: JAL 130
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x17d, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 17f
-End of pending interrupts
-	interrupts: off -> on
-Reading VA 0x4, size 4
-	Translate 0x4, read: phys addr = 0x4
-	value read = 00000000
-At PC = 0x4: SLL r0,r0,0
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x17e, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 17f
-End of pending interrupts
-	interrupts: off -> on
-Reading VA 0x208, size 4
-	Translate 0x208, read: phys addr = 0x208
-	value read = 27bdffe8
-At PC = 0x208: ADDIU r29,r29,-24
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x17f, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 17f
-End of pending interrupts
-Invoking interrupt handler for the timer at time 17f
-Scheduling interrupt handler the timer at time = 1a1
-Time: 0x17f, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9f8)
-Interrupt handler timer, scheduled at 1a1
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-Yielding thread "main"
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x189, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9f8)
-Interrupt handler timer, scheduled at 1a1
-End of pending interrupts
-	interrupts: off -> on
-Reading VA 0x20c, size 4
-	Translate 0x20c, read: phys addr = 0x20c
-	value read = afbf0014
-At PC = 0x20c: SW r31,20(r29)
-Writing VA 0x6ec, size 4, value 0x8
-	Translate 0x6ec, write: phys addr = 0x6ec
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x18a, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9f8)
-Interrupt handler timer, scheduled at 1a1
-End of pending interrupts
-	interrupts: off -> on
-Reading VA 0x210, size 4
-	Translate 0x210, read: phys addr = 0x210
-	value read = afbe0010
-At PC = 0x210: SW r30,16(r29)
-Writing VA 0x6e8, size 4, value 0x0
-	Translate 0x6e8, write: phys addr = 0x6e8
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x18b, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9f8)
-Interrupt handler timer, scheduled at 1a1
-End of pending interrupts
-	interrupts: off -> on
-Reading VA 0x214, size 4
-	Translate 0x214, read: phys addr = 0x214
-	value read = 0c000060
-At PC = 0x214: JAL 96
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x18c, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9f8)
-Interrupt handler timer, scheduled at 1a1
-End of pending interrupts
-	interrupts: off -> on
-Reading VA 0x218, size 4
-	Translate 0x218, read: phys addr = 0x218
-	value read = 03a0f021
-At PC = 0x218: ADDU r30,r29,r0
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x18d, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9f8)
-Interrupt handler timer, scheduled at 1a1
-End of pending interrupts
-	interrupts: off -> on
-Reading VA 0x180, size 4
-	Translate 0x180, read: phys addr = 0x180
-	value read = 03e00008
-At PC = 0x180: JR r0,r31
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x18e, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9f8)
-Interrupt handler timer, scheduled at 1a1
-End of pending interrupts
-	interrupts: off -> on
-Reading VA 0x184, size 4
-	Translate 0x184, read: phys addr = 0x184
-	value read = 00000000
-At PC = 0x184: SLL r0,r0,0
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x18f, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9f8)
-Interrupt handler timer, scheduled at 1a1
-End of pending interrupts
-	interrupts: off -> on
-Reading VA 0x21c, size 4
-	Translate 0x21c, read: phys addr = 0x21c
-	value read = 3c040000
-At PC = 0x21c: LUI r4,0
-Executing: LUI r4,0
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x190, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9f8)
-Interrupt handler timer, scheduled at 1a1
-End of pending interrupts
-	interrupts: off -> on
-Reading VA 0x220, size 4
-	Translate 0x220, read: phys addr = 0x220
-	value read = 24840190
-At PC = 0x220: ADDIU r4,r4,400
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x191, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9f8)
-Interrupt handler timer, scheduled at 1a1
-End of pending interrupts
-	interrupts: off -> on
-Reading VA 0x224, size 4
-	Translate 0x224, read: phys addr = 0x224
-	value read = 3c050000
-At PC = 0x224: LUI r5,0
-Executing: LUI r5,0
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x192, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9f8)
-Interrupt handler timer, scheduled at 1a1
-End of pending interrupts
-	interrupts: off -> on
-Reading VA 0x228, size 4
-	Translate 0x228, read: phys addr = 0x228
-	value read = 24a5028c
-At PC = 0x228: ADDIU r5,r5,652
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x193, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9f8)
-Interrupt handler timer, scheduled at 1a1
-End of pending interrupts
-	interrupts: off -> on
-Reading VA 0x22c, size 4
-	Translate 0x22c, read: phys addr = 0x22c
-	value read = 24060005
-At PC = 0x22c: ADDIU r6,r0,5
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x194, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9f8)
-Interrupt handler timer, scheduled at 1a1
-End of pending interrupts
-	interrupts: off -> on
-Reading VA 0x230, size 4
-	Translate 0x230, read: phys addr = 0x230
-	value read = 0c000028
-At PC = 0x230: JAL 40
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x195, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9f8)
-Interrupt handler timer, scheduled at 1a1
-End of pending interrupts
-	interrupts: off -> on
-Reading VA 0x234, size 4
-	Translate 0x234, read: phys addr = 0x234
-	value read = 24070001
-At PC = 0x234: ADDIU r7,r0,1
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x196, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9f8)
-Interrupt handler timer, scheduled at 1a1
-End of pending interrupts
-	interrupts: off -> on
-Reading VA 0xa0, size 4
-	Translate 0xa0, read: phys addr = 0xa0
-	value read = 24020009
-At PC = 0xa0: ADDIU r2,r0,9
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x197, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9f8)
-Interrupt handler timer, scheduled at 1a1
-End of pending interrupts
-	interrupts: off -> on
-Reading VA 0xa4, size 4
-	Translate 0xa4, read: phys addr = 0xa4
-	value read = 0000000c
-At PC = 0xa4: SYSCALL
-Exception: syscall
-Fork syscall.
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x1a1, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9f8)
-Interrupt handler timer, scheduled at 1a1
-End of pending interrupts
-Invoking interrupt handler for the timer at time 1a1
-Scheduling interrupt handler the timer at time = 210
-Time: 0x1a1, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5aa18)
-Interrupt handler timer, scheduled at 210
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-Yielding thread "main"
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x1ab, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5aa18)
-Interrupt handler timer, scheduled at 210
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x1b5, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5aa18)
-Interrupt handler timer, scheduled at 210
-End of pending interrupts
-	interrupts: off -> on
-Reading VA 0x28c, size 1
-	Translate 0x28c, read: phys addr = 0x28c
-	value read = 00000050
-Reading VA 0x28d, size 1
-	Translate 0x28d, read: phys addr = 0x28d
-	value read = 00000072
-Reading VA 0x28e, size 1
-	Translate 0x28e, read: phys addr = 0x28e
-	value read = 00000069
-Reading VA 0x28f, size 1
-	Translate 0x28f, read: phys addr = 0x28f
-	value read = 0000006e
-Reading VA 0x290, size 1
-	Translate 0x290, read: phys addr = 0x290
-	value read = 00000074
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x1bf, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5aa18)
-Interrupt handler timer, scheduled at 210
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x1c9, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5aa18)
-Interrupt handler timer, scheduled at 210
-End of pending interrupts
-	interrupts: off -> on
-Num pages pre allocate e
-Num pages post allocate 16
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x1d3, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5aa18)
-Interrupt handler timer, scheduled at 210
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x1dd, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5aa18)
-Interrupt handler timer, scheduled at 210
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x1e7, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5aa18)
-Interrupt handler timer, scheduled at 210
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x1f1, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5aa18)
-Interrupt handler timer, scheduled at 210
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x1fb, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5aa18)
-Interrupt handler timer, scheduled at 210
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x205, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5aa18)
-Interrupt handler timer, scheduled at 210
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x20f, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5aa18)
-Interrupt handler timer, scheduled at 210
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x219, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5aa18)
-Interrupt handler timer, scheduled at 210
-End of pending interrupts
-Invoking interrupt handler for the timer at time 210
-Scheduling interrupt handler the timer at time = 2d1
-Time: 0x219, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 2d1
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-Yielding thread "main"
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x223, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 2d1
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x22d, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 2d1
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x237, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 2d1
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x241, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 2d1
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x24b, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 2d1
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x255, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 2d1
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x25f, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 2d1
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x269, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 2d1
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x273, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 2d1
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x27d, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 2d1
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x287, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 2d1
-End of pending interrupts
-	interrupts: off -> on
-Forking thread "Print 1" with func = 0x35000, arg = 400
-	interrupts: on -> off
-Putting thread Print 1 on ready list.
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x291, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 2d1
-End of pending interrupts
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x292, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 2d1
-End of pending interrupts
-	interrupts: off -> on
-Reading VA 0xa8, size 4
-	Translate 0xa8, read: phys addr = 0xa8
-	value read = 03e00008
-At PC = 0xa8: JR r0,r31
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x293, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 2d1
-End of pending interrupts
-	interrupts: off -> on
-Reading VA 0xac, size 4
-	Translate 0xac, read: phys addr = 0xac
-	value read = 00000000
-At PC = 0xac: SLL r0,r0,0
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x294, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 2d1
-End of pending interrupts
-	interrupts: off -> on
-Reading VA 0x238, size 4
-	Translate 0x238, read: phys addr = 0x238
-	value read = 3c040000
-At PC = 0x238: LUI r4,0
-Executing: LUI r4,0
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x295, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 2d1
-End of pending interrupts
-	interrupts: off -> on
-Reading VA 0x23c, size 4
-	Translate 0x23c, read: phys addr = 0x23c
-	value read = 248401cc
-At PC = 0x23c: ADDIU r4,r4,460
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x296, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 2d1
-End of pending interrupts
-	interrupts: off -> on
-Reading VA 0x240, size 4
-	Translate 0x240, read: phys addr = 0x240
-	value read = 3c050000
-At PC = 0x240: LUI r5,0
-Executing: LUI r5,0
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x297, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 2d1
-End of pending interrupts
-	interrupts: off -> on
-Reading VA 0x244, size 4
-	Translate 0x244, read: phys addr = 0x244
-	value read = 24a5028c
-At PC = 0x244: ADDIU r5,r5,652
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x298, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 2d1
-End of pending interrupts
-	interrupts: off -> on
-Reading VA 0x248, size 4
-	Translate 0x248, read: phys addr = 0x248
-	value read = 24060005
-At PC = 0x248: ADDIU r6,r0,5
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x299, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 2d1
-End of pending interrupts
-	interrupts: off -> on
-Reading VA 0x24c, size 4
-	Translate 0x24c, read: phys addr = 0x24c
-	value read = 0c000028
-At PC = 0x24c: JAL 40
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x29a, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 2d1
-End of pending interrupts
-	interrupts: off -> on
-Reading VA 0x250, size 4
-	Translate 0x250, read: phys addr = 0x250
-	value read = 24070002
-At PC = 0x250: ADDIU r7,r0,2
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x29b, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 2d1
-End of pending interrupts
-	interrupts: off -> on
-Reading VA 0xa0, size 4
-	Translate 0xa0, read: phys addr = 0xa0
-	value read = 24020009
-At PC = 0xa0: ADDIU r2,r0,9
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x29c, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 2d1
-End of pending interrupts
-	interrupts: off -> on
-Reading VA 0xa4, size 4
-	Translate 0xa4, read: phys addr = 0xa4
-	value read = 0000000c
-At PC = 0xa4: SYSCALL
-Exception: syscall
-Fork syscall.
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x2a6, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 2d1
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x2b0, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 2d1
-End of pending interrupts
-	interrupts: off -> on
-Reading VA 0x28c, size 1
-	Translate 0x28c, read: phys addr = 0x28c
-	value read = 00000050
-Reading VA 0x28d, size 1
-	Translate 0x28d, read: phys addr = 0x28d
-	value read = 00000072
-Reading VA 0x28e, size 1
-	Translate 0x28e, read: phys addr = 0x28e
-	value read = 00000069
-Reading VA 0x28f, size 1
-	Translate 0x28f, read: phys addr = 0x28f
-	value read = 0000006e
-Reading VA 0x290, size 1
-	Translate 0x290, read: phys addr = 0x290
-	value read = 00000074
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x2ba, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 2d1
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x2c4, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 2d1
-End of pending interrupts
-	interrupts: off -> on
-Num pages pre allocate 16
-Num pages post allocate 1e
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x2ce, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 2d1
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x2d8, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 2d1
-End of pending interrupts
-Invoking interrupt handler for the timer at time 2d1
-Scheduling interrupt handler the timer at time = 2e5
-Time: 0x2d8, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9f8)
-Interrupt handler timer, scheduled at 2e5
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-Yielding thread "main"
-Putting thread main on ready list.
-Switching from thread "main" to thread "Print 1"
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x2e2, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9f8)
-Interrupt handler timer, scheduled at 2e5
-End of pending interrupts
-	interrupts: off -> on
-Vaddr in Fork_Thread 190
-Initializing stack register to ef0
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x2ec, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9f8)
-Interrupt handler timer, scheduled at 2e5
-End of pending interrupts
-Invoking interrupt handler for the timer at time 2e5
-Scheduling interrupt handler the timer at time = 392
-Time: 0x2ec, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5aa38)
-Interrupt handler timer, scheduled at 392
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-Yielding thread "Print 1"
-Putting thread Print 1 on ready list.
-Switching from thread "Print 1" to thread "main"
-Now in thread "main"
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x2f6, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5aa38)
-Interrupt handler timer, scheduled at 392
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x300, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5aa38)
-Interrupt handler timer, scheduled at 392
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x30a, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5aa38)
-Interrupt handler timer, scheduled at 392
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x314, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5aa38)
-Interrupt handler timer, scheduled at 392
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x31e, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5aa38)
-Interrupt handler timer, scheduled at 392
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x328, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5aa38)
-Interrupt handler timer, scheduled at 392
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x332, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5aa38)
-Interrupt handler timer, scheduled at 392
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x33c, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5aa38)
-Interrupt handler timer, scheduled at 392
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x346, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5aa38)
-Interrupt handler timer, scheduled at 392
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x350, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5aa38)
-Interrupt handler timer, scheduled at 392
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x35a, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5aa38)
-Interrupt handler timer, scheduled at 392
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x364, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5aa38)
-Interrupt handler timer, scheduled at 392
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x36e, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5aa38)
-Interrupt handler timer, scheduled at 392
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x378, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5aa38)
-Interrupt handler timer, scheduled at 392
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x382, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5aa38)
-Interrupt handler timer, scheduled at 392
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x38c, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5aa38)
-Interrupt handler timer, scheduled at 392
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x396, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5aa38)
-Interrupt handler timer, scheduled at 392
-End of pending interrupts
-Invoking interrupt handler for the timer at time 392
-Scheduling interrupt handler the timer at time = 401
-Time: 0x396, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 401
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-Yielding thread "main"
-Putting thread main on ready list.
-Switching from thread "main" to thread "Print 1"
-Now in thread "Print 1"
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x3a0, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 401
-End of pending interrupts
-	interrupts: off -> on
-Num Pages returning 16
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x3aa, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 401
-End of pending interrupts
-	interrupts: off -> on
-Stack reg in Fork_Thread af0
-Starting thread "Print 1" at time 3aa
-Reading VA 0x190, size 4
-	Translate 0x190, read: phys addr = 0x190
-	value read = 27bdffe8
-At PC = 0x190: ADDIU r29,r29,-24
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x3ab, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 401
-End of pending interrupts
-	interrupts: off -> on
-Reading VA 0x194, size 4
-	Translate 0x194, read: phys addr = 0x194
-	value read = afbf0014
-At PC = 0x194: SW r31,20(r29)
-Writing VA 0xaec, size 4, value 0x0
-	Translate 0xaec, write: phys addr = 0xaec
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x3ac, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 401
-End of pending interrupts
-	interrupts: off -> on
-Reading VA 0x198, size 4
-	Translate 0x198, read: phys addr = 0x198
-	value read = afbe0010
-At PC = 0x198: SW r30,16(r29)
-Writing VA 0xae8, size 4, value 0x0
-	Translate 0xae8, write: phys addr = 0xae8
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x3ad, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 401
-End of pending interrupts
-	interrupts: off -> on
-Reading VA 0x19c, size 4
-	Translate 0x19c, read: phys addr = 0x19c
-	value read = 03a0f021
-At PC = 0x19c: ADDU r30,r29,r0
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x3ae, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 401
-End of pending interrupts
-	interrupts: off -> on
-Reading VA 0x1a0, size 4
-	Translate 0x1a0, read: phys addr = 0x1a0
-	value read = 3c040000
-At PC = 0x1a0: LUI r4,0
-Executing: LUI r4,0
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x3af, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 401
-End of pending interrupts
-	interrupts: off -> on
-Reading VA 0x1a4, size 4
-	Translate 0x1a4, read: phys addr = 0x1a4
-	value read = 24840270
-At PC = 0x1a4: ADDIU r4,r4,624
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x3b0, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 401
-End of pending interrupts
-	interrupts: off -> on
-Reading VA 0x1a8, size 4
-	Translate 0x1a8, read: phys addr = 0x1a8
-	value read = 0c000054
-At PC = 0x1a8: JAL 84
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x3b1, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 401
-End of pending interrupts
-	interrupts: off -> on
-Reading VA 0x1ac, size 4
-	Translate 0x1ac, read: phys addr = 0x1ac
-	value read = 24050009
-At PC = 0x1ac: ADDIU r5,r0,9
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x3b2, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 401
-End of pending interrupts
-	interrupts: off -> on
-Reading VA 0x150, size 4
-	Translate 0x150, read: phys addr = 0x150
-	value read = 24020014
-At PC = 0x150: ADDIU r2,r0,20
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x3b3, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 401
-End of pending interrupts
-	interrupts: off -> on
-Reading VA 0x154, size 4
-	Translate 0x154, read: phys addr = 0x154
-	value read = 0000000c
-At PC = 0x154: SYSCALL
-Exception: syscall
-Print syscall.
-Reading VA 0x270, size 1
-	Translate 0x270, read: phys addr = 0x270
-	value read = 00000043
-Reading VA 0x271, size 1
-	Translate 0x271, read: phys addr = 0x271
-	value read = 00000053
-Reading VA 0x272, size 1
-	Translate 0x272, read: phys addr = 0x272
-	value read = 00000043
-Reading VA 0x273, size 1
-	Translate 0x273, read: phys addr = 0x273
-	value read = 00000049
-Reading VA 0x274, size 1
-	Translate 0x274, read: phys addr = 0x274
-	value read = 00000020
-Reading VA 0x275, size 1
-	Translate 0x275, read: phys addr = 0x275
-	value read = 00000033
-Reading VA 0x276, size 1
-	Translate 0x276, read: phys addr = 0x276
-	value read = 00000035
-Reading VA 0x277, size 1
-	Translate 0x277, read: phys addr = 0x277
-	value read = 00000030
-Reading VA 0x278, size 1
-	Translate 0x278, read: phys addr = 0x278
-	value read = 0000000a
-CSCI 350
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x3b4, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 401
-End of pending interrupts
-	interrupts: off -> on
-Reading VA 0x158, size 4
-	Translate 0x158, read: phys addr = 0x158
-	value read = 03e00008
-At PC = 0x158: JR r0,r31
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x3b5, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 401
-End of pending interrupts
-	interrupts: off -> on
-Reading VA 0x15c, size 4
-	Translate 0x15c, read: phys addr = 0x15c
-	value read = 00000000
-At PC = 0x15c: SLL r0,r0,0
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x3b6, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 401
-End of pending interrupts
-	interrupts: off -> on
-Reading VA 0x1b0, size 4
-	Translate 0x1b0, read: phys addr = 0x1b0
-	value read = 0c000008
-At PC = 0x1b0: JAL 8
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x3b7, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 401
-End of pending interrupts
-	interrupts: off -> on
-Reading VA 0x1b4, size 4
-	Translate 0x1b4, read: phys addr = 0x1b4
-	value read = 00002021
-At PC = 0x1b4: ADDU r4,r0,r0
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x3b8, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 401
-End of pending interrupts
-	interrupts: off -> on
-Reading VA 0x20, size 4
-	Translate 0x20, read: phys addr = 0x20
-	value read = 24020001
-At PC = 0x20: ADDIU r2,r0,1
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x3b9, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 401
-End of pending interrupts
-	interrupts: off -> on
-Reading VA 0x24, size 4
-	Translate 0x24, read: phys addr = 0x24
-	value read = 0000000c
-At PC = 0x24: SYSCALL
-Exception: syscall
-Exit syscall.
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x3c3, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 401
-End of pending interrupts
-	interrupts: off -> on
-In Exit Syscall, numThreads is 3 numProcesses is 1
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x3cd, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 401
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-Finishing thread "Print 1"
-Sleeping thread "Print 1"
-Switching from thread "Print 1" to thread "main"
-Now in thread "main"
-Deleting thread "Print 1"
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x3d7, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 401
-End of pending interrupts
-	interrupts: off -> on
-Forking thread "Print 2" with func = 0x35000, arg = 460
-	interrupts: on -> off
-Putting thread Print 2 on ready list.
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x3e1, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 401
-End of pending interrupts
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x3e2, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 401
-End of pending interrupts
-	interrupts: off -> on
-Reading VA 0xa8, size 4
-	Translate 0xa8, read: phys addr = 0xa8
-	value read = 03e00008
-At PC = 0xa8: JR r0,r31
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x3e3, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 401
-End of pending interrupts
-	interrupts: off -> on
-Reading VA 0xac, size 4
-	Translate 0xac, read: phys addr = 0xac
-	value read = 00000000
-At PC = 0xac: SLL r0,r0,0
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x3e4, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 401
-End of pending interrupts
-	interrupts: off -> on
-Reading VA 0x254, size 4
-	Translate 0x254, read: phys addr = 0x254
-	value read = 0c000008
-At PC = 0x254: JAL 8
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x3e5, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 401
-End of pending interrupts
-	interrupts: off -> on
-Reading VA 0x258, size 4
-	Translate 0x258, read: phys addr = 0x258
-	value read = 00002021
-At PC = 0x258: ADDU r4,r0,r0
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x3e6, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 401
-End of pending interrupts
-	interrupts: off -> on
-Reading VA 0x20, size 4
-	Translate 0x20, read: phys addr = 0x20
-	value read = 24020001
-At PC = 0x20: ADDIU r2,r0,1
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x3e7, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 401
-End of pending interrupts
-	interrupts: off -> on
-Reading VA 0x24, size 4
-	Translate 0x24, read: phys addr = 0x24
-	value read = 0000000c
-At PC = 0x24: SYSCALL
-Exception: syscall
-Exit syscall.
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x3f1, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 401
-End of pending interrupts
-	interrupts: off -> on
-In Exit Syscall, numThreads is 2 numProcesses is 1
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x3fb, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 401
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-Finishing thread "main"
-Sleeping thread "main"
-Switching from thread "main" to thread "Print 2"
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x405, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9d8)
-Interrupt handler timer, scheduled at 401
-End of pending interrupts
-Invoking interrupt handler for the timer at time 401
-Scheduling interrupt handler the timer at time = 4b9
-Time: 0x405, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9f8)
-Interrupt handler timer, scheduled at 4b9
-End of pending interrupts
-	interrupts: off -> on
-	interrupts: on -> off
-Yielding thread "Print 2"
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x40f, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9f8)
-Interrupt handler timer, scheduled at 4b9
-End of pending interrupts
-	interrupts: off -> on
-Vaddr in Fork_Thread 1cc
-Initializing stack register to ef0
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x419, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9f8)
-Interrupt handler timer, scheduled at 4b9
-End of pending interrupts
-	interrupts: off -> on
-Num Pages returning 1e
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x423, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9f8)
-Interrupt handler timer, scheduled at 4b9
-End of pending interrupts
-	interrupts: off -> on
-Stack reg in Fork_Thread ef0
-Starting thread "Print 2" at time 423
-Reading VA 0x1cc, size 4
-	Translate 0x1cc, read: phys addr = 0x1cc
-	value read = 27bdffe8
-At PC = 0x1cc: ADDIU r29,r29,-24
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x424, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9f8)
-Interrupt handler timer, scheduled at 4b9
-End of pending interrupts
-	interrupts: off -> on
-Reading VA 0x1d0, size 4
-	Translate 0x1d0, read: phys addr = 0x1d0
-	value read = afbf0014
-At PC = 0x1d0: SW r31,20(r29)
-Writing VA 0xeec, size 4, value 0x0
-	Translate 0xeec, write: phys addr = 0xeec
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x425, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9f8)
-Interrupt handler timer, scheduled at 4b9
-End of pending interrupts
-	interrupts: off -> on
-Reading VA 0x1d4, size 4
-	Translate 0x1d4, read: phys addr = 0x1d4
-	value read = afbe0010
-At PC = 0x1d4: SW r30,16(r29)
-Writing VA 0xee8, size 4, value 0x0
-	Translate 0xee8, write: phys addr = 0xee8
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x426, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9f8)
-Interrupt handler timer, scheduled at 4b9
-End of pending interrupts
-	interrupts: off -> on
-Reading VA 0x1d8, size 4
-	Translate 0x1d8, read: phys addr = 0x1d8
-	value read = 03a0f021
-At PC = 0x1d8: ADDU r30,r29,r0
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x427, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9f8)
-Interrupt handler timer, scheduled at 4b9
-End of pending interrupts
-	interrupts: off -> on
-Reading VA 0x1dc, size 4
-	Translate 0x1dc, read: phys addr = 0x1dc
-	value read = 3c040000
-At PC = 0x1dc: LUI r4,0
-Executing: LUI r4,0
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x428, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9f8)
-Interrupt handler timer, scheduled at 4b9
-End of pending interrupts
-	interrupts: off -> on
-Reading VA 0x1e0, size 4
-	Translate 0x1e0, read: phys addr = 0x1e0
-	value read = 2484027c
-At PC = 0x1e0: ADDIU r4,r4,636
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x429, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9f8)
-Interrupt handler timer, scheduled at 4b9
-End of pending interrupts
-	interrupts: off -> on
-Reading VA 0x1e4, size 4
-	Translate 0x1e4, read: phys addr = 0x1e4
-	value read = 0c000054
-At PC = 0x1e4: JAL 84
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x42a, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9f8)
-Interrupt handler timer, scheduled at 4b9
-End of pending interrupts
-	interrupts: off -> on
-Reading VA 0x1e8, size 4
-	Translate 0x1e8, read: phys addr = 0x1e8
-	value read = 2405000c
-At PC = 0x1e8: ADDIU r5,r0,12
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x42b, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9f8)
-Interrupt handler timer, scheduled at 4b9
-End of pending interrupts
-	interrupts: off -> on
-Reading VA 0x150, size 4
-	Translate 0x150, read: phys addr = 0x150
-	value read = 24020014
-At PC = 0x150: ADDIU r2,r0,20
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x42c, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9f8)
-Interrupt handler timer, scheduled at 4b9
-End of pending interrupts
-	interrupts: off -> on
-Reading VA 0x154, size 4
-	Translate 0x154, read: phys addr = 0x154
-	value read = 0000000c
-At PC = 0x154: SYSCALL
-Exception: syscall
-Print syscall.
-Reading VA 0x27c, size 1
-	Translate 0x27c, read: phys addr = 0x27c
-	value read = 00000048
-Reading VA 0x27d, size 1
-	Translate 0x27d, read: phys addr = 0x27d
-	value read = 00000065
-Reading VA 0x27e, size 1
-	Translate 0x27e, read: phys addr = 0x27e
-	value read = 0000006c
-Reading VA 0x27f, size 1
-	Translate 0x27f, read: phys addr = 0x27f
-	value read = 0000006c
-Reading VA 0x280, size 1
-	Translate 0x280, read: phys addr = 0x280
-	value read = 0000006f
-Reading VA 0x281, size 1
-	Translate 0x281, read: phys addr = 0x281
-	value read = 00000020
-Reading VA 0x282, size 1
-	Translate 0x282, read: phys addr = 0x282
-	value read = 00000057
-Reading VA 0x283, size 1
-	Translate 0x283, read: phys addr = 0x283
-	value read = 0000006f
-Reading VA 0x284, size 1
-	Translate 0x284, read: phys addr = 0x284
-	value read = 00000072
-Reading VA 0x285, size 1
-	Translate 0x285, read: phys addr = 0x285
-	value read = 0000006c
-Reading VA 0x286, size 1
-	Translate 0x286, read: phys addr = 0x286
-	value read = 00000064
-Reading VA 0x287, size 1
-	Translate 0x287, read: phys addr = 0x287
-	value read = 0000000a
-Hello World
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x42d, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9f8)
-Interrupt handler timer, scheduled at 4b9
-End of pending interrupts
-	interrupts: off -> on
-Reading VA 0x158, size 4
-	Translate 0x158, read: phys addr = 0x158
-	value read = 03e00008
-At PC = 0x158: JR r0,r31
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x42e, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9f8)
-Interrupt handler timer, scheduled at 4b9
-End of pending interrupts
-	interrupts: off -> on
-Reading VA 0x15c, size 4
-	Translate 0x15c, read: phys addr = 0x15c
-	value read = 00000000
-At PC = 0x15c: SLL r0,r0,0
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x42f, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9f8)
-Interrupt handler timer, scheduled at 4b9
-End of pending interrupts
-	interrupts: off -> on
-Reading VA 0x1ec, size 4
-	Translate 0x1ec, read: phys addr = 0x1ec
-	value read = 0c000008
-At PC = 0x1ec: JAL 8
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x430, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9f8)
-Interrupt handler timer, scheduled at 4b9
-End of pending interrupts
-	interrupts: off -> on
-Reading VA 0x1f0, size 4
-	Translate 0x1f0, read: phys addr = 0x1f0
-	value read = 00002021
-At PC = 0x1f0: ADDU r4,r0,r0
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x431, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9f8)
-Interrupt handler timer, scheduled at 4b9
-End of pending interrupts
-	interrupts: off -> on
-Reading VA 0x20, size 4
-	Translate 0x20, read: phys addr = 0x20
-	value read = 24020001
-At PC = 0x20: ADDIU r2,r0,1
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x432, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9f8)
-Interrupt handler timer, scheduled at 4b9
-End of pending interrupts
-	interrupts: off -> on
-Reading VA 0x24, size 4
-	Translate 0x24, read: phys addr = 0x24
-	value read = 0000000c
-At PC = 0x24: SYSCALL
-Exception: syscall
-Exit syscall.
-	interrupts: on -> off
-	interrupts: off -> on
-
-== Tick 0 ==
-	interrupts: on -> off
-Time: 0x43c, interrupts off
-Pending interrupts:
-In mapcar, about to invoke 2e1c8(5a9f8)
-Interrupt handler timer, scheduled at 4b9
-End of pending interrupts
-	interrupts: off -> on
-In Exit Syscall, numThreads is 1 numProcesses is 1
+Application Clerk 0 is going on break.
+Application Clerk 1 is going on break.
+Picture Clerk 0 is going on break.
+Picture Clerk 1 is going on break.
+Passport Clerk 0 is going on break.
+Passport Clerk 1 is going on break.
+Cashier 0 is going on break.
+Cashier 1 is going on break.
+Customer 0 has gotten in regular line for Application Clerk 0.
+Customer 1 has gotten in regular line for Application Clerk 1.
+Customer 2 has gotten in regular line for Application Clerk 0.
+Customer 3 has gotten in regular line for Application Clerk 1.
+Customer 4 has gotten in regular line for Application Clerk 0.
+Customer 5 has gotten in regular line for Application Clerk 1.
+Customer 6 has gotten in regular line for Application Clerk 0.
+Customer 7 has gotten in regular line for Application Clerk 1.
+Customer 8 has gotten in regular line for Application Clerk 0.
+Customer 9 has gotten in regular line for Application Clerk 1.
+Senator 0 is waiting to enter the Passport Office.
+Manager is waking Application Clerk 0 from break.
+Manager is waking Application Clerk 1 from break.
+Application Clerk 0 is coming off of break.
+Application Clerk 0 is going on break.
+Application Clerk 1 is coming off of break.
+Application Clerk 1 is going on break.
+Customer 0 is going outside the office because there is a Senator present.
+Customer 2 is going outside the office because there is a Senator present.
+Customer 4 is going outside the office because there is a Senator present.
+Customer 6 is going outside the office because there is a Senator present.
+Customer 8 is going outside the office because there is a Senator present.
+Customer 1 is going outside the office because there is a Senator present.
+Customer 3 is going outside the office because there is a Senator present.
+Customer 5 is going outside the office because there is a Senator present.
+Customer 7 is going outside the office because there is a Senator present.
+Customer 9 is going outside the office because there is a Senator present.
+Senator 0 has gotten in regular line for Application Clerk 0.
+Manager is waking Application Clerk 0 from break.
+Application Clerk 0 is coming off of break.
+Application Clerk 0 has signalled a Senator to come to their counter.
+Senator 0 has given SSN 0 to Application Clerk 0.
+Application Clerk 0 has received SSN 0 from Senator 0.
+Application Clerk 0 has recorded a complete application for Senator 0.
+Senator 0 has gotten in regular line for Picture Clerk 0.
+Application Clerk 0 is going on break.
+Manager is waking Picture Clerk 0 from break.
+Picture Clerk 0 is coming off of break.
+Picture Clerk 0 has signalled a Senator to come to their counter.
+Senator 0 has given SSN 0 to Picture Clerk 0.
+Picture Clerk 0 has received SSN 0 from Senator 0.
+Picture Clerk 0 has taken a picture of Senator 0.
+Senator 0 does like their picture from Picture Clerk 0.
+Picture Clerk 0 has been told that Senator 0 does like their picture.
+Picture Clerk 0 is going on break.
+Senator 0 has gotten in regular line for Passport Clerk 0.
+Manager is waking Passport Clerk 0 from break.
+Passport Clerk 0 is coming off of break.
+Passport Clerk 0 has signalled a Senator to come to their counter.
+Senator 0 has given SSN 0 to Passport Clerk 0.
+Passport Clerk 0 has received SSN 0 from Senator 0.
+Passport Clerk 0 has determined that Senator 0 has both their application and picture completed.
+Passport Clerk 0 has recorded Senator 0 has both their application and picture completed.
+Senator 0 has gotten in regular line for Cashier 0.
+Passport Clerk 0 is going on break.
+Manager is waking Cashier 0 from break.
+Cashier 0 is coming of off break.
+Cashier 0 has signalled a Senator to come to their counter.
+Senator 0 has given SSN 0 to Cashier 0.
+Senator 0 has given Cashier 0 $100.
+Cashier 0 has received SSN 0 from Senator 0.
+Cashier 0 has verified that Senator 0 has been certified by a Passport Clerk.
+Cashier 0 has recieved the $100 from Senator 0 after certification.
+Cashier 0 has provided Senator 0 their completed passport.
+Cashier 0 has recorded Senator 0 has been given their completed passport.
+Senator 0 is leaving the Passport Office.
+Cashier 0 is going on break.
+Customer 0 has gotten in regular line for Application Clerk 0.
+Customer 2 has gotten in regular line for Application Clerk 1.
+Customer 4 has gotten in regular line for Application Clerk 0.
+Customer 6 has gotten in regular line for Application Clerk 1.
+Customer 8 has gotten in regular line for Application Clerk 0.
+Customer 1 has gotten in regular line for Application Clerk 1.
+Customer 3 has gotten in regular line for Application Clerk 0.
+Customer 5 has gotten in regular line for Application Clerk 1.
+Customer 7 has gotten in regular line for Application Clerk 0.
+Customer 9 has gotten in regular line for Application Clerk 1.
+Manager is waking Application Clerk 0 from break.
+Manager is waking Application Clerk 1 from break.
+Application Clerk 0 is coming off of break.
+Application Clerk 0 has signalled a Customer to come to their counter.
+Application Clerk 1 is coming off of break.
+Application Clerk 1 has signalled a Customer to come to their counter.
+Customer 0 has given SSN 0 to Application Clerk 0.
+Customer 2 has given SSN 2 to Application Clerk 1.
+Application Clerk 0 has received SSN 0 from Customer 0.
+Application Clerk 1 has received SSN 2 from Customer 2.
+Application Clerk 0 has recorded a complete application for Customer 0.
+Application Clerk 1 has recorded a complete application for Customer 2.
+Customer 0 has gotten in regular line for Picture Clerk 0.
+Customer 2 has gotten in regular line for Picture Clerk 1.
+Application Clerk 0 has signalled a Customer to come to their counter.
+Application Clerk 1 has signalled a Customer to come to their counter.
+Customer 4 has given SSN 4 to Application Clerk 0.
+Customer 6 has given SSN 6 to Application Clerk 1.
+Application Clerk 0 has received SSN 4 from Customer 4.
+Application Clerk 1 has received SSN 6 from Customer 6.
+Application Clerk 0 has recorded a complete application for Customer 4.
+Application Clerk 1 has recorded a complete application for Customer 6.
+Customer 4 has gotten in regular line for Picture Clerk 0.
+Customer 6 has gotten in regular line for Picture Clerk 1.
+Application Clerk 0 has signalled a Customer to come to their counter.
+Application Clerk 1 has signalled a Customer to come to their counter.
+Customer 8 has given SSN 8 to Application Clerk 0.
+Customer 1 has given SSN 1 to Application Clerk 1.
+Application Clerk 0 has received SSN 8 from Customer 8.
+Application Clerk 1 has received SSN 1 from Customer 1.
+Application Clerk 0 has recorded a complete application for Customer 8.
+Application Clerk 1 has recorded a complete application for Customer 1.
+Customer 8 has gotten in regular line for Picture Clerk 0.
+Customer 1 has gotten in regular line for Picture Clerk 1.
+Application Clerk 0 has signalled a Customer to come to their counter.
+Application Clerk 1 has signalled a Customer to come to their counter.
+Customer 3 has given SSN 3 to Application Clerk 0.
+Customer 5 has given SSN 5 to Application Clerk 1.
+Application Clerk 0 has received SSN 3 from Customer 3.
+Application Clerk 1 has received SSN 5 from Customer 5.
+Application Clerk 0 has recorded a complete application for Customer 3.
+Application Clerk 1 has recorded a complete application for Customer 5.
+Customer 3 has gotten in regular line for Picture Clerk 0.
+Customer 5 has gotten in regular line for Picture Clerk 1.
+Application Clerk 0 has signalled a Customer to come to their counter.
+Application Clerk 1 has signalled a Customer to come to their counter.
+Customer 7 has given SSN 7 to Application Clerk 0.
+Customer 9 has given SSN 9 to Application Clerk 1.
+Application Clerk 0 has received SSN 7 from Customer 7.
+Application Clerk 1 has received SSN 9 from Customer 9.
+Application Clerk 0 has recorded a complete application for Customer 7.
+Application Clerk 1 has recorded a complete application for Customer 9.
+Customer 7 has gotten in regular line for Picture Clerk 0.
+Customer 9 has gotten in regular line for Picture Clerk 1.
+Application Clerk 0 is going on break.
+Application Clerk 1 is going on break.
+Manager is waking Picture Clerk 0 from break.
+Manager is waking Picture Clerk 1 from break.
+Picture Clerk 0 is coming off of break.
+Picture Clerk 0 has signalled a Customer to come to their counter.
+Picture Clerk 1 is coming off of break.
+Picture Clerk 1 has signalled a Customer to come to their counter.
+Customer 0 has given SSN 0 to Picture Clerk 0.
+Customer 2 has given SSN 2 to Picture Clerk 1.
+Picture Clerk 0 has received SSN 0 from Customer 0.
+Picture Clerk 1 has received SSN 2 from Customer 2.
+Picture Clerk 0 has taken a picture of Customer 0.
+Picture Clerk 1 has taken a picture of Customer 2.
+Customer 0 does like their picture from Picture Clerk 0.
+Customer 2 does like their picture from Picture Clerk 1.
+Picture Clerk 0 has been told that Customer 0 does like their picture.
+Picture Clerk 0 has signalled a Customer to come to their counter.
+Picture Clerk 1 has been told that Customer 2 does like their picture.
+Picture Clerk 1 has signalled a Customer to come to their counter.
+Customer 0 has gotten in regular line for Passport Clerk 0.
+Customer 4 has given SSN 4 to Picture Clerk 0.
+Customer 2 has gotten in regular line for Passport Clerk 1.
+Customer 6 has given SSN 6 to Picture Clerk 1.
+Picture Clerk 0 has received SSN 4 from Customer 4.
+Picture Clerk 1 has received SSN 6 from Customer 6.
+Picture Clerk 0 has taken a picture of Customer 4.
+Picture Clerk 1 has taken a picture of Customer 6.
+Customer 4 does like their picture from Picture Clerk 0.
+Customer 6 does like their picture from Picture Clerk 1.
+Picture Clerk 0 has been told that Customer 4 does like their picture.
+Picture Clerk 0 has signalled a Customer to come to their counter.
+Picture Clerk 1 has been told that Customer 6 does like their picture.
+Picture Clerk 1 has signalled a Customer to come to their counter.
+Customer 4 has gotten in regular line for Passport Clerk 0.
+Customer 8 has given SSN 8 to Picture Clerk 0.
+Customer 6 has gotten in regular line for Passport Clerk 1.
+Customer 1 has given SSN 1 to Picture Clerk 1.
+Picture Clerk 0 has received SSN 8 from Customer 8.
+Picture Clerk 1 has received SSN 1 from Customer 1.
+Picture Clerk 0 has taken a picture of Customer 8.
+Picture Clerk 1 has taken a picture of Customer 1.
+Customer 8 does like their picture from Picture Clerk 0.
+Customer 1 does like their picture from Picture Clerk 1.
+Picture Clerk 0 has been told that Customer 8 does like their picture.
+Picture Clerk 0 has signalled a Customer to come to their counter.
+Picture Clerk 1 has been told that Customer 1 does like their picture.
+Picture Clerk 1 has signalled a Customer to come to their counter.
+Customer 8 has gotten in regular line for Passport Clerk 0.
+Customer 3 has given SSN 3 to Picture Clerk 0.
+Customer 1 has gotten in regular line for Passport Clerk 1.
+Customer 5 has given SSN 5 to Picture Clerk 1.
+Picture Clerk 0 has received SSN 3 from Customer 3.
+Picture Clerk 1 has received SSN 5 from Customer 5.
+Picture Clerk 0 has taken a picture of Customer 3.
+Picture Clerk 1 has taken a picture of Customer 5.
+Customer 3 does like their picture from Picture Clerk 0.
+Customer 5 does like their picture from Picture Clerk 1.
+Picture Clerk 0 has been told that Customer 3 does like their picture.
+Picture Clerk 0 has signalled a Customer to come to their counter.
+Picture Clerk 1 has been told that Customer 5 does like their picture.
+Picture Clerk 1 has signalled a Customer to come to their counter.
+Customer 3 has gotten in regular line for Passport Clerk 0.
+Customer 7 has given SSN 7 to Picture Clerk 0.
+Customer 5 has gotten in regular line for Passport Clerk 1.
+Customer 9 has given SSN 9 to Picture Clerk 1.
+Picture Clerk 0 has received SSN 7 from Customer 7.
+Picture Clerk 1 has received SSN 9 from Customer 9.
+Picture Clerk 0 has taken a picture of Customer 7.
+Picture Clerk 1 has taken a picture of Customer 9.
+Customer 7 does like their picture from Picture Clerk 0.
+Customer 9 does like their picture from Picture Clerk 1.
+Picture Clerk 0 has been told that Customer 7 does like their picture.
+Picture Clerk 0 is going on break.
+Picture Clerk 1 has been told that Customer 9 does like their picture.
+Picture Clerk 1 is going on break.
+Customer 7 has gotten in regular line for Passport Clerk 0.
+Customer 9 has gotten in regular line for Passport Clerk 1.
+Manager is waking Passport Clerk 0 from break.
+Manager is waking Passport Clerk 1 from break.
+Passport Clerk 0 is coming off of break.
+Passport Clerk 0 has signalled a Customer to come to their counter.
+Passport Clerk 1 is coming off of break.
+Passport Clerk 1 has signalled a Customer to come to their counter.
+Customer 0 has given SSN 0 to Passport Clerk 0.
+Customer 2 has given SSN 2 to Passport Clerk 1.
+Passport Clerk 0 has received SSN 0 from Customer 0.
+Passport Clerk 1 has received SSN 2 from Customer 2.
+Passport Clerk 0 has determined that Customer 0 has both their application and picture completed.
+Passport Clerk 0 has recorded Customer 0 has both their application and picture completed.
+Passport Clerk 1 has determined that Customer 2 has both their application and picture completed.
+Passport Clerk 1 has recorded Customer 2 has both their application and picture completed.
+Customer 0 has gotten in regular line for Cashier 0.
+Customer 2 has gotten in regular line for Cashier 1.
+Passport Clerk 0 has signalled a Customer to come to their counter.
+Passport Clerk 1 has signalled a Customer to come to their counter.
+Customer 4 has given SSN 4 to Passport Clerk 0.
+Customer 6 has given SSN 6 to Passport Clerk 1.
+Passport Clerk 0 has received SSN 4 from Customer 4.
+Passport Clerk 1 has received SSN 6 from Customer 6.
+Passport Clerk 0 has determined that Customer 4 has both their application and picture completed.
+Passport Clerk 0 has recorded Customer 4 has both their application and picture completed.
+Passport Clerk 1 has determined that Customer 6 has both their application and picture completed.
+Passport Clerk 1 has recorded Customer 6 has both their application and picture completed.
+Customer 4 has gotten in regular line for Cashier 0.
+Customer 6 has gotten in regular line for Cashier 1.
+Passport Clerk 0 has signalled a Customer to come to their counter.
+Passport Clerk 1 has signalled a Customer to come to their counter.
+Customer 8 has given SSN 8 to Passport Clerk 0.
+Customer 1 has given SSN 1 to Passport Clerk 1.
+Passport Clerk 0 has received SSN 8 from Customer 8.
+Passport Clerk 1 has received SSN 1 from Customer 1.
+Passport Clerk 0 has determined that Customer 8 has both their application and picture completed.
+Passport Clerk 0 has recorded Customer 8 has both their application and picture completed.
+Passport Clerk 1 has determined that Customer 1 has both their application and picture completed.
+Passport Clerk 1 has recorded Customer 1 has both their application and picture completed.
+Customer 8 has gotten in regular line for Cashier 0.
+Customer 1 has gotten in regular line for Cashier 1.
+Passport Clerk 0 has signalled a Customer to come to their counter.
+Passport Clerk 1 has signalled a Customer to come to their counter.
+Customer 3 has given SSN 3 to Passport Clerk 0.
+Customer 5 has given SSN 5 to Passport Clerk 1.
+Passport Clerk 0 has received SSN 3 from Customer 3.
+Passport Clerk 1 has received SSN 5 from Customer 5.
+Passport Clerk 0 has determined that Customer 3 has both their application and picture completed.
+Passport Clerk 0 has recorded Customer 3 has both their application and picture completed.
+Passport Clerk 1 has determined that Customer 5 has both their application and picture completed.
+Passport Clerk 1 has recorded Customer 5 has both their application and picture completed.
+Customer 3 has gotten in regular line for Cashier 0.
+Customer 5 has gotten in regular line for Cashier 1.
+Passport Clerk 0 has signalled a Customer to come to their counter.
+Passport Clerk 1 has signalled a Customer to come to their counter.
+Customer 7 has given SSN 7 to Passport Clerk 0.
+Customer 9 has given SSN 9 to Passport Clerk 1.
+Passport Clerk 0 has received SSN 7 from Customer 7.
+Passport Clerk 1 has received SSN 9 from Customer 9.
+Passport Clerk 0 has determined that Customer 7 has both their application and picture completed.
+Passport Clerk 0 has recorded Customer 7 has both their application and picture completed.
+Passport Clerk 1 has determined that Customer 9 has both their application and picture completed.
+Passport Clerk 1 has recorded Customer 9 has both their application and picture completed.
+Customer 7 has gotten in regular line for Cashier 0.
+Customer 9 has gotten in regular line for Cashier 1.
+Passport Clerk 0 is going on break.
+Passport Clerk 1 is going on break.
+Manager is waking Cashier 0 from break.
+Manager is waking Cashier 1 from break.
+Cashier 0 is coming of off break.
+Cashier 0 has signalled a Customer to come to their counter.
+Cashier 1 is coming of off break.
+Cashier 1 has signalled a Customer to come to their counter.
+Customer 0 has given SSN 0 to Cashier 0.
+Customer 0 has given $100 0 to Cashier 0.
+Customer 2 has given SSN 2 to Cashier 1.
+Customer 2 has given $100 2 to Cashier 1.
+Cashier 0 has received SSN 0 from Customer 0.
+Cashier 0 has verified that Customer 0 has been certified by a Passport Clerk.
+Cashier 0 has recieved the $100 from Customer 0 after certification.
+Cashier 1 has received SSN 2 from Customer 2.
+Cashier 1 has verified that Customer 2 has been certified by a Passport Clerk.
+Cashier 1 has recieved the $100 from Customer 2 after certification.
+Cashier 0 has provided Customer 0 their completed passport.
+Cashier 0 has recorded Customer 0 has been given their completed passport.
+Cashier 1 has provided Customer 2 their completed passport.
+Cashier 1 has recorded Customer 2 has been given their completed passport.
+Customer 0 is leaving the Passport Office.
+Customer 2 is leaving the Passport Office.
+Cashier 0 has signalled a Customer to come to their counter.
+Cashier 1 has signalled a Customer to come to their counter.
+Customer 4 has given SSN 4 to Cashier 0.
+Customer 4 has given $100 4 to Cashier 0.
+Customer 6 has given SSN 6 to Cashier 1.
+Customer 6 has given $100 6 to Cashier 1.
+Cashier 0 has received SSN 4 from Customer 4.
+Cashier 0 has verified that Customer 4 has been certified by a Passport Clerk.
+Cashier 0 has recieved the $100 from Customer 4 after certification.
+Cashier 1 has received SSN 6 from Customer 6.
+Cashier 1 has verified that Customer 6 has been certified by a Passport Clerk.
+Cashier 1 has recieved the $100 from Customer 6 after certification.
+Cashier 0 has provided Customer 4 their completed passport.
+Cashier 0 has recorded Customer 4 has been given their completed passport.
+Cashier 1 has provided Customer 6 their completed passport.
+Cashier 1 has recorded Customer 6 has been given their completed passport.
+Customer 4 is leaving the Passport Office.
+Customer 6 is leaving the Passport Office.
+Cashier 0 has signalled a Customer to come to their counter.
+Cashier 1 has signalled a Customer to come to their counter.
+Customer 8 has given SSN 8 to Cashier 0.
+Customer 8 has given $100 8 to Cashier 0.
+Customer 1 has given SSN 1 to Cashier 1.
+Customer 1 has given $100 1 to Cashier 1.
+Cashier 0 has received SSN 8 from Customer 8.
+Cashier 0 has verified that Customer 8 has been certified by a Passport Clerk.
+Cashier 0 has recieved the $100 from Customer 8 after certification.
+Cashier 1 has received SSN 1 from Customer 1.
+Cashier 1 has verified that Customer 1 has been certified by a Passport Clerk.
+Cashier 1 has recieved the $100 from Customer 1 after certification.
+Cashier 0 has provided Customer 8 their completed passport.
+Cashier 0 has recorded Customer 8 has been given their completed passport.
+Cashier 1 has provided Customer 1 their completed passport.
+Cashier 1 has recorded Customer 1 has been given their completed passport.
+Customer 8 is leaving the Passport Office.
+Customer 1 is leaving the Passport Office.
+Cashier 0 has signalled a Customer to come to their counter.
+Cashier 1 has signalled a Customer to come to their counter.
+Customer 3 has given SSN 3 to Cashier 0.
+Customer 3 has given $100 3 to Cashier 0.
+Customer 5 has given SSN 5 to Cashier 1.
+Customer 5 has given $100 5 to Cashier 1.
+Cashier 0 has received SSN 3 from Customer 3.
+Cashier 0 has verified that Customer 3 has been certified by a Passport Clerk.
+Cashier 0 has recieved the $100 from Customer 3 after certification.
+Cashier 1 has received SSN 5 from Customer 5.
+Cashier 1 has verified that Customer 5 has been certified by a Passport Clerk.
+Cashier 1 has recieved the $100 from Customer 5 after certification.
+Cashier 0 has provided Customer 3 their completed passport.
+Cashier 0 has recorded Customer 3 has been given their completed passport.
+Cashier 1 has provided Customer 5 their completed passport.
+Cashier 1 has recorded Customer 5 has been given their completed passport.
+Customer 3 is leaving the Passport Office.
+Customer 5 is leaving the Passport Office.
+Cashier 0 has signalled a Customer to come to their counter.
+Cashier 1 has signalled a Customer to come to their counter.
+Customer 7 has given SSN 7 to Cashier 0.
+Customer 7 has given $100 7 to Cashier 0.
+Customer 9 has given SSN 9 to Cashier 1.
+Customer 9 has given $100 9 to Cashier 1.
+Cashier 0 has received SSN 7 from Customer 7.
+Cashier 0 has verified that Customer 7 has been certified by a Passport Clerk.
+Cashier 0 has recieved the $100 from Customer 7 after certification.
+Cashier 1 has received SSN 9 from Customer 9.
+Cashier 1 has verified that Customer 9 has been certified by a Passport Clerk.
+Cashier 1 has recieved the $100 from Customer 9 after certification.
+Cashier 0 has provided Customer 7 their completed passport.
+Cashier 0 has recorded Customer 7 has been given their completed passport.
+Cashier 1 has provided Customer 9 their completed passport.
+Cashier 1 has recorded Customer 9 has been given their completed passport.
+Customer 7 is leaving the Passport Office.
+Customer 9 is leaving the Passport Office.
+Cashier 0 is going on break.
+Cashier 1 is going on break.
+Manager has counted a total of $0 for Application Clerks.
+Manager has counted a total of $0 for Picture Clerks.
+Manager has counted a total of $0 for Passport Clerks.
+Manager has counted a total of $1100 for Cashiers.
+Manager has counted a total of $1100 for the Passport Office.
+Manager is closing the Passport Office.
+No threads ready or runnable, and no pending interrupts.
+Assuming the program completed.
 Machine halting!
 
-Ticks: total 43c, idle 0, system 3fc, user 40
+Ticks: total 305703, idle 0, system 111440, user 194263
 Disk I/O: reads 0, writes 0
 Console I/O: reads 0, writes 0
 Paging: faults 0

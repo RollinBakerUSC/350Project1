@@ -302,12 +302,13 @@ void Fork_Thread(unsigned int vaddr) {
     }
   }
   processLock->Release();
-  currentThread->space->InitRegisters();
+  //currentThread->space->InitRegisters();
   currentThread->space->RestoreState();
   machine->WriteRegister(PCReg, vaddr);
   machine->WriteRegister(NextPCReg, vaddr+4);
   machine->WriteRegister(StackReg, stack);
   machine->Run();
+  ASSERT(false);
 }
 
 void Fork_Syscall(unsigned int addr, unsigned int vaddr, int size, int id) {
@@ -319,7 +320,6 @@ void Fork_Syscall(unsigned int addr, unsigned int vaddr, int size, int id) {
       break;
     }
   }
-  processLock->Release();
 
   char* buf = new char[size+3];
   copyin(vaddr, size, buf);
@@ -330,6 +330,8 @@ void Fork_Syscall(unsigned int addr, unsigned int vaddr, int size, int id) {
   Thread* t = new Thread(buf);
   currentThread->space->allocateStack();
   t->space = currentThread->space;
+
+  processLock->Release();
 
   t->Fork((VoidFunctionPtr)Fork_Thread, addr);
 }
@@ -347,7 +349,6 @@ int CreateLock_Syscall(unsigned int vaddr, int size) {
   }
 
   buf[size] = '\0';
-
   KernelLock* newLock = new KernelLock(buf, currentThread->space);
   kernelLockLock->Acquire();
   kernelLockTable->push_back(newLock);
@@ -460,7 +461,11 @@ void Wait_Syscall(unsigned int cvIndex, unsigned int lockIndex) {
       currentThread->space == lock->addrspace &&
       cv->valid && lock->valid) {
       cv->numThreads++;
+      kernelCVLock->Release();
+      kernelLockLock->Release();
       cv->condition->Wait(lock->lock);
+      kernelCVLock->Acquire();
+      kernelLockLock->Acquire();
       cv->numThreads--;
     }
   }
