@@ -19,6 +19,7 @@
 #include "addrspace.h"
 
 #include <vector>
+#include <utility>
 
 struct KernelLock {
 	KernelLock(char* name, AddrSpace* _addrspace) {
@@ -54,9 +55,11 @@ struct Process {
 	Process(AddrSpace* _space) {
 		space = _space;
 		numThreads = 1; // initialize to 1 for the thread who made the process
+		threadStacks = new std::vector<std::pair<Thread*, unsigned int>* >;
 	}
 	AddrSpace* space;
 	int numThreads;
+	std::vector<std::pair<Thread*, unsigned int>* >* threadStacks;
 };
 
 // Initialization and cleanup routines

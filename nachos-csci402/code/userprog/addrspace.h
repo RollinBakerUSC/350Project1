@@ -33,6 +33,7 @@ class AddrSpace {
     void InitRegisters();		// Initialize user-level CPU registers,
 					// before jumping to user code
     void clearMem(); // clear out the memory upon completion
+    void clearStack(int stack);
     void allocateStack();
     int getNumPages();
     void SaveState();			// Save/restore address space-specific

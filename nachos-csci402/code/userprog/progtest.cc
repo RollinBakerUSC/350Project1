@@ -38,8 +38,13 @@ StartProcess(char *filename)
     currentThread->space = space;
 
     Process* newProcess = new Process(currentThread->space);
+    std::pair<Thread*, unsigned int>* newPair = new std::pair<Thread*, unsigned int>;
+    newPair->first = currentThread;
+    newPair->second = space->getNumPages()*PageSize-16;
+    newProcess->threadStacks->push_back(newPair);
     processLock->Acquire();
     processTable->push_back(newProcess);
+
     processLock->Release();
 
     delete executable;			// close file

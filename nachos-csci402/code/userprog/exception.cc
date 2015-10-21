@@ -268,6 +268,19 @@ int Exec_Syscall(unsigned int vaddr, int size) {
 
   Thread* t = new Thread(buf);
   t->space = space;
+  
+  unsigned int stack = space->getNumPages()*PageSize - 16;
+  std::pair<Thread*, unsigned int>* newPair = new std::pair<Thread*, unsigned int>;
+  newPair->first = t;
+  newPair->second = stack;
+  processLock->Acquire();
+  for(unsigned int i = 0; i < processTable->size(); i++) {
+    if(space == processTable->at(i)->space) {
+      processTable->at(i)->threadStacks->push_back(newPair);
+      break;
+    }
+  }
+  processLock->Release();
 
   delete executable;
 
@@ -277,11 +290,22 @@ int Exec_Syscall(unsigned int vaddr, int size) {
 }
 
 void Fork_Thread(unsigned int vaddr) {
+  unsigned int stack = currentThread->space->getNumPages()*PageSize - 16;
+  std::pair<Thread*, unsigned int>* newPair = new std::pair<Thread*, unsigned int>;
+  newPair->first = currentThread;
+  newPair->second = stack;
+  processLock->Acquire();
+  for(unsigned int i = 0; i < processTable->size(); i++) {
+    if(currentThread->space == processTable->at(i)->space) {
+      processTable->at(i)->threadStacks->push_back(newPair);
+      break;
+    }
+  }
+  processLock->Release();
   currentThread->space->InitRegisters();
   currentThread->space->RestoreState();
   machine->WriteRegister(PCReg, vaddr);
   machine->WriteRegister(NextPCReg, vaddr+4);
-  int stack = currentThread->space->getNumPages()*PageSize - 16;
   machine->WriteRegister(StackReg, stack);
   machine->Run();
 }
@@ -512,7 +536,20 @@ void Exit_Syscall(int status) {
   }
   // thread who called exit is not the last thread in the process
   if(myProcess->numThreads > 1) {
+    int threadIndex;
     myProcess->numThreads--;
+    std::vector<std::pair<Thread*, unsigned int>* >* v = myProcess->threadStacks;
+    std::pair<Thread*, unsigned int>* p;
+    for(unsigned int i = 0; i < v->size(); i++) {
+      if(currentThread == v->at(i)->first) {
+        threadIndex = i;
+        p = v->at(i);
+        break;
+      }
+    }
+    myProcess->space->clearStack(p->second);
+    delete p;
+    myProcess->threadStacks->erase(myProcess->threadStacks->begin() + threadIndex);
     processLock->Release();
     currentThread->Finish();
   }

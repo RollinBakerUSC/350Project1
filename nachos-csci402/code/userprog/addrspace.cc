@@ -147,7 +147,12 @@ AddrSpace::AddrSpace(OpenFile *executable) : fileTable(MaxOpenFiles) {
 
     DEBUG('a', "Initializing address space, num pages %d, size %d\n", 
 					numPages, size);
-// first, set up the translation 
+
+    queueLock->Acquire();
+    int n = numPages;
+    numPageQueue->push(n);
+    queueLock->Release();
+// first, set up the translation
     pageTable = new TranslationEntry[numPages];
 
     for (i = 0; i < numPages; i++) {
@@ -271,6 +276,17 @@ void AddrSpace::clearMem() {
     }
 }
 
+void AddrSpace::clearStack(int stack) {
+    bitMapLock->Acquire();
+    int stackEnd = stack/PageSize;
+    for(int i = stackEnd-7; i <= stackEnd; i++) {
+        mainMemoryBitMap->Clear(pageTable[i].physicalPage);
+        bzero(&machine->mainMemory[pageTable[i].physicalPage*PageSize], PageSize);
+        pageTable[i].valid = false;
+    }  
+    bitMapLock->Release();
+}
+
 void AddrSpace::allocateStack() {
     pageLock->Acquire();
     queueLock->Acquire();
@@ -300,7 +316,8 @@ void AddrSpace::allocateStack() {
     }
     delete pageTable;
     pageTable = newPageTable;
-    machine->pageTable = newPageTable;
+    //machine->pageTable = newPageTable;
+    RestoreState();
     pageLock->Release();
 }
 
