@@ -30,6 +30,8 @@ BitMap* mainMemoryBitMap;
 std::vector<Process*>* processTable;
 Lock* processLock;
 
+Lock* outputLock;
+
 #ifdef FILESYS_NEEDED
 FileSystem  *fileSystem;
 #endif
@@ -160,6 +162,8 @@ Initialize(int argc, char **argv)
     processTable = new std::vector<Process*>;
     processLock = new Lock("Process Table Lock");
 
+    outputLock = new Lock("Output Lock");
+
     // We didn't explicitly allocate the current thread we are running in.
     // But if it ever tries to give up the CPU, we better have a Thread
     // object to save its state. 
@@ -234,6 +238,8 @@ Cleanup()
 
     delete processTable;
     delete processLock;
+
+    delete outputLock;
     
     Exit(0);
 }

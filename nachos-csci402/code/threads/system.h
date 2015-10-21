@@ -86,6 +86,8 @@ extern Lock* bitMapLock;
 extern std::vector<Process*>* processTable;
 extern Lock* processLock;
 
+extern Lock* outputLock;
+
 #ifdef USER_PROGRAM
 #include "machine.h"
 extern Machine* machine;	// user program memory and registers

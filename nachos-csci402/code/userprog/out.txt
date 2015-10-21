@@ -5,389 +5,799 @@ Picture Clerk 1 is going on break.
 Passport Clerk 0 is going on break.
 Passport Clerk 1 is going on break.
 Cashier 0 is going on break.
-Cashier 1 is going on break.
 Customer 0 has gotten in regular line for Application Clerk 0.
+Cashier 1 is going on break.
 Customer 1 has gotten in regular line for Application Clerk 1.
-Customer 2 has gotten in regular line for Application Clerk 0.
-Customer 3 has gotten in regular line for Application Clerk 1.
-Customer 4 has gotten in regular line for Application Clerk 0.
-Customer 5 has gotten in regular line for Application Clerk 1.
-Customer 6 has gotten in regular line for Application Clerk 0.
-Customer 7 has gotten in regular line for Application Clerk 1.
-Customer 8 has gotten in regular line for Application Clerk 0.
-Customer 9 has gotten in regular line for Application Clerk 1.
-Senator 0 is waiting to enter the Passport Office.
-Manager is waking Application Clerk 0 from break.
-Manager is waking Application Clerk 1 from break.
-Application Clerk 0 is coming off of break.
 Application Clerk 0 is going on break.
+Customer 2 has gotten in regular line for Application Clerk 0.
+Senator 0 is waiting to enter the Passport Office.
+Application Clerk 1 is going on break.
+Customer 3 has gotten in regular line for Application Clerk 1.
+Picture Clerk 0 is going on break.
+Picture Clerk 1 is going on break.
+Passport Clerk 0Customer  is going on break.
+4 has gotten in regular line for Application Clerk 0.
+Passport Clerk 1 is going on break.
+Manager is waking Application Clerk 0 from break.
+Cashier 1 is going on break.
+Senator 0 is waiting to enter the Passport Office.
+Customer 5 has gotten in regular line for Application Clerk 1.
+Customer 0 has gotten in regular line for Application Clerk 0.
+Application Clerk 0 is coming off of break.
+Cashier 0 is going on break.
+Manager is waking Application Clerk 1 from break.
+Customer 6Customer  has gotten in regular line for Application Clerk 10 has gotten in regular line for Application Clerk .
+1.
 Application Clerk 1 is coming off of break.
+Manager is waking Application Clerk 0 from break.
+Customer 2 has gotten in regular line for Application Clerk 0.
+Application Clerk 0 is coming off of break.
+Customer 7 has gotten in bribe line for Application Clerk 0.
+Manager is waking Application Clerk 1 from break.
+Customer 3 has gotten in regular line for Application Clerk 1.
+Application Clerk 1 is coming off of break.
+Customer 8 has gotten in bribe line for Application Clerk 1.
+Customer 4 has gotten in bribe line for Application Clerk 0.
+Customer 9 has gotten in bribe line for Application Clerk 0.
+Customer 5 has gotten in bribe line for Application Clerk 1.
+Application Clerk 0 is going on break.
 Application Clerk 1 is going on break.
 Customer 0 is going outside the office because there is a Senator present.
+Customer 7 has gotten in bribe line for Application Clerk 0.
+Manager is waking Application Clerk 0 from break.
 Customer 2 is going outside the office because there is a Senator present.
+Application Clerk 0 is coming off of break.
 Customer 4 is going outside the office because there is a Senator present.
+Customer 6 has gotten in bribe line for Application Clerk 1.
+Manager is waking Application Clerk 1 from break.
 Customer 6 is going outside the office because there is a Senator present.
+Customer 8 has gotten in regular line for Application Clerk 0.
+Application Clerk 1 is coming off of break.
+Customer 7 is going outside the office because there is a Senator present.
+Customer 9 has gotten in bribe line for Application Clerk 0.
+Customer 9 is going outside the office because there is a Senator present.
+Customer 1 is going outside the office because there is a Senator present.
+Application Clerk 0 is going on break.
+Customer 3 is going outside the office because there is a Senator present.
+Customer 0 is going outside the office because there is a Senator present.
+Customer 5Application Clerk 1 is going on break.
+ is going outside the office because there is a Senator present.
+Customer 2 is going outside the office because there is a Senator present.
 Customer 8 is going outside the office because there is a Senator present.
+Manager is waking Application Clerk 0 from break.
+Customer 8 is going outside the office because there is a Senator present.
+Application Clerk 0 is going on break.
+Application Clerk 1 is going on break.
+Application Clerk 0 is coming off of break.
+Customer 4 is going outside the office because there is a Senator present.
+Manager is waking Application Clerk 1 from break.
+Customer 7 is going outside the office because there is a Senator present.
+Application Clerk 1 is coming off of break.
+Customer 9 is going outside the office because there is a Senator present.
 Customer 1 is going outside the office because there is a Senator present.
 Customer 3 is going outside the office because there is a Senator present.
 Customer 5 is going outside the office because there is a Senator present.
-Customer 7 is going outside the office because there is a Senator present.
-Customer 9 is going outside the office because there is a Senator present.
+Customer 6 is going outside the office because there is a Senator present.
+Application Clerk 0 is going on break.
+Application Clerk 1 is going on break.
+Senator 0 has gotten in regular line for Application Clerk 0.
 Senator 0 has gotten in regular line for Application Clerk 0.
 Manager is waking Application Clerk 0 from break.
 Application Clerk 0 is coming off of break.
 Application Clerk 0 has signalled a Senator to come to their counter.
 Senator 0 has given SSN 0 to Application Clerk 0.
 Application Clerk 0 has received SSN 0 from Senator 0.
-Application Clerk 0 has recorded a complete application for Senator 0.
+Manager is waking Application Clerk 0 from break.
+Application Clerk 0Application Clerk  is coming off of break.
+0 has recorded a complete application for Senator 0.
+Application Clerk 0 has signalled a Senator to come to their counter.
 Senator 0 has gotten in regular line for Picture Clerk 0.
+Senator 0 has given SSN 0 to Application Clerk 0.
 Application Clerk 0 is going on break.
+Application Clerk 0 has received SSN 0 from Senator 0.
 Manager is waking Picture Clerk 0 from break.
 Picture Clerk 0 is coming off of break.
 Picture Clerk 0 has signalled a Senator to come to their counter.
-Senator 0 has given SSN 0 to Picture Clerk 0.
+Senator Application Clerk 00 has given SSN 0 to Picture Clerk 0.
+ has recorded a complete application for Senator 0.
 Picture Clerk 0 has received SSN 0 from Senator 0.
+Senator 0 has gotten in regular line for Picture Clerk 0.
+Application Clerk 0 is going on break.
 Picture Clerk 0 has taken a picture of Senator 0.
 Senator 0 does like their picture from Picture Clerk 0.
 Picture Clerk 0 has been told that Senator 0 does like their picture.
-Picture Clerk 0 is going on break.
 Senator 0 has gotten in regular line for Passport Clerk 0.
+Picture Clerk 0 is going on break.
 Manager is waking Passport Clerk 0 from break.
 Passport Clerk 0 is coming off of break.
 Passport Clerk 0 has signalled a Senator to come to their counter.
 Senator 0 has given SSN 0 to Passport Clerk 0.
 Passport Clerk 0 has received SSN 0 from Senator 0.
+Manager is waking Picture Clerk 0 from break.
+Picture Clerk 0 is coming off of break.
+Picture Clerk 0 has signalled a Senator to come to their counter.
 Passport Clerk 0 has determined that Senator 0 has both their application and picture completed.
 Passport Clerk 0 has recorded Senator 0 has both their application and picture completed.
+Senator 0 has given SSN 0 to Picture Clerk 0.
 Senator 0 has gotten in regular line for Cashier 0.
+Picture Clerk 0 has received SSN 0 from Senator 0.
 Passport Clerk 0 is going on break.
+Picture Clerk 0 has taken a picture of Senator 0.
+Senator 0 does like their picture from Picture Clerk 0.
+Picture Clerk 0 has been told that Senator 0 does like their picture.
 Manager is waking Cashier 0 from break.
+Picture Clerk 0 is going on break.
+Senator 0 has gotten in regular line for Passport Clerk 0.
 Cashier 0 is coming of off break.
 Cashier 0 has signalled a Senator to come to their counter.
+Manager is waking Passport Clerk 0 from break.
 Senator 0 has given SSN 0 to Cashier 0.
+Passport Clerk 0 is coming off of break.
 Senator 0 has given Cashier 0 $100.
+Passport Clerk 0 has signalled a Senator to come to their counter.
 Cashier 0 has received SSN 0 from Senator 0.
+Senator 0Cashier 0 has verified that Senator 0 has been certified by a Passport Clerk.
+ has given SSN Cashier 00 to Passport Clerk 0.
+ has recieved the $100 from Senator 0 after certification.
+Passport Clerk 0 has received SSN 0 from Senator 0.
+Cashier 0Passport Clerk  has provided Senator 00 has determined that Senator  their completed passport.
+0 has both their application and picture completed.
+Passport Clerk 0 has recorded Senator 0 has both their application and picture completed.
+Cashier 0 has recorded Senator 0 has been given their completed passport.
+Senator 0 has gotten in regular line for Cashier 0.
+Senator 0 is leaving the Passport Office.
+Passport Clerk 0 is going on break.
+Manager is waking Cashier 0 from break.
+Customer 0 has gotten in regular line for Application Clerk 0.
+Cashier 0 is going on break.
+Cashier 0 is coming of off break.
+Customer 2 has gotten in regular line for Application Clerk 1.
+Customer Cashier 0 has signalled a Senator to come to their counter.
+4 has gotten in regular line for Application Clerk 0.
+Senator 0Customer 6 has gotten in regular line for Application Clerk  has given SSN 10.
+ to Cashier 0.
+Senator 0 has given Cashier 0 $100.
+Customer 7 has gotten in regular line for Application Clerk Cashier 00 has received SSN 0 from Senator 0.
+.
 Cashier 0 has verified that Senator 0 has been certified by a Passport Clerk.
 Cashier 0 has recieved the $100 from Senator 0 after certification.
+Customer 9 has gotten in regular line for Application Clerk 1.
+Customer 1 has gotten in regular line for Application Clerk 0.
+Customer 3 has gotten in regular line for Application Clerk 1.
 Cashier 0 has provided Senator 0 their completed passport.
-Cashier 0 has recorded Senator 0 has been given their completed passport.
+Customer 5Cashier 0 has recorded Senator  has gotten in regular line for Application Clerk 0 has been given their completed passport.
+0.
+Manager is waking Application Clerk 0 from break.
+Customer 8 has gotten in regular line for Application Clerk 1.
+Application Clerk 0 is coming off of break.
 Senator 0 is leaving the Passport Office.
+Manager is waking Application Clerk 1 from break.
 Cashier 0 is going on break.
 Customer 0 has gotten in regular line for Application Clerk 0.
-Customer 2 has gotten in regular line for Application Clerk 1.
-Customer 4 has gotten in regular line for Application Clerk 0.
-Customer 6 has gotten in regular line for Application Clerk 1.
-Customer 8 has gotten in regular line for Application Clerk 0.
-Customer 1 has gotten in regular line for Application Clerk 1.
-Customer 3 has gotten in regular line for Application Clerk 0.
-Customer 5 has gotten in regular line for Application Clerk 1.
-Customer 7 has gotten in regular line for Application Clerk 0.
-Customer 9 has gotten in regular line for Application Clerk 1.
-Manager is waking Application Clerk 0 from break.
-Manager is waking Application Clerk 1 from break.
-Application Clerk 0 is coming off of break.
 Application Clerk 0 has signalled a Customer to come to their counter.
+Application Clerk 1 is coming off of break.
+Customer 2 has gotten in regular line for Application Clerk 1.
+Customer 0 has given SSN 0 to Application Clerk 0.
+Application Clerk 1 has signalled a Customer to come to their counter.
+Customer 8 has gotten in regular line for Application Clerk 0.
+Customer 4 has gotten in regular line for Application Clerk 1.
+Application Clerk 0 has received SSN 0 from Customer 0.
+Customer 7 has gotten in regular line for Application Clerk 0.
+Customer 2 has given SSN 2 to Application Clerk 1.
+Customer 9 has gotten in regular line for Application Clerk 1.
+Application Clerk 1 has received SSN 2 from Customer 2.
+Customer 1 has gotten in regular line for Application Clerk 0.
+Customer 3 has gotten in regular line for Application Clerk 1.
+Application Clerk 0 has recorded a complete application for Customer 0.
+Customer 5 has gotten in regular line for Application Clerk 0.
+Application Clerk 1 has recorded a complete application for Customer 2.
+Customer 0 has gotten in regular line for Picture Clerk 0.
+Customer 6 has gotten in regular line for Application Clerk 1.
+Manager is waking Application Clerk 0 from break.
+Application Clerk 0 has signalled a Customer to come to their counter.
+Application Clerk 0 is coming off of break.
+Manager is waking Application Clerk 1 from break.
+Application Clerk 0 has signalled a Customer to come to their counter.
+Customer 2 has gotten in regular line for Picture Clerk 1.
 Application Clerk 1 is coming off of break.
 Application Clerk 1 has signalled a Customer to come to their counter.
 Customer 0 has given SSN 0 to Application Clerk 0.
-Customer 2 has given SSN 2 to Application Clerk 1.
-Application Clerk 0 has received SSN 0 from Customer 0.
-Application Clerk 1 has received SSN 2 from Customer 2.
-Application Clerk 0 has recorded a complete application for Customer 0.
-Application Clerk 1 has recorded a complete application for Customer 2.
-Customer 0 has gotten in regular line for Picture Clerk 0.
-Customer 2 has gotten in regular line for Picture Clerk 1.
-Application Clerk 0 has signalled a Customer to come to their counter.
 Application Clerk 1 has signalled a Customer to come to their counter.
+Application Clerk 0 has received SSN 0 from Customer 0.
 Customer 4 has given SSN 4 to Application Clerk 0.
-Customer 6 has given SSN 6 to Application Clerk 1.
-Application Clerk 0 has received SSN 4 from Customer 4.
-Application Clerk 1 has received SSN 6 from Customer 6.
-Application Clerk 0 has recorded a complete application for Customer 4.
+Customer 6 has given SSN 6 to Application Clerk 1Customer 2 has given SSN .
+2 to Application Clerk 1Application Clerk 0 has received SSN .
+4 from Customer 4.
+Application Clerk 1 has received SSN 2 from Customer 2.
+Application Clerk 0Application Clerk 1 has received SSN 6 from Customer  has recorded a complete application for Customer 0.
+6.
+Customer 0Application Clerk  has gotten in regular line for Picture Clerk 00 has recorded a complete application for Customer .
+4.
+Application Clerk 0 has signalled a Customer to come to their counter.
+Application Clerk 1 has recorded a complete application for Customer 2.
 Application Clerk 1 has recorded a complete application for Customer 6.
 Customer 4 has gotten in regular line for Picture Clerk 0.
-Customer 6 has gotten in regular line for Picture Clerk 1.
-Application Clerk 0 has signalled a Customer to come to their counter.
-Application Clerk 1 has signalled a Customer to come to their counter.
 Customer 8 has given SSN 8 to Application Clerk 0.
-Customer 1 has given SSN 1 to Application Clerk 1.
+Application Clerk 0 has signalled a Customer to come to their counter.
+Customer 2 has gotten in regular line for Picture Clerk 1.
 Application Clerk 0 has received SSN 8 from Customer 8.
-Application Clerk 1 has received SSN 1 from Customer 1.
-Application Clerk 0 has recorded a complete application for Customer 8.
-Application Clerk 1 has recorded a complete application for Customer 1.
-Customer 8 has gotten in regular line for Picture Clerk 0.
-Customer 1 has gotten in regular line for Picture Clerk 1.
-Application Clerk 0 has signalled a Customer to come to their counter.
-Application Clerk 1 has signalled a Customer to come to their counter.
-Customer 3 has given SSN 3 to Application Clerk 0.
-Customer 5 has given SSN 5 to Application Clerk 1.
-Application Clerk 0 has received SSN 3 from Customer 3.
-Application Clerk 1 has received SSN 5 from Customer 5.
-Application Clerk 0 has recorded a complete application for Customer 3.
-Application Clerk 1 has recorded a complete application for Customer 5.
-Customer 3 has gotten in regular line for Picture Clerk 0.
-Customer 5 has gotten in regular line for Picture Clerk 1.
-Application Clerk 0 has signalled a Customer to come to their counter.
-Application Clerk 1 has signalled a Customer to come to their counter.
 Customer 7 has given SSN 7 to Application Clerk 0.
-Customer 9 has given SSN 9 to Application Clerk 1.
+Application Clerk 1Customer 6 has signalled a Customer to come to their counter.
+ has gotten in regular line for Picture Clerk 1.
 Application Clerk 0 has received SSN 7 from Customer 7.
-Application Clerk 1 has received SSN 9 from Customer 9.
+Application Clerk 0 has recorded a complete application for Customer Application Clerk 81.
+ has signalled a Customer to come to their counter.
+Customer 4 has given SSN 4 to Application Clerk 1.
 Application Clerk 0 has recorded a complete application for Customer 7.
-Application Clerk 1 has recorded a complete application for Customer 9.
-Customer 7 has gotten in regular line for Picture Clerk 0.
+Application Clerk 1 has received SSN 4 from Customer 4.
+Customer 9 has given SSN 9Application Clerk  to Application Clerk 0 has signalled a Customer to come to their counter.
+1.
+Application Clerk 0 has signalled a Customer to come to their counter.
+Application Clerk 1 has recorded a complete application for Customer 4.
+Application Clerk 1 has received SSN 9 from Customer 9.
+Customer 8 has gotten in regular line for Picture Clerk 0Customer 7 has gotten in regular line for Picture Clerk .
+0.
+Customer Customer 7 has given SSN 71 has given SSN 1 to Application Clerk 0 to Application Clerk 0.
+.
+Customer 4 has gotten in regular line for Picture Clerk Application Clerk 10 has received SSN 1 from Customer 1.
+.
+Application Clerk 1 has recorded a complete application for Customer 9Application Clerk .
+1 has signalled a Customer to come to their counter.
+Application Clerk 0 has received SSN 7 from Customer 7.
+Customer 9 has given SSN 9 to Application Clerk 1.
 Customer 9 has gotten in regular line for Picture Clerk 1.
-Application Clerk 0 is going on break.
-Application Clerk 1 is going on break.
+Application Clerk 0 has recorded a complete application for Customer 1.
+Application Clerk 0 has recorded a complete application for Customer 7.
 Manager is waking Picture Clerk 0 from break.
+Application Clerk 1 has received SSN 9 from Customer Application Clerk 19.
+ has signalled a Customer to come to their counter.
 Manager is waking Picture Clerk 1 from break.
 Picture Clerk 0 is coming off of break.
-Picture Clerk 0 has signalled a Customer to come to their counter.
+Application Clerk 1 has recorded a complete application for Customer 9.
+Customer 3 has given SSN 3 to Application Clerk 1.
 Picture Clerk 1 is coming off of break.
+Customer 7 has gotten in regular line for Picture Clerk 0.
+Picture Clerk 0 has signalled a Customer to come to their counter.
+Customer Application Clerk 0 has signalled a Customer to come to their counter.
+1 has gotten in bribe line for Picture Clerk 0.
+Application Clerk 1 has received SSN 3 from Customer 3.
+Application Clerk 0 has signalled a Customer to come to their counter.
+Customer 1 has given SSN 1 to Application Clerk 0.
+Customer 9 has gotten in regular line for Picture Clerk 1.
+Application Clerk 1 has recorded a complete application for Customer 3.
+Application Clerk 0 has received SSN Customer 0 has given SSN 0 to Picture Clerk 01 from Customer 1.
+.
 Picture Clerk 1 has signalled a Customer to come to their counter.
-Customer 0 has given SSN 0 to Picture Clerk 0.
+Application Clerk 1Picture Clerk 0 has received SSN  has signalled a Customer to come to their counter.
+0 from Customer 0.
+Application Clerk 0 has recorded a complete application for Customer 1.
+Customer 5 has given SSN 5 to Application Clerk 0.
+Manager is waking Picture Clerk 0 from break.
+Picture Clerk 0 has taken a picture of Customer 0Customer 3 has given SSN 3.
+ to Application Clerk 1.
 Customer 2 has given SSN 2 to Picture Clerk 1.
-Picture Clerk 0 has received SSN 0 from Customer 0.
-Picture Clerk 1 has received SSN 2 from Customer 2.
-Picture Clerk 0 has taken a picture of Customer 0.
-Picture Clerk 1 has taken a picture of Customer 2.
+Application Clerk 0 has received SSN 5 from Customer 5Manager is waking Picture Clerk .
+1 from break.
+Customer 3 has gotten in bribe line for Picture Clerk 1.
+Picture Clerk 0 is coming off of break.
+Customer 1 has gotten in regular line for Picture Clerk 0.
+Application Clerk 0 has recorded a complete application for Customer 5.
 Customer 0 does like their picture from Picture Clerk 0.
-Customer 2 does like their picture from Picture Clerk 1.
+Picture Clerk 1Picture Clerk 1 is coming off of break.
+ has received SSN 2 from Customer 2.
+Application Clerk 1 has received SSN 3Application Clerk  from Customer 1 has signalled a Customer to come to their counter.
+3.
+Picture Clerk 0 has signalled a Customer to come to their counter.
 Picture Clerk 0 has been told that Customer 0 does like their picture.
+Picture Clerk 1 has taken a picture of Customer 2.
+Application Clerk 1 has recorded a complete application for Customer 3.
+Customer 8 has given SSN 8 to Application Clerk 1.
+Application Clerk 0 has signalled a Customer to come to their counter.
+Customer 5 has gotten in bribe line for Picture Clerk 0.
+Customer 2 does like their picture from Picture Clerk 1.
+Application Clerk 0 is going on break.
+Application Clerk 1 has received SSN 8 from Customer 8.
+Picture Clerk 1 has signalled a Customer to come to their counter.
 Picture Clerk 0 has signalled a Customer to come to their counter.
 Picture Clerk 1 has been told that Customer 2 does like their picture.
-Picture Clerk 1 has signalled a Customer to come to their counter.
+Application Clerk 1 has recorded a complete application for Customer 8.
 Customer 0 has gotten in regular line for Passport Clerk 0.
-Customer 4 has given SSN 4 to Picture Clerk 0.
+Customer 0 has given SSN 0 to Picture Clerk 0.
+Customer 5 has given SSN 5 to Application Clerk 0.
+Customer 2 has given SSN 2 to Picture Clerk 1.
+Customer 3 has gotten in bribe line for Picture Clerk Customer 1 has given SSN 1 to Picture Clerk 0.
+0.
+Picture Clerk 0 has received SSN 0 from Customer 0.
+Picture Clerk 1 has signalled a Customer to come to their counter.
+Application Clerk 0 has received SSN 5 from Customer 5.
+Picture Clerk 1Customer 2 has received SSN 2 from Customer  has gotten in regular line for Passport Clerk 1.
+2.
+Application Clerk 1 has signalled a Customer to come to their counter.
+Picture Clerk 0 has received SSN 1 from Customer 1.
+Customer 8 has gotten in regular line for Picture Clerk 0Picture Clerk .
+0 has taken a picture of Customer 0.
+Customer 6 has given SSN 6 to Application Clerk 1.
+Customer 0 does like their picture from Picture Clerk 0.
+Application Clerk 1 is going on break.
+Application Clerk 1 has received SSN 6 from Customer 6.
+Customer 3 has given SSN 3 to Picture Clerk 1.
+Picture Clerk 1 has taken a picture of Customer 2.
+Picture Clerk 0 has taken a picture of Customer Application Clerk 10.
+ has recorded a complete application for Customer 5.
+Picture Clerk 1 has received SSN 3 from Customer 3Picture Clerk .
+0 has been told that Customer 0 does like their picture.
+Customer Customer 2 does like their picture from Picture Clerk 1.
+1 does like their picture from Picture Clerk 0.
+Application Clerk 1 has recorded a complete application for Customer 6.
+Picture Clerk 1 has taken a picture of Customer 3.
+Picture Clerk 0 has signalled a Customer to come to their counter.
+Picture Clerk 1 has been told that Customer 2 does like their picture.
+Picture Clerk 0 has been told that Customer 1 does like their picture.
+Customer 0 has gotten in regular line for Passport Clerk 0.
+Customer 3 does like their picture from Picture Clerk 1.
+Customer 5 has gotten in regular line for Picture Clerk 1.
+Picture Clerk 0 has signalled a Customer to come to their counter.
+Picture Clerk 1 has been told that Customer 3 does like their picture.
+Customer 5 has given SSN 5 to Picture Clerk Customer 03.
+ has given SSN 3 to Picture Clerk 0.
+Customer 1 has gotten in regular line for Passport Clerk 0.
+Application Clerk 0 is going on break.
+Picture Clerk 1 has signalled a Customer to come to their counter.
+Picture Clerk 0 has received SSN 5 from Customer 5.
+Picture Clerk Picture Clerk 01 has received SSN  has signalled a Customer to come to their counter.
+3 from Customer 3.
+Customer 6 has gotten in regular line for Picture Clerk Customer 03.
+ has gotten in regular line for Passport Clerk 1.
+Picture Clerk 0 has taken a picture of Customer 5.
 Customer 2 has gotten in regular line for Passport Clerk 1.
-Customer 6 has given SSN 6 to Picture Clerk 1.
-Picture Clerk 0 has received SSN 4 from Customer 4.
-Picture Clerk 1 has received SSN 6 from Customer 6.
-Picture Clerk 0 has taken a picture of Customer 4.
-Picture Clerk 1 has taken a picture of Customer 6.
-Customer 4 does like their picture from Picture Clerk 0.
-Customer 6 does like their picture from Picture Clerk 1.
-Picture Clerk 0 has been told that Customer 4 does like their picture.
-Picture Clerk 0 has signalled a Customer to come to their counter.
-Picture Clerk 1 has been told that Customer 6 does like their picture.
-Picture Clerk 1 has signalled a Customer to come to their counter.
-Customer 4 has gotten in regular line for Passport Clerk 0.
-Customer 8 has given SSN 8 to Picture Clerk 0.
-Customer 6 has gotten in regular line for Passport Clerk 1.
-Customer 1 has given SSN 1 to Picture Clerk 1.
-Picture Clerk 0 has received SSN 8 from Customer 8.
-Picture Clerk 1 has received SSN 1 from Customer 1.
-Picture Clerk 0 has taken a picture of Customer 8.
-Picture Clerk 1 has taken a picture of Customer 1.
-Customer 8 does like their picture from Picture Clerk 0.
-Customer 1 does like their picture from Picture Clerk 1.
-Picture Clerk 0 has been told that Customer 8 does like their picture.
-Picture Clerk 0 has signalled a Customer to come to their counter.
-Picture Clerk 1 has been told that Customer 1 does like their picture.
-Picture Clerk 1 has signalled a Customer to come to their counter.
-Customer 8 has gotten in regular line for Passport Clerk 0.
-Customer 3 has given SSN 3 to Picture Clerk 0.
-Customer 1 has gotten in regular line for Passport Clerk 1.
-Customer 5 has given SSN 5 to Picture Clerk 1.
-Picture Clerk 0 has received SSN 3 from Customer 3.
-Picture Clerk 1 has received SSN 5 from Customer 5.
+Customer 5 does like their picture from Picture Clerk 0.
 Picture Clerk 0 has taken a picture of Customer 3.
-Picture Clerk 1 has taken a picture of Customer 5.
+Customer 6 has given SSN 6 to Picture Clerk 1.
+Application Clerk 1 is going on break.
+Picture Clerk 0 has been told that Customer Customer 4 has given SSN 45 does like their picture.
+ to Picture Clerk 1.
 Customer 3 does like their picture from Picture Clerk 0.
-Customer 5 does like their picture from Picture Clerk 1.
-Picture Clerk 0 has been told that Customer 3 does like their picture.
+Picture Clerk 1 has received SSN 6 from Customer 6.
 Picture Clerk 0 has signalled a Customer to come to their counter.
-Picture Clerk 1 has been told that Customer 5 does like their picture.
-Picture Clerk 1 has signalled a Customer to come to their counter.
-Customer 3 has gotten in regular line for Passport Clerk 0.
-Customer 7 has given SSN 7 to Picture Clerk 0.
-Customer 5 has gotten in regular line for Passport Clerk 1.
-Customer 9 has given SSN 9 to Picture Clerk 1.
-Picture Clerk 0 has received SSN 7 from Customer 7.
-Picture Clerk 1 has received SSN 9 from Customer 9.
-Picture Clerk 0 has taken a picture of Customer 7.
-Picture Clerk 1 has taken a picture of Customer 9.
-Customer 7 does like their picture from Picture Clerk 0.
-Customer 9 does like their picture from Picture Clerk 1.
-Picture Clerk 0 has been told that Customer 7 does like their picture.
-Picture Clerk 0 is going on break.
-Picture Clerk 1 has been told that Customer 9 does like their picture.
-Picture Clerk 1 is going on break.
-Customer 7 has gotten in regular line for Passport Clerk 0.
-Customer 9 has gotten in regular line for Passport Clerk 1.
+Picture Clerk 1 has received SSN 4 from Customer 4.
+Picture Clerk 0 has been told that Customer 3 does like their picture.
+Picture Clerk 1 has taken a picture of Customer 6.
+Customer 5 has gotten in regular line for Passport Clerk 0.
+Picture Clerk 0 has signalled a Customer to come to their counter.
 Manager is waking Passport Clerk 0 from break.
-Manager is waking Passport Clerk 1 from break.
-Passport Clerk 0 is coming off of break.
-Passport Clerk 0 has signalled a Customer to come to their counter.
-Passport Clerk 1 is coming off of break.
-Passport Clerk 1 has signalled a Customer to come to their counter.
+Picture Clerk 1Customer  has taken a picture of Customer 64 does like their picture from Picture Clerk .
+1.
+Customer 4 has given SSN 4 to Picture Clerk 0.
+Customer 3 has gotten in regular line for Passport Clerk Passport Clerk 0.
+0 is coming off of break.
+Customer 4 does like their picture from Picture Clerk 1.
+Picture Clerk 1 has been told that Customer 6 does like their picture.
+Passport Clerk 0Customer  has signalled a Customer to come to their counter.
+8 has given SSN 8 to Picture Clerk 0.
+Picture Clerk 0 has received SSN 4 from Customer 4.
+Picture Clerk 1 has been told that Customer 4 does like their picture.
+Picture Clerk 0 has received SSN 8 from Customer 8.
 Customer 0 has given SSN 0 to Passport Clerk 0.
-Customer 2 has given SSN 2 to Passport Clerk 1.
+Picture Clerk 1 has signalled a Customer to come to their counter.
+Picture Clerk 1 has signalled a Customer to come to their counter.
+Picture Clerk 0 has taken a picture of Customer 4.
 Passport Clerk 0 has received SSN 0 from Customer 0.
-Passport Clerk 1 has received SSN 2 from Customer 2.
+Picture Clerk 0 has taken a picture of Customer 8.
+Customer 4 has gotten in regular line for Passport Clerk Customer 16.
+ has gotten in bribe line for Passport Clerk 0.
+Customer 8 does like their picture from Picture Clerk 0.
+Customer 4 does like their picture from Picture Clerk 0.
+Customer 9 has given SSN 9 to Picture Clerk 1.
 Passport Clerk 0 has determined that Customer 0 has both their application and picture completed.
+Picture Clerk 0 has been told that Customer 8 does like their picture.
+Customer 9 has given SSN 9 to Picture Clerk 1.
+Picture Clerk 0 has been told that Customer 4 does like their picture.
 Passport Clerk 0 has recorded Customer 0 has both their application and picture completed.
-Passport Clerk 1 has determined that Customer 2 has both their application and picture completed.
-Passport Clerk 1 has recorded Customer 2 has both their application and picture completed.
-Customer 0 has gotten in regular line for Cashier 0.
-Customer 2 has gotten in regular line for Cashier 1.
+Picture Clerk 1 has received SSN 9 from Customer 9.
+Picture Clerk 0 has signalled a Customer to come to their counter.
+Picture Clerk 0 has signalled a Customer to come to their counter.
+Picture Clerk 1 has received SSN 9 from Customer 9.
+Customer 8 has gotten in regular line for Passport Clerk 0.
+Picture Clerk 1 has taken a picture of Customer 9.
+Manager is waking Passport Clerk 0 from break.
+Customer 7 has given SSN 7 to Picture Clerk Customer 9 does like their picture from Picture Clerk 10.
+.
+Customer 7 has given SSN Picture Clerk 1 has taken a picture of Customer 79 to Picture Clerk .
+0.
+Passport Clerk 0 is coming off of break.
+Customer 4 has gotten in bribe line for Passport Clerk 0.
+Picture Clerk 1 has been told that Customer 9 does like their picture.
+Picture Clerk 0 has received SSN 7 from Customer 7.
+Picture Clerk 0 has received SSN 7 from Customer 7.
+Customer 0 has gotten in regular line for Cashier 0Passport Clerk 0 has signalled a Customer to come to their counter.
+.
+Customer 9 does like their picture from Picture Clerk 1.
+Picture Clerk 0 has taken a picture of Customer 7.
 Passport Clerk 0 has signalled a Customer to come to their counter.
-Passport Clerk 1 has signalled a Customer to come to their counter.
-Customer 4 has given SSN 4 to Passport Clerk 0.
-Customer 6 has given SSN 6 to Passport Clerk 1.
-Passport Clerk 0 has received SSN 4 from Customer 4.
-Passport Clerk 1 has received SSN 6 from Customer 6.
-Passport Clerk 0 has determined that Customer 4 has both their application and picture completed.
-Passport Clerk 0 has recorded Customer 4 has both their application and picture completed.
-Passport Clerk 1 has determined that Customer 6 has both their application and picture completed.
-Passport Clerk 1 has recorded Customer 6 has both their application and picture completed.
-Customer 4 has gotten in regular line for Cashier 0.
+Picture Clerk 0 has taken a picture of Customer 7.
+Picture Clerk 1 has been told that Customer 9 does like their picture.
+Customer 0 has given SSN 0 to Passport Clerk 0.
+Customer 7 does like their picture from Picture Clerk 0.
+Picture Clerk 1 has signalled a Customer to come to their counter.
+Customer 6 has given SSN 6 to Passport Clerk 0.
+Customer 9 has gotten in regular line for Passport Clerk 0.
+Customer 7 does like their picture from Picture Clerk 0Picture Clerk 1 is going on break.
+.
+Customer 9 has gotten in regular line for Passport Clerk 0.
+Passport Clerk 0 has received SSN Picture Clerk 00 has been told that Customer 7 from Customer 0.
+ does like their picture.
+Passport Clerk 0 has received SSN 6 from Customer 6.
+Picture Clerk 0 has been told that Customer 7Picture Clerk  does like their picture.
+0 has signalled a Customer to come to their counter.
+Customer 5 has given SSN 5 to Picture Clerk 1.
+Passport Clerk 0 has determined that Customer 0 has both their application and picture completed.
+Passport Clerk 0 has determined that Customer 6 has both their application and picture completed.
+Picture Clerk 0 has signalled a Customer to come to their counter.
+Customer 7 has gotten in regular line for Passport Clerk 0.
+Passport Clerk 0 has recorded Customer 0 has both their application and picture completed.
+Picture Clerk 1Passport Clerk  has received SSN 05 has recorded Customer  from Customer 65 has both their application and picture completed.
+.
+Customer 8 has given SSN 8 to Picture Clerk 0.
+Customer 7 has gotten in regular line for Passport Clerk 0.
+Picture Clerk 0 has received SSN 8 from Customer 8.
 Customer 6 has gotten in regular line for Cashier 1.
-Passport Clerk 0 has signalled a Customer to come to their counter.
-Passport Clerk 1 has signalled a Customer to come to their counter.
-Customer 8 has given SSN 8 to Passport Clerk 0.
-Customer 1 has given SSN 1 to Passport Clerk 1.
-Passport Clerk 0 has received SSN 8 from Customer 8.
-Passport Clerk 1 has received SSN 1 from Customer 1.
-Passport Clerk 0 has determined that Customer 8 has both their application and picture completed.
-Passport Clerk 0 has recorded Customer 8 has both their application and picture completed.
-Passport Clerk 1 has determined that Customer 1 has both their application and picture completed.
-Passport Clerk 1 has recorded Customer 1 has both their application and picture completed.
-Customer 8 has gotten in regular line for Cashier 0.
-Customer 1 has gotten in regular line for Cashier 1.
-Passport Clerk 0 has signalled a Customer to come to their counter.
-Passport Clerk 1 has signalled a Customer to come to their counter.
-Customer 3 has given SSN 3 to Passport Clerk 0.
-Customer 5 has given SSN 5 to Passport Clerk 1.
+Customer 1 has given SSN 1 to Picture Clerk 0.
+Customer 0 has gotten in regular line for Cashier 0.
+Passport Clerk Picture Clerk 01 has signalled a Customer to come to their counter.
+ has taken a picture of Customer 5.
+Passport Clerk 0Picture Clerk 0 has taken a picture of Customer 8.
+ has signalled a Customer to come to their counter.
+Picture Clerk 0 has received SSN Customer 4 has given SSN 1 from Customer 4 to Passport Clerk 0.
+1.
+Customer 5 does like their picture from Picture Clerk 1.
+Customer 3 has given SSN 3Customer 8 to Passport Clerk  does like their picture from Picture Clerk 00.
+.
+Picture Clerk Passport Clerk 01 has been told that Customer 5 does like their picture.
+ has received SSN 4 from Customer 4.
+Picture Clerk 0 has taken a picture of Customer 1.
 Passport Clerk 0 has received SSN 3 from Customer 3.
-Passport Clerk 1 has received SSN 5 from Customer 5.
+Picture Clerk 0 has been told that Customer 8 does like their picture.
+Picture Clerk 1 is going on break.
+Passport Clerk 0 has determined that Customer 4 has both their application and picture completed.
+Customer 5 has gotten in regular line for Passport Clerk 0.
+Passport Clerk 0 has recorded Customer 4 has both their application and picture completed.
+Customer 1 does like their picture from Picture Clerk 0.
 Passport Clerk 0 has determined that Customer 3 has both their application and picture completed.
+Picture Clerk 0 is going on break.
+Customer 8 has gotten in regular line for Passport Clerk 1.
 Passport Clerk 0 has recorded Customer 3 has both their application and picture completed.
-Passport Clerk 1 has determined that Customer 5 has both their application and picture completed.
-Passport Clerk 1 has recorded Customer 5 has both their application and picture completed.
-Customer 3 has gotten in regular line for Cashier 0.
-Customer 5 has gotten in regular line for Cashier 1.
+Picture Clerk 0 has been told that Customer 1 does like their picture.
+Customer 4 has gotten in regular line for Cashier 0.
+Customer 3 has gotten in regular line for Cashier 1.
 Passport Clerk 0 has signalled a Customer to come to their counter.
+Picture Clerk Customer 01 has signalled a Customer to come to their counter.
+ has given SSN 1 to Passport Clerk 0.
+Manager is waking Passport Clerk 1 from break.
+Passport Clerk 0Passport Clerk  has received SSN 01 has signalled a Customer to come to their counter.
+ from Customer 1.
+Passport Clerk 1 is coming off of break.
+Customer 1 has gotten in bribe line for Passport Clerk 0.
 Passport Clerk 1 has signalled a Customer to come to their counter.
-Customer 7 has given SSN 7 to Passport Clerk 0.
-Customer 9 has given SSN 9 to Passport Clerk 1.
-Passport Clerk 0 has received SSN 7 from Customer 7.
-Passport Clerk 1 has received SSN 9 from Customer 9.
-Passport Clerk 0 has determined that Customer 7 has both their application and picture completed.
-Passport Clerk 0 has recorded Customer 7 has both their application and picture completed.
-Passport Clerk 1 has determined that Customer 9 has both their application and picture completed.
-Passport Clerk 1 has recorded Customer 9 has both their application and picture completed.
-Customer 7 has gotten in regular line for Cashier 0.
-Customer 9 has gotten in regular line for Cashier 1.
-Passport Clerk 0 is going on break.
-Passport Clerk 1 is going on break.
+Customer 6 has given SSN 6 to Picture Clerk 0.
+Passport Clerk 0 has determined that Customer 1 has both their application and picture completed.
+Customer 8 has given SSN 8 to Passport Clerk 0.
+Passport Clerk 0 has recorded Customer 1 has both their application and picture completed.
+Picture Clerk 0 has received SSN 6 from Customer 6.
+Customer 2 has given SSN 2 to Passport Clerk 1.
+Passport Clerk 0 has received SSN 8 from Customer 8.
+Customer 1 has gotten in regular line for Cashier 1.
+Passport Clerk 1 has received SSN 2 from Customer 2.
+Picture Clerk 0 has taken a picture of Customer 6.
+Passport Clerk 0 has signalled a Customer to come to their counter.
+Customer 6 does like their picture from Picture Clerk 0.
+Passport Clerk 0Customer  has determined that Customer 58 has both their application and picture completed.
+ has given SSN Picture Clerk 0 has been told that Customer 56 does like their picture.
+ to Passport Clerk 0.
+Passport Clerk 0 has recorded Customer 8 has both their application and picture completed.
+Passport Clerk 1 has determined that Customer 2 has both their application and picture completed.
+Picture Clerk 0 is going on break.
+Passport Clerk 1 has recorded Customer 2 has both their application and picture completed.
+Customer 6 has gotten in regular line for Passport Clerk 0.
+Passport Clerk 0 has received SSN 5 from Customer 5.
+Customer 8 has gotten in regular line for Cashier 0.
+Customer 2 has gotten in regular line for Cashier Passport Clerk 0.
+0 has signalled a Customer to come to their counter.
+Passport Clerk 0 has determined that Customer 5 has both their application and picture completed.
+Passport Clerk 1 has signalled a Customer to come to their counter.
+Customer 1 has given SSN 1 to Passport Clerk 0.
+Passport Clerk 0 has recorded Customer 5 has both their application and picture completed.
+Passport Clerk 0 has received SSN 1 from Customer 1.
+Customer 3 has given SSN 3 to Passport Clerk 1.
 Manager is waking Cashier 0 from break.
+Customer 5 has gotten in regular line for Cashier 1.
+Passport Clerk 0 has determined that Customer Passport Clerk 1 has received SSN 13 has both their application and picture completed.
+ from Customer 3.
+Passport Clerk 0 has recorded Customer Cashier 0 is coming of off break.
+1 has both their application and picture completed.
 Manager is waking Cashier 1 from break.
-Cashier 0 is coming of off break.
-Cashier 0 has signalled a Customer to come to their counter.
+Passport Clerk 0 has signalled a Customer to come to their counter.
 Cashier 1 is coming of off break.
+Customer 9 has given SSN 9Customer 1 has gotten in regular line for Cashier  to Passport Clerk 0.
+1.
+Cashier 0 has signalled a Customer to come to their counter.
+Passport Clerk 0 has signalled a Customer to come to their counter.
+Passport Clerk 1 has determined that Customer 3 has both their application and picture completed.
+Passport Clerk 0 has received SSN 9 from Customer 9.
+Passport Clerk 1 has recorded Customer 3 has both their application and picture completed.
+Customer 0 has given SSN 0 to Cashier Customer 09.
+ has given SSN 9 to Passport Clerk 0.
 Cashier 1 has signalled a Customer to come to their counter.
-Customer 0 has given SSN 0 to Cashier 0.
 Customer 0 has given $100 0 to Cashier 0.
-Customer 2 has given SSN 2 to Cashier 1.
-Customer 2 has given $100 2 to Cashier 1.
+Passport Clerk 0 has received SSN 9 from Customer Passport Clerk 0 has determined that Customer 9 has both their application and picture completed.
+9.
 Cashier 0 has received SSN 0 from Customer 0.
+Passport Clerk 1 has signalled a Customer to come to their counter.
+Customer 6 has given SSN 6 to Cashier 1.
+Passport Clerk 0 has recorded Customer 9 has both their application and picture completed.
 Cashier 0 has verified that Customer 0 has been certified by a Passport Clerk.
 Cashier 0 has recieved the $100 from Customer 0 after certification.
+Customer 3 has gotten in regular line for Cashier 0.
+Customer 6 has given $100 6 to Cashier Passport Clerk 01 has determined that Customer .
+9 has both their application and picture completed.
+Customer 8 has given SSN 8 to Passport Clerk Passport Clerk 10.
+ has recorded Customer 9 has both their application and picture completed.
+Customer 9 has gotten in regular line for Cashier 1.
+Cashier 0 has provided Customer 0 their completed passport.
+Cashier 1 has received SSN 6 from Customer 6.
+Passport Clerk 1 has received SSN 8 from Customer 8.
+Cashier 1 has verified that Customer 6 has been certified by a Passport Clerk.
+Cashier 1 has recieved the $100 from Customer 6 after certification.
+Passport Clerk 0 has signalled a Customer to come to their counter.
+Customer 9 has gotten in regular line for Cashier 0.
+Cashier 0 has recorded Customer 0 has been given their completed passport.
+Passport Clerk 0 has signalled a Customer to come to their counter.
+Manager is waking Cashier 0 from break.
+Passport Clerk 1 has determined that Customer 8 has both their application and picture completed.
+Cashier 1 has provided Customer 6 their completed passport.
+Customer 0 is leaving the Passport Office.
+Customer 7 has given SSN 7 to Passport Clerk 0.
+Passport Clerk 1 has recorded Customer 8Customer  has both their application and picture completed.
+7 has given SSN 7 to Passport Clerk 0.
+Cashier Cashier 0 has signalled a Customer to come to their counter.
+0 is coming of off break.
+Cashier 1 has recorded Customer 6 has been given their completed passport.
+Passport Clerk 0 has received SSN 7 from Customer 7.
+Passport Clerk 0 has received SSN 7 from Customer 7.
+Cashier 0 has signalled a Customer to come to their counter.
+Customer 4 has given SSN 4 to Cashier 0.
+Customer 8 has gotten in regular line for Cashier 0.
+Customer Passport Clerk 60 is leaving the Passport Office.
+ has determined that Customer Passport Clerk 7 has both their application and picture completed.
+0Customer 0 has given SSN 0 has determined that Customer  to Cashier 07 has both their application and picture completed.
+.
+Customer 4 has given $100 4 to Cashier 0.
+Passport Clerk 0 has recorded Customer 7 has both their application and picture completed.
+Passport Clerk 1 is going on break.
+Customer 0 has given $100 0 to Cashier 0Cashier 1 has signalled a Customer to come to their counter.
+.
+Passport Clerk 0 has recorded Customer 7 has both their application and picture completed.
+Cashier 0 has received SSN 4 from Customer 4.
+Cashier 0 has received SSN 0 from Customer 0.
+Cashier Cashier 0 has verified that Customer 04 has verified that Customer 0 has been certified by a Passport Clerk.
+Cashier  has been certified by a Passport Clerk.
+0Cashier  has recieved the $100 from Customer 0 after certification.
+0 has recieved the $100 from Customer 4 after certification.
+Customer 7 has gotten in regular line for Cashier 0.
+Customer 1 has given SSN 1 to Cashier 1.
+Customer 7 has gotten in regular line for Cashier 1.
+Customer 1 has given $100 1 to Cashier 1.
+Passport Clerk 0 has signalled a Customer to come to their counter.
+Cashier 0 has provided Customer 4 their completed passport.
+Cashier 0 has provided Customer 0 their completed passport.
+Cashier 1 has received SSN 1 from Customer 1.
+Passport Clerk 0 is going on break.
+Cashier Customer 51 has verified that Customer 1 has been certified by a Passport Clerk.
+Cashier  has given SSN 51 has recieved the $100 from Customer 1 after certification.
+ to Passport Clerk 0.
+Cashier Cashier 00 has recorded Customer 0 has been given their completed passport.
+ has recorded Customer 4 has been given their completed passport.
+Passport Clerk 0 has received SSN 5 from Customer 5.
+Customer 4 is leaving the Passport Office.
+Customer 0 is leaving the Passport Office.
+Cashier 1 has provided Customer 1 their completed passport.
+Passport Clerk 0Cashier  has determined that Customer 05 has signalled a Customer to come to their counter.
+ has both their application and picture completed.
+Cashier 0 has signalled a Customer to come to their counter.
+Cashier 1 has recorded Customer 1 has been given their completed passport.
+Passport Clerk 0 has recorded Customer 5 has both their application and picture completed.
+Customer 2 has given SSN 2 to Cashier 0.
+Customer 8 has given SSN Customer 81 to Cashier  is leaving the Passport Office.
+0.
+Customer 2 has given $100 2 to Cashier 0Customer 5 has gotten in regular line for Cashier 0.
+.
+Cashier 1 has signalled a Customer to come to their counter.
+Customer 8 has given $100 8 to Cashier 0.
+Cashier 0 has received SSN 2 from Customer 2.
+Passport Clerk 0 has signalled a Customer to come to their counter.
+Cashier 0 has verified that Customer 2 has been certified by a Passport Clerk.
+Cashier 0 has recieved the $100 from Customer 2Cashier 0 has received SSN  after certification.
+8 from Customer 8.
+Customer 5 has given SSN 5 to Cashier 1.
+Cashier 0 has verified that Customer 8 has been certified by a Passport Clerk.
+Cashier 0 has recieved the $100 from Customer 8 after certification.
+Customer 5Customer 6 has given SSN 6 to Passport Clerk  has given $100 5 to Cashier 01.
+.
+Cashier 0 has provided Customer 2 their completed passport.
+Cashier 1 has received SSN 5 from Customer 5.
+Passport Clerk 0 has received SSN 6 from Customer 6.
+Cashier 1 has verified that Customer 5Cashier 0 has been certified by a Passport Clerk.
+Cashier 1 has recieved the $100 from Customer  has provided Customer 5 after certification.
+8 their completed passport.
+Cashier 0 has recorded Customer 2 has been given their completed passport.
+Cashier 0 has recorded Customer 8 has been given their completed passport.
+Customer 2 is leaving the Passport Office.
+Passport Clerk 0 has determined that Customer 6 has both their application and picture completed.
+Cashier 1 has provided Customer Passport Clerk 0 has recorded Customer 5 their completed passport.
+6 has both their application and picture completed.
+Cashier 0 has signalled a Customer to come to their counter.
+Customer 8 is leaving the Passport Office.
+Cashier 1 has recorded Customer 5 has been given their completed passport.
+Cashier 0 has signalled a Customer to come to their counter.
+Customer 3 has given SSN 3 to Cashier 0.
+Customer 5 is leaving the Passport Office.
+Customer 3 has given $100 3 to Cashier 0.
+Customer 9 has given SSN 9 to Cashier 0.
+Cashier 1 has signalled a Customer to come to their counter.
+Customer 6 has gotten in regular line for Cashier 0.
+Cashier 0 has received SSN 3 from Customer Customer 3.
+9 has given $100 9 to Cashier 0.
+Cashier 0 has verified that Customer 3 has been certified by a Passport Clerk.
+Cashier 0 has recieved the $100 from Customer 3 after certification.
+Passport Clerk 0 is going on break.
+Customer 9 has given SSN 9 to Cashier 1.
+Cashier 0 has received SSN 9 from Customer 9.
+Customer 9Cashier 0 has verified that Customer 9 has been certified by a Passport Clerk.
+Cashier  has given $100 09 has recieved the $100 from Customer  to Cashier 91 after certification.
+.
+Cashier 0 has provided Customer 3 their completed passport.
+Cashier 1 has received SSN 9 from Customer 9.
+Cashier 0 has recorded Customer 3 has been given their completed passport.
+Cashier 1 has verified that Customer 9 has been certified by a Passport Clerk.
+Cashier 1 has recieved the $100 from Customer 9 after certification.
+Customer 3 is leaving the Passport Office.
+Cashier Cashier 0 has signalled a Customer to come to their counter.
+0 has provided Customer 9 their completed passport.
+Customer 8 has given SSN 8 to Cashier 0Cashier 0 has recorded Customer .
+9 has been given their completed passport.
+Customer 8 has given $100 8 to Cashier 0.
+Customer 9 is leaving the Passport Office.
+Cashier 1 has provided Customer 9 their completed passport.
+Cashier 0 has received SSN 8Cashier 0 has signalled a Customer to come to their counter.
+ from Customer 8.
+Cashier 1 has recorded Customer 9 has been given their completed passport.
+Cashier 0 has verified that Customer 8 has been certified by a Passport Clerk.
+Cashier 0 has recieved the $100 from Customer 8 after certification.
+Customer 9 is leaving the Passport Office.
+Customer 7 has given SSN 7 to Cashier 0.
+Cashier 1 has signalled a Customer to come to their counter.
+Customer 7 has given $100 7 to Cashier 0.
+Cashier Cashier 0 has provided Customer 80 has received SSN 7 from Customer 7.
+ their completed passport.
+Cashier 0 has verified that Customer Customer 7 has given SSN 7 to Cashier 71 has been certified by a Passport Clerk.
+Cashier 0 has recieved the $100 from Customer .
+7Cashier  after certification.
+0 has recorded Customer 8 has been given their completed passport.
+Customer 7 has given $100 7 to Cashier 1.
+Customer 8 is leaving the Passport Office.
+Cashier 0 is going on break.
+Cashier 1 has received SSN 7 from Customer 7.
+Cashier 1 has verified that Customer 7 has been certified by a Passport Clerk.
+Cashier 1 has recieved the $100 from Customer 7 after certification.
+Cashier 0 has provided Customer 7 their completed passport.
+Cashier 0 has recorded Customer 7 has been given their completed passport.
+Customer 7 is leaving the Passport Office.
+Cashier 0 has signalled a Customer to come to their counter.
+Cashier 1 has provided Customer 7 their completed passport.
+Cashier 1Customer 5 has given SSN  has recorded Customer 7 has been given their completed passport.
+5 to Cashier 0.
+Customer 5 has given $100 5 to Cashier 0.
+Customer 7 is leaving the Passport Office.
+Cashier Cashier 1 is going on break.
+0 has received SSN 5 from Customer 5.
+Cashier 0 has verified that Customer 5 has been certified by a Passport Clerk.
+Cashier 0 has recieved the $100 from Customer 5 after certification.
+Cashier 0 has provided Customer 5 their completed passport.
+Cashier 0 has recorded Customer 5 has been given their completed passport.
+Customer 5 is leaving the Passport Office.
+Cashier 0 has signalled a Customer to come to their counter.
+Customer 6 has given SSN 6 to Cashier 0.
+Customer 6 has given $100 6 to Cashier 0.
+Cashier 0 has received SSN 6 from Customer 6.
+Cashier 0 has verified that Customer 6 has been certified by a Passport Clerk.
+Cashier 0 has recieved the $100 from Customer 6 after certification.
+Cashier 0 has provided Customer 6 their completed passport.
+Cashier 0 has recorded Customer 6 has been given their completed passport.
+Customer 6 is leaving the Passport Office.
+Cashier 0 is going on break.
+Manager has counted a total of $1500 for Application Clerks.
+Manager has counted a total of $1500 for Picture Clerks.
+Manager has counted a total of $1000 for Passport Clerks.
+Manager has counted a total of $1100 for Cashiers.
+Manager has counted a total of $5100 for the Passport Office.
+Manager is closing the Passport Office.
+Manager has counted a total of $2500 for Application Clerks.
+Manager has counted a total of $500 for Picture Clerks.
+Manager has counted a total of $500 for Passport Clerks.
+Manager has counted a total of $700 for Cashiers.
+Manager has counted a total of $4200 for the Passport Office.
+Manager is waking Passport Clerk 1 from break.
+Passport Clerk 1 is coming off of break.
+Manager is waking Cashier 1 from break.
+Passport Clerk 1 has signalled a Customer to come to their counter.
+Cashier 1 is coming of off break.
+Customer 2 has given SSN 2 to Passport Clerk 1.
+Cashier 1 has signalled a Customer to come to their counter.
+Passport Clerk 1 has received SSN 2 from Customer 2.
+Customer 3 has given SSN 3 to Cashier 1.
+Customer 3 has given $100 3 to Cashier 1.
+Cashier 1 has received SSN 3 from Customer 3.
+Cashier 1 has verified that Customer 3 has been certified by a Passport Clerk.
+Cashier 1 has recieved the $100 from Customer 3 after certification.
+Passport Clerk 1 has determined that Customer 2 has both their application and picture completed.
+Passport Clerk 1 has recorded Customer 2 has both their application and picture completed.
+Cashier 1 has provided Customer 3 their completed passport.
+Customer 2 has gotten in bribe line for Cashier 1.
+Cashier 1 has recorded Customer 3 has been given their completed passport.
+Passport Clerk 1 has signalled a Customer to come to their counter.
+Customer 4 has given SSN 4 to Passport Clerk 1.
+Customer 3 is leaving the Passport Office.
+Cashier 1 has signalled a Customer to come to their counter.
+Passport Clerk 1 has received SSN 4 from Customer 4.
+Customer 2 has given SSN 2 to Cashier 1.
+Customer 2 has given $100 2 to Cashier 1.
 Cashier 1 has received SSN 2 from Customer 2.
 Cashier 1 has verified that Customer 2 has been certified by a Passport Clerk.
 Cashier 1 has recieved the $100 from Customer 2 after certification.
-Cashier 0 has provided Customer 0 their completed passport.
-Cashier 0 has recorded Customer 0 has been given their completed passport.
+Passport Clerk 1 has determined that Customer 4 has both their application and picture completed.
+Passport Clerk 1 has recorded Customer 4 has both their application and picture completed.
+Customer 4 has gotten in regular line for Cashier 0.
+Passport Clerk 1 is going on break.
 Cashier 1 has provided Customer 2 their completed passport.
 Cashier 1 has recorded Customer 2 has been given their completed passport.
-Customer 0 is leaving the Passport Office.
 Customer 2 is leaving the Passport Office.
-Cashier 0 has signalled a Customer to come to their counter.
 Cashier 1 has signalled a Customer to come to their counter.
-Customer 4 has given SSN 4 to Cashier 0.
-Customer 4 has given $100 4 to Cashier 0.
-Customer 6 has given SSN 6 to Cashier 1.
-Customer 6 has given $100 6 to Cashier 1.
-Cashier 0 has received SSN 4 from Customer 4.
-Cashier 0 has verified that Customer 4 has been certified by a Passport Clerk.
-Cashier 0 has recieved the $100 from Customer 4 after certification.
-Cashier 1 has received SSN 6 from Customer 6.
-Cashier 1 has verified that Customer 6 has been certified by a Passport Clerk.
-Cashier 1 has recieved the $100 from Customer 6 after certification.
-Cashier 0 has provided Customer 4 their completed passport.
-Cashier 0 has recorded Customer 4 has been given their completed passport.
-Cashier 1 has provided Customer 6 their completed passport.
-Cashier 1 has recorded Customer 6 has been given their completed passport.
-Customer 4 is leaving the Passport Office.
-Customer 6 is leaving the Passport Office.
-Cashier 0 has signalled a Customer to come to their counter.
-Cashier 1 has signalled a Customer to come to their counter.
-Customer 8 has given SSN 8 to Cashier 0.
-Customer 8 has given $100 8 to Cashier 0.
 Customer 1 has given SSN 1 to Cashier 1.
 Customer 1 has given $100 1 to Cashier 1.
-Cashier 0 has received SSN 8 from Customer 8.
-Cashier 0 has verified that Customer 8 has been certified by a Passport Clerk.
-Cashier 0 has recieved the $100 from Customer 8 after certification.
 Cashier 1 has received SSN 1 from Customer 1.
 Cashier 1 has verified that Customer 1 has been certified by a Passport Clerk.
 Cashier 1 has recieved the $100 from Customer 1 after certification.
-Cashier 0 has provided Customer 8 their completed passport.
-Cashier 0 has recorded Customer 8 has been given their completed passport.
 Cashier 1 has provided Customer 1 their completed passport.
 Cashier 1 has recorded Customer 1 has been given their completed passport.
-Customer 8 is leaving the Passport Office.
 Customer 1 is leaving the Passport Office.
-Cashier 0 has signalled a Customer to come to their counter.
-Cashier 1 has signalled a Customer to come to their counter.
-Customer 3 has given SSN 3 to Cashier 0.
-Customer 3 has given $100 3 to Cashier 0.
-Customer 5 has given SSN 5 to Cashier 1.
-Customer 5 has given $100 5 to Cashier 1.
-Cashier 0 has received SSN 3 from Customer 3.
-Cashier 0 has verified that Customer 3 has been certified by a Passport Clerk.
-Cashier 0 has recieved the $100 from Customer 3 after certification.
-Cashier 1 has received SSN 5 from Customer 5.
-Cashier 1 has verified that Customer 5 has been certified by a Passport Clerk.
-Cashier 1 has recieved the $100 from Customer 5 after certification.
-Cashier 0 has provided Customer 3 their completed passport.
-Cashier 0 has recorded Customer 3 has been given their completed passport.
-Cashier 1 has provided Customer 5 their completed passport.
-Cashier 1 has recorded Customer 5 has been given their completed passport.
-Customer 3 is leaving the Passport Office.
-Customer 5 is leaving the Passport Office.
-Cashier 0 has signalled a Customer to come to their counter.
-Cashier 1 has signalled a Customer to come to their counter.
-Customer 7 has given SSN 7 to Cashier 0.
-Customer 7 has given $100 7 to Cashier 0.
-Customer 9 has given SSN 9 to Cashier 1.
-Customer 9 has given $100 9 to Cashier 1.
-Cashier 0 has received SSN 7 from Customer 7.
-Cashier 0 has verified that Customer 7 has been certified by a Passport Clerk.
-Cashier 0 has recieved the $100 from Customer 7 after certification.
-Cashier 1 has received SSN 9 from Customer 9.
-Cashier 1 has verified that Customer 9 has been certified by a Passport Clerk.
-Cashier 1 has recieved the $100 from Customer 9 after certification.
-Cashier 0 has provided Customer 7 their completed passport.
-Cashier 0 has recorded Customer 7 has been given their completed passport.
-Cashier 1 has provided Customer 9 their completed passport.
-Cashier 1 has recorded Customer 9 has been given their completed passport.
-Customer 7 is leaving the Passport Office.
-Customer 9 is leaving the Passport Office.
-Cashier 0 is going on break.
 Cashier 1 is going on break.
-Manager has counted a total of $0 for Application Clerks.
-Manager has counted a total of $0 for Picture Clerks.
-Manager has counted a total of $0 for Passport Clerks.
-Manager has counted a total of $1100 for Cashiers.
-Manager has counted a total of $1100 for the Passport Office.
+Manager has counted a total of $2500 for Application Clerks.
+Manager has counted a total of $500 for Picture Clerks.
+Manager has counted a total of $500 for Passport Clerks.
+Manager has counted a total of $1500 for Cashiers.
+Manager has counted a total of $5000 for the Passport Office.
+Manager is waking Cashier 0 from break.
+Cashier 0 is coming of off break.
+Cashier 0 has signalled a Customer to come to their counter.
+Customer 4 has given SSN 4 to Cashier 0.
+Customer 4 has given $100 4 to Cashier 0.
+Cashier 0 has received SSN 4 from Customer 4.
+Cashier 0 has verified that Customer 4 has been certified by a Passport Clerk.
+Cashier 0 has recieved the $100 from Customer 4 after certification.
+Cashier 0 has provided Customer 4 their completed passport.
+Cashier 0 has recorded Customer 4 has been given their completed passport.
+Customer 4 is leaving the Passport Office.
+Cashier 0 is going on break.
+Manager has counted a total of $2500 for Application Clerks.
+Manager has counted a total of $500 for Picture Clerks.
+Manager has counted a total of $500 for Passport Clerks.
+Manager has counted a total of $1600 for Cashiers.
+Manager has counted a total of $5100 for the Passport Office.
 Manager is closing the Passport Office.
 No threads ready or runnable, and no pending interrupts.
 Assuming the program completed.
 Machine halting!
 
-Ticks: total 305703, idle 0, system 111440, user 194263
+Ticks: total 1237627, idle 141, system 581120, user 656366
 Disk I/O: reads 0, writes 0
 Console I/O: reads 0, writes 0
 Paging: faults 0

@@ -326,7 +326,6 @@ void Fork_Syscall(unsigned int addr, unsigned int vaddr, int size, int id) {
   buf[size] = ' ';
   buf[size+1] = (char)(id+48);
   buf[size+2] = '\0';
-
   Thread* t = new Thread(buf);
   currentThread->space->allocateStack();
   t->space = currentThread->space;
@@ -383,7 +382,9 @@ void Acquire_Syscall(unsigned int index) {
     KernelLock* lock = kernelLockTable->at(index);
     if(currentThread->space == lock->addrspace && lock->valid) {
       lock->numThreads++;
+      kernelLockLock->Release();
       lock->lock->Acquire();
+      kernelLockLock->Acquire();
     }
   }
   kernelLockLock->Release();
@@ -506,6 +507,7 @@ void Broadcast_Syscall(unsigned int cvIndex, unsigned int lockIndex) {
 }
 
 void Print_Syscall(unsigned int vaddr, int size) {
+  outputLock->Acquire();
   char* buf = new char[size+1];
 
   copyin(vaddr, size, buf);
@@ -513,10 +515,13 @@ void Print_Syscall(unsigned int vaddr, int size) {
   buf[size] = '\0';
 
   cout << buf;
+  outputLock->Release();
 }
 
 void PrintInt_Syscall(int toPrint) {
+  outputLock->Acquire();
   cout << toPrint;
+  outputLock->Release();
 }
 
 /* used solely for the passport office */
