@@ -31,7 +31,7 @@ CPP = $(GCCDIR)cpp
 INCDIR =-I../userprog -I../threads
 CFLAGS = -G 0 -c $(INCDIR)
 
-all: halt matmult sort testfiles locksandcvs exec print fork passportoffice passexec
+all: halt matmult sort testfiles locksandcvs exec print fork passportoffice passexec mp_wait mp_signal mp_broadcast mp_lock
 
 start.o: start.s ../userprog/syscall.h
 	$(CPP) $(CPPFLAGS) start.s > strt.s
@@ -97,6 +97,30 @@ passexec.o: passexec.c
 passexec: passexec.o start.o
 	$(LD) $(LDFLAGS) start.o passexec.o -o passexec.coff
 	../bin/coff2noff passexec.coff passexec
+
+mp_wait.o: mp_wait.c
+	$(CC) $(CFLAGS) -c mp_wait.c
+mp_wait: mp_wait.o start.o
+	$(LD) $(LDFLAGS) start.o mp_wait.o -o mp_wait.coff
+	../bin/coff2noff mp_wait.coff mp_wait
+
+mp_signal.o: mp_signal.c
+	$(CC) $(CFLAGS) -c mp_signal.c
+mp_signal: mp_signal.o start.o
+	$(LD) $(LDFLAGS) start.o mp_signal.o -o mp_signal.coff
+	../bin/coff2noff mp_signal.coff mp_signal
+
+mp_broadcast.o: mp_broadcast.c
+	$(CC) $(CFLAGS) -c mp_broadcast.c
+mp_broadcast: mp_broadcast.o start.o
+	$(LD) $(LDFLAGS) start.o mp_broadcast.o -o mp_broadcast.coff
+	../bin/coff2noff mp_broadcast.coff mp_broadcast
+
+mp_lock.o: mp_lock.c
+	$(CC) $(CFLAGS) -c mp_lock.c
+mp_lock: mp_lock.o start.o
+	$(LD) $(LDFLAGS) start.o mp_lock.o -o mp_lock.coff
+	../bin/coff2noff mp_lock.coff mp_lock
 
 clean:
 	rm -f *.o *.coff
