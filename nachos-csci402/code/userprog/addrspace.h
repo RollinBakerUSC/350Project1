@@ -38,6 +38,7 @@ class AddrSpace {
     int getNumPages();
     void SaveState();			// Save/restore address space-specific
     void RestoreState();		// info on a context switch
+    void setTLB(int vpn);
     Table fileTable;			// Table of openfiles
 
  private:

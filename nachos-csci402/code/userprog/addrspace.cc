@@ -248,7 +248,13 @@ AddrSpace::InitRegisters()
 //----------------------------------------------------------------------
 
 void AddrSpace::SaveState() 
-{}
+{
+    IntStatus oldLevel = interrupt->SetLevel(IntOff);
+    for(int i = 0; i < TLBSize; i++) {
+        machine->tlb[i].valid = false;
+    }
+    (void) interrupt->SetLevel(oldLevel);
+}
 
 //----------------------------------------------------------------------
 // AddrSpace::RestoreState
@@ -260,8 +266,13 @@ void AddrSpace::SaveState()
 
 void AddrSpace::RestoreState() 
 {
-    machine->pageTable = pageTable;
+    //machine->pageTable = pageTable;
     machine->pageTableSize = numPages;
+    /*IntStatus oldLevel = interrupt->SetLevel(IntOff);
+    for(int i = 0; i < TLBSize; i++) {
+        tlb[i].valid = false;
+    }
+    (void) interrupt->SetLevel(oldLevel);*/
 }
 
 void AddrSpace::clearMem() {
@@ -327,4 +338,16 @@ int AddrSpace::getNumPages() {
     numPageQueue->pop();
     queueLock->Release();
     return n;
+}
+
+void AddrSpace::setTLB(int vpn) {
+    IntStatus oldLevel = interrupt->SetLevel(IntOff);
+    machine->tlb[currentTLB].virtualPage = pageTable[vpn].virtualPage;
+    machine->tlb[currentTLB].physicalPage = pageTable[vpn].physicalPage;
+    machine->tlb[currentTLB].valid = pageTable[vpn].valid;
+    machine->tlb[currentTLB].use = pageTable[vpn].use;
+    machine->tlb[currentTLB].dirty = pageTable[vpn].dirty;
+    machine->tlb[currentTLB].readOnly = pageTable[vpn].readOnly;
+    currentTLB = ++currentTLB % TLBSize;
+    (void) interrupt->SetLevel(oldLevel);
 }

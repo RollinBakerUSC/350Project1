@@ -533,6 +533,7 @@ int GetID_Syscall() {
 }
 
 void Exit_Syscall(int status) {
+  cout << "Exit with status " << status << endl;
   processLock->Acquire();
   Process* myProcess;
   int myIndex;
@@ -593,6 +594,11 @@ void Exit_Syscall(int status) {
       currentThread->Finish();
     }
   }
+}
+
+void HandlePageFault() {
+  int vpn = machine->ReadRegister(BadVAddrReg)/PageSize;
+  currentThread->space->setTLB(vpn);
 }
 
 void ExceptionHandler(ExceptionType which) {
@@ -707,8 +713,10 @@ void ExceptionHandler(ExceptionType which) {
 	machine->WriteRegister(PCReg,machine->ReadRegister(NextPCReg));
 	machine->WriteRegister(NextPCReg,machine->ReadRegister(PCReg)+4);
 	return;
-    } else {
+  } else if (which == PageFaultException){
+    HandlePageFault();
+  } else {
       cout<<"Unexpected user mode exception - which:"<<which<<"  type:"<< type<<endl;
       interrupt->Halt();
-    }
+  }
 }

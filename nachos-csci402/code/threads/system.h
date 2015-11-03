@@ -88,6 +88,8 @@ extern Lock* processLock;
 
 extern Lock* outputLock;
 
+extern int currentTLB;
+
 #ifdef USER_PROGRAM
 #include "machine.h"
 extern Machine* machine;	// user program memory and registers

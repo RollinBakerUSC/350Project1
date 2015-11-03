@@ -32,6 +32,8 @@ Lock* processLock;
 
 Lock* outputLock;
 
+int currentTLB;
+
 #ifdef FILESYS_NEEDED
 FileSystem  *fileSystem;
 #endif
@@ -163,6 +165,8 @@ Initialize(int argc, char **argv)
     processLock = new Lock("Process Table Lock");
 
     outputLock = new Lock("Output Lock");
+
+    currentTLB = 0;
 
     // We didn't explicitly allocate the current thread we are running in.
     // But if it ever tries to give up the CPU, we better have a Thread
