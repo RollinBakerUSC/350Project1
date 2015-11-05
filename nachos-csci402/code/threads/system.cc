@@ -30,6 +30,9 @@ BitMap* mainMemoryBitMap;
 std::vector<Process*>* processTable;
 Lock* processLock;
 
+IPTEntry* IPT;
+Lock* IPTLock;
+
 Lock* outputLock;
 
 int currentTLB;
@@ -79,6 +82,8 @@ TimerInterruptHandler(int dummy)
 	interrupt->YieldOnReturn();
 }
 
+void populateIPT(){
+}
 //----------------------------------------------------------------------
 // Initialize
 // 	Initialize Nachos global data structures.  Interpret command
@@ -163,6 +168,13 @@ Initialize(int argc, char **argv)
 
     processTable = new std::vector<Process*>;
     processLock = new Lock("Process Table Lock");
+
+    IPT = new IPTEntry[NumPhysPages];
+    IPTLock = new Lock("IPT Lock");
+    for(int i = 0; i < NumPhysPages; i++){
+        IPT[i].owner = NULL;
+        IPT[i].entry.valid = false; //I think all you have to do
+    }
 
     outputLock = new Lock("Output Lock");
 

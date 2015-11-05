@@ -51,6 +51,7 @@ struct KernelCondition {
 	int numThreads;
 };
 
+
 struct Process {
 	Process(AddrSpace* _space) {
 		space = _space;
@@ -60,6 +61,12 @@ struct Process {
 	AddrSpace* space;
 	int numThreads;
 	std::vector<std::pair<Thread*, unsigned int>* >* threadStacks;
+};
+
+struct IPTEntry{
+
+	TranslationEntry entry;
+	AddrSpace* owner;
 };
 
 // Initialization and cleanup routines
@@ -85,6 +92,9 @@ extern Lock* bitMapLock;
 
 extern std::vector<Process*>* processTable;
 extern Lock* processLock;
+
+extern IPTEntry* IPT;
+extern Lock* IPTLock;
 
 extern Lock* outputLock;
 
