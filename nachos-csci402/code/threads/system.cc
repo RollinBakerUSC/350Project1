@@ -203,7 +203,7 @@ Initialize(int argc, char **argv)
         fileSystem->Create("swapFile", 0);
         swapFile = fileSystem->Open("swapFile");
     }
-    swapFileBitMap = new BitMap(2048);
+    swapFileBitMap = new BitMap(4096);
     swapFileLock = new Lock("Swap File Lock");
 
     // We didn't explicitly allocate the current thread we are running in.
