@@ -95,6 +95,8 @@ extern Lock* processLock;
 
 extern IPTEntry* IPT;
 extern Lock* IPTLock;
+extern int currentIPT;
+extern bool PRand;
 
 extern Lock* outputLock;
 

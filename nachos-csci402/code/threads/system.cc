@@ -32,6 +32,8 @@ Lock* processLock;
 
 IPTEntry* IPT;
 Lock* IPTLock;
+int currentIPT;
+bool PRand;
 
 Lock* outputLock;
 
@@ -132,7 +134,12 @@ Initialize(int argc, char **argv)
 						// number generator
 	    randomYield = TRUE;
 	    argCount = 2;
-	}
+	} else if(!strcmp(*argv, "-P")) {
+        ASSERT(argc > 1);
+        if(!strcmp(*(argv + 1), "RAND")) {
+            PRand = true;
+        }
+    }
 #ifdef USER_PROGRAM
 	if (!strcmp(*argv, "-s"))
 	    debugUserProg = TRUE;
@@ -180,6 +187,10 @@ Initialize(int argc, char **argv)
         IPT[i].owner = NULL;
         IPT[i].entry.valid = false; //I think all you have to do
         IPT[i].entry.physicalPage = i;
+    }
+    currentIPT = 0;
+    if(!PRand) {
+        PRand = false;
     }
 
     outputLock = new Lock("Output Lock");

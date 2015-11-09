@@ -615,7 +615,14 @@ void updateTLB(int ppn) {
 }
 
 int HandleMemoryFull() {
-  int ppn = rand() % NumPhysPages;
+  int ppn;
+  if(PRand) { // if random page replacement policy
+    ppn = rand() % NumPhysPages;
+  }
+  else {
+    ppn = currentIPT;
+    currentIPT = ++currentIPT % NumPhysPages;
+  }
   //cout << "PPN to evict = " << ppn << endl;
   if(IPT[ppn].owner == currentThread->space) {
     TLBLock->Acquire();
