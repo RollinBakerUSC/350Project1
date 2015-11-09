@@ -263,6 +263,7 @@ void AddrSpace::SaveState()
 {
     IntStatus oldLevel = interrupt->SetLevel(IntOff);
     TLBLock->Acquire();
+    //cout << "Updating TLB on context switch" << endl;
     for(int i = 0; i < TLBSize; i++) {
         machine->tlb[i].valid = false;
     }
@@ -373,7 +374,7 @@ int AddrSpace::getNumPages() {
     return n;
 }
 
-void AddrSpace::setTLB(int vpn) {
+/*void AddrSpace::setTLB(int vpn) {
     machine->tlb[currentTLB].virtualPage = pageTable[vpn].entry.virtualPage;
     machine->tlb[currentTLB].physicalPage = pageTable[vpn].entry.physicalPage;
     machine->tlb[currentTLB].valid = pageTable[vpn].entry.valid;
@@ -381,15 +382,17 @@ void AddrSpace::setTLB(int vpn) {
     machine->tlb[currentTLB].dirty = pageTable[vpn].entry.dirty;
     machine->tlb[currentTLB].readOnly = pageTable[vpn].entry.readOnly;
     currentTLB = ++currentTLB % TLBSize;
-}
+}*/
 
 void AddrSpace::IPTMiss(int vpn, int ppn) {
     bzero(&machine->mainMemory[ppn*PageSize], PageSize);
     if(pageTable[vpn].location == 1) { // in executable
        //bzero(&machine->mainMemory[ppn*PageSize], PageSize);
+       //cout << "Reading VPN " << vpn << " PPN " << ppn << " from executable" << endl;
        executable->ReadAt(&machine->mainMemory[ppn*PageSize], PageSize, pageTable[vpn].byteOffset);
     } else if(pageTable[vpn].location == 0) { // in swapfile
        //bzero(&machine->mainMemory[ppn*PageSize], PageSize);
+       //cout << "Reading VPN " << vpn << " PPN " << ppn << " from swapfile" << endl;
        swapFileLock->Acquire();
        swapFile->ReadAt(&machine->mainMemory[ppn*PageSize], PageSize, pageTable[vpn].swapLocation*PageSize);
        //swapFileBitMap->Clear(pageTable[vpn].swapLocation);

@@ -600,7 +600,8 @@ void updateTLB(int ppn) {
   TLBLock->Acquire();
   //cout << "Updating TLB Entry - " << currentTLB << endl;
   if(machine->tlb[currentTLB].dirty) {
-    IPT[machine->tlb[currentTLB].physicalPage].entry.dirty = machine->tlb[currentTLB].dirty;
+    int toPropagate = machine->tlb[currentTLB].physicalPage;
+    IPT[toPropagate].entry.dirty = machine->tlb[currentTLB].dirty;
   }
   //cout << "Setting Virtual Page to " << IPT[ppn].entry.virtualPage << endl;
   machine->tlb[currentTLB].virtualPage = IPT[ppn].entry.virtualPage;
@@ -624,7 +625,7 @@ int HandleMemoryFull() {
     currentIPT = ++currentIPT % NumPhysPages;
   }
   //cout << "PPN to evict = " << ppn << endl;
-  if(IPT[ppn].owner == currentThread->space) {
+  //if(IPT[ppn].owner == currentThread->space) {
     TLBLock->Acquire();
     for(int i = 0; i < TLBSize; i++) {
       if(machine->tlb[i].physicalPage == ppn) {
@@ -633,7 +634,7 @@ int HandleMemoryFull() {
       }
     }
     TLBLock->Release();
-  }
+  //}
   if(IPT[ppn].entry.dirty) {
     //cout << "PPN " << ppn << " is dirty" << endl;
     swapFileLock->Acquire();

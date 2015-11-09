@@ -202,6 +202,10 @@ Initialize(int argc, char **argv)
     if(swapFile == NULL) {
         fileSystem->Create("swapFile", 0);
         swapFile = fileSystem->Open("swapFile");
+    } else {
+        fileSystem->Remove("swapFile");
+        fileSystem->Create("swapFile", 0);
+        swapFile = fileSystem->Open("swapFile");
     }
     swapFileBitMap = new BitMap(4096);
     swapFileLock = new Lock("Swap File Lock");
