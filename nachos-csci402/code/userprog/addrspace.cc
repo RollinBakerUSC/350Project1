@@ -117,7 +117,8 @@ SwapHeader (NoffHeader *noffH)
 //      constructed set to false.
 //----------------------------------------------------------------------
 
-AddrSpace::AddrSpace(OpenFile *executable) : fileTable(MaxOpenFiles) {
+AddrSpace::AddrSpace(OpenFile *_executable) : fileTable(MaxOpenFiles) {
+    executable = _executable;
     pageLock = new Lock("Page Table Lock");
     numPageQueue = new std::queue<int>;
     queueLock = new Lock("Queue Lock");
@@ -140,7 +141,7 @@ AddrSpace::AddrSpace(OpenFile *executable) : fileTable(MaxOpenFiles) {
 						// to leave room for the stack
     size = numPages * PageSize;
 
-    ASSERT(numPages <= NumPhysPages);		// check we're not trying
+    //ASSERT(numPages <= NumPhysPages);		// check we're not trying
 						// to run anything too big --
 						// at least until we have
 						// virtual memory
@@ -153,25 +154,36 @@ AddrSpace::AddrSpace(OpenFile *executable) : fileTable(MaxOpenFiles) {
     numPageQueue->push(n);
     queueLock->Release();
 // first, set up the translation
-    pageTable = new TranslationEntry[numPages];
+    pageTable = new PageTableEntry[numPages];
 
     for (i = 0; i < numPages; i++) {
-	pageTable[i].virtualPage = i;	// for now, virtual page # = phys page #
-    bitMapLock->Acquire();
-	pageTable[i].physicalPage = mainMemoryBitMap->Find();
-    bitMapLock->Release();
-    if(pageTable[i].physicalPage == -1) {
-        printf("Nachos is out of memory.\n");
-        interrupt->Halt();
-    }
-	pageTable[i].valid = TRUE;
-	pageTable[i].use = FALSE;
-	pageTable[i].dirty = FALSE;
-	pageTable[i].readOnly = FALSE;  // if the code segment was entirely on 
-					// a separate page, we could set its 
-					// pages to be read-only
-    bzero(&machine->mainMemory[pageTable[i].physicalPage*PageSize], PageSize);
-    executable->ReadAt(&machine->mainMemory[pageTable[i].physicalPage*PageSize], PageSize, 40 + i*PageSize);
+    	pageTable[i].entry.virtualPage = i;	// for now, virtual page # = phys page #
+        /*bitMapLock->Acquire();
+        int ppn = mainMemoryBitMap->Find();
+    	pageTable[i].entry.physicalPage = ppn;
+        bitMapLock->Release();
+        if(pageTable[i].entry.physicalPage == -1) {
+            printf("Nachos is out of memory.\n");
+            interrupt->Halt();
+        } */
+    	pageTable[i].entry.valid = FALSE;
+    	pageTable[i].entry.use = FALSE;
+    	pageTable[i].entry.dirty = FALSE;
+    	pageTable[i].entry.readOnly = FALSE;  // if the code segment was entirely on 
+    					// a separate page, we could set its 
+    					// pages to be read-only
+        /*IPTLock->Acquire();
+        IPT[ppn].owner = this;
+        IPT[ppn].entry.valid = TRUE;
+        IPT[ppn].entry.virtualPage = i;
+        IPT[ppn].entry.use = FALSE;
+        IPT[ppn].entry.dirty = FALSE;
+        IPT[ppn].entry.readOnly = FALSE;
+        IPTLock->Release(); */
+        //bzero(&machine->mainMemory[pageTable[i].entry.physicalPage*PageSize], PageSize);
+        //executable->ReadAt(&machine->mainMemory[pageTable[i].entry.physicalPage*PageSize], PageSize, 40 + i*PageSize);
+        pageTable[i].byteOffset = 40 + i*PageSize;
+        pageTable[i].location = 1; // executable 
     }
     
 // zero out the entire address space, to zero the unitialized data segment 
@@ -250,9 +262,11 @@ AddrSpace::InitRegisters()
 void AddrSpace::SaveState() 
 {
     IntStatus oldLevel = interrupt->SetLevel(IntOff);
+    TLBLock->Acquire();
     for(int i = 0; i < TLBSize; i++) {
         machine->tlb[i].valid = false;
     }
+    TLBLock->Release();
     (void) interrupt->SetLevel(oldLevel);
 }
 
@@ -277,12 +291,15 @@ void AddrSpace::RestoreState()
 
 void AddrSpace::clearMem() {
     for(unsigned int i = 0; i < numPages; i++) {
-        if(pageTable[i].valid) {
+        if(pageTable[i].entry.valid) {
             bitMapLock->Acquire();
-            mainMemoryBitMap->Clear(pageTable[i].physicalPage);
-            bzero(&machine->mainMemory[pageTable[i].physicalPage*PageSize], PageSize);
+            mainMemoryBitMap->Clear(pageTable[i].entry.physicalPage);
+            bzero(&machine->mainMemory[pageTable[i].entry.physicalPage*PageSize], PageSize);
             bitMapLock->Release();
-            pageTable[i].valid = false;
+            IPTLock->Acquire();
+            IPT[pageTable[i].entry.physicalPage].entry.valid = false;
+            IPTLock->Release();
+            pageTable[i].entry.valid = false;
         }
     }
 }
@@ -291,9 +308,12 @@ void AddrSpace::clearStack(int stack) {
     bitMapLock->Acquire();
     int stackEnd = stack/PageSize;
     for(int i = stackEnd-7; i <= stackEnd; i++) {
-        mainMemoryBitMap->Clear(pageTable[i].physicalPage);
-        bzero(&machine->mainMemory[pageTable[i].physicalPage*PageSize], PageSize);
-        pageTable[i].valid = false;
+        mainMemoryBitMap->Clear(pageTable[i].entry.physicalPage);
+        bzero(&machine->mainMemory[pageTable[i].entry.physicalPage*PageSize], PageSize);
+        IPTLock->Acquire();
+        IPT[pageTable[i].entry.physicalPage].entry.valid = false;
+        IPTLock->Release();
+        pageTable[i].entry.valid = false;
     }  
     bitMapLock->Release();
 }
@@ -306,24 +326,37 @@ void AddrSpace::allocateStack() {
     numPageQueue->push(n);
     queueLock->Release();
 
-    TranslationEntry* newPageTable = new TranslationEntry[numPages];
+    PageTableEntry* newPageTable = new PageTableEntry[numPages];
     for(unsigned int i = 0; i < numPages - 8; i++) {
-        newPageTable[i].virtualPage = pageTable[i].virtualPage;
-        newPageTable[i].physicalPage = pageTable[i].physicalPage;
-        newPageTable[i].valid = pageTable[i].valid;
-        newPageTable[i].use = pageTable[i].use;
-        newPageTable[i].dirty = pageTable[i].dirty;
-        newPageTable[i].readOnly = pageTable[i].readOnly;
+        newPageTable[i].entry.virtualPage = pageTable[i].entry.virtualPage;
+        newPageTable[i].entry.physicalPage = pageTable[i].entry.physicalPage;
+        newPageTable[i].entry.valid = pageTable[i].entry.valid;
+        newPageTable[i].entry.use = pageTable[i].entry.use;
+        newPageTable[i].entry.dirty = pageTable[i].entry.dirty;
+        newPageTable[i].entry.readOnly = pageTable[i].entry.readOnly;
+        newPageTable[i].byteOffset = pageTable[i].byteOffset;
+        newPageTable[i].location = pageTable[i].location; 
     }
     for(unsigned int i = numPages - 8; i < numPages; i++) {
-        newPageTable[i].virtualPage = i;
-        bitMapLock->Acquire();
-        newPageTable[i].physicalPage = mainMemoryBitMap->Find();
-        bitMapLock->Release();
-        newPageTable[i].valid = TRUE;
-        newPageTable[i].use = FALSE;
-        newPageTable[i].dirty = FALSE;
-        newPageTable[i].readOnly = FALSE;
+        newPageTable[i].entry.virtualPage = i;
+        /*bitMapLock->Acquire();
+        int ppn = mainMemoryBitMap->Find();
+        newPageTable[i].entry.physicalPage = ppn;
+        bitMapLock->Release(); */
+        newPageTable[i].entry.valid = FALSE;
+        newPageTable[i].entry.use = FALSE;
+        newPageTable[i].entry.dirty = FALSE;
+        newPageTable[i].entry.readOnly = FALSE;
+        newPageTable[i].byteOffset = 40 + i*PageSize;
+        newPageTable[i].location = 2; // neither 
+        /*IPTLock->Acquire();
+        IPT[ppn].owner = this;
+        IPT[ppn].entry.valid = TRUE;
+        IPT[ppn].entry.virtualPage = i;
+        IPT[ppn].entry.use = FALSE;
+        IPT[ppn].entry.dirty = FALSE;
+        IPT[ppn].entry.readOnly = FALSE;
+        IPTLock->Release();*/
     }
     delete pageTable;
     pageTable = newPageTable;
@@ -341,13 +374,45 @@ int AddrSpace::getNumPages() {
 }
 
 void AddrSpace::setTLB(int vpn) {
-    IntStatus oldLevel = interrupt->SetLevel(IntOff);
-    machine->tlb[currentTLB].virtualPage = pageTable[vpn].virtualPage;
-    machine->tlb[currentTLB].physicalPage = pageTable[vpn].physicalPage;
-    machine->tlb[currentTLB].valid = pageTable[vpn].valid;
-    machine->tlb[currentTLB].use = pageTable[vpn].use;
-    machine->tlb[currentTLB].dirty = pageTable[vpn].dirty;
-    machine->tlb[currentTLB].readOnly = pageTable[vpn].readOnly;
+    machine->tlb[currentTLB].virtualPage = pageTable[vpn].entry.virtualPage;
+    machine->tlb[currentTLB].physicalPage = pageTable[vpn].entry.physicalPage;
+    machine->tlb[currentTLB].valid = pageTable[vpn].entry.valid;
+    machine->tlb[currentTLB].use = pageTable[vpn].entry.use;
+    machine->tlb[currentTLB].dirty = pageTable[vpn].entry.dirty;
+    machine->tlb[currentTLB].readOnly = pageTable[vpn].entry.readOnly;
     currentTLB = ++currentTLB % TLBSize;
-    (void) interrupt->SetLevel(oldLevel);
+}
+
+void AddrSpace::IPTMiss(int vpn, int ppn) {
+    bzero(&machine->mainMemory[ppn*PageSize], PageSize);
+    if(pageTable[vpn].location == 1) { // in executable
+       //bzero(&machine->mainMemory[ppn*PageSize], PageSize);
+       executable->ReadAt(&machine->mainMemory[ppn*PageSize], PageSize, pageTable[vpn].byteOffset);
+    } else if(pageTable[vpn].location == 0) { // in swapfile
+       //bzero(&machine->mainMemory[ppn*PageSize], PageSize);
+       swapFileLock->Acquire();
+       swapFile->ReadAt(&machine->mainMemory[ppn*PageSize], PageSize, pageTable[vpn].swapLocation*PageSize);
+       //swapFileBitMap->Clear(pageTable[vpn].swapLocation);
+       swapFileLock->Release();
+    }
+    pageTable[vpn].entry.valid = true;
+    pageTable[vpn].entry.physicalPage = ppn;
+    
+    IPT[ppn].owner = this;
+    IPT[ppn].entry.virtualPage = vpn;
+    IPT[ppn].entry.physicalPage = ppn;
+    IPT[ppn].entry.valid = true;
+    IPT[ppn].entry.use = pageTable[vpn].entry.use;
+    IPT[ppn].entry.dirty = pageTable[vpn].entry.dirty;
+    IPT[ppn].entry.readOnly = pageTable[vpn].entry.readOnly;
+}
+
+void AddrSpace::swappedPage(int vpn, int swapLocation) {
+    pageTable[vpn].entry.valid = false;
+    pageTable[vpn].location = 0; // 0 means swapfile
+    pageTable[vpn].swapLocation = swapLocation;
+}
+
+void AddrSpace::evictedPage(int vpn) {
+    pageTable[vpn].entry.valid = false;
 }

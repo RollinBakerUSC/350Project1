@@ -36,6 +36,11 @@ Lock* IPTLock;
 Lock* outputLock;
 
 int currentTLB;
+Lock* TLBLock;
+
+OpenFile *swapFile;
+Lock* swapFileLock;
+BitMap* swapFileBitMap;
 
 #ifdef FILESYS_NEEDED
 FileSystem  *fileSystem;
@@ -174,11 +179,21 @@ Initialize(int argc, char **argv)
     for(int i = 0; i < NumPhysPages; i++){
         IPT[i].owner = NULL;
         IPT[i].entry.valid = false; //I think all you have to do
+        IPT[i].entry.physicalPage = i;
     }
 
     outputLock = new Lock("Output Lock");
 
     currentTLB = 0;
+    TLBLock = new Lock("TLB Lock");
+
+    swapFile = fileSystem->Open("swapFile");
+    if(swapFile == NULL) {
+        fileSystem->Create("swapFile", 0);
+        swapFile = fileSystem->Open("swapFile");
+    }
+    swapFileBitMap = new BitMap(2048);
+    swapFileLock = new Lock("Swap File Lock");
 
     // We didn't explicitly allocate the current thread we are running in.
     // But if it ever tries to give up the CPU, we better have a Thread
@@ -256,6 +271,10 @@ Cleanup()
     delete processLock;
 
     delete outputLock;
+
+    delete swapFile;
+    delete swapFileBitMap;
+    delete swapFileLock;
     
     Exit(0);
 }

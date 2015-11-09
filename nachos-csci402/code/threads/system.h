@@ -99,6 +99,11 @@ extern Lock* IPTLock;
 extern Lock* outputLock;
 
 extern int currentTLB;
+extern Lock* TLBLock;
+
+extern OpenFile *swapFile;
+extern Lock* swapFileLock;
+extern BitMap* swapFileBitMap;
 
 #ifdef USER_PROGRAM
 #include "machine.h"

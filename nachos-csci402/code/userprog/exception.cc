@@ -282,7 +282,7 @@ int Exec_Syscall(unsigned int vaddr, int size) {
   }
   processLock->Release();
 
-  delete executable;
+  //delete executable;
 
   t->Fork((VoidFunctionPtr)Exec_Thread, 0);
 
@@ -596,9 +596,93 @@ void Exit_Syscall(int status) {
   }
 }
 
+void updateTLB(int ppn) {
+  TLBLock->Acquire();
+  //cout << "Updating TLB Entry - " << currentTLB << endl;
+  if(machine->tlb[currentTLB].dirty) {
+    IPT[machine->tlb[currentTLB].physicalPage].entry.dirty = machine->tlb[currentTLB].dirty;
+  }
+  //cout << "Setting Virtual Page to " << IPT[ppn].entry.virtualPage << endl;
+  machine->tlb[currentTLB].virtualPage = IPT[ppn].entry.virtualPage;
+  //cout << "Setting physicalPage to " << IPT[ppn].entry.physicalPage << endl << endl;
+  machine->tlb[currentTLB].physicalPage = IPT[ppn].entry.physicalPage;
+  machine->tlb[currentTLB].valid = IPT[ppn].entry.valid;
+  machine->tlb[currentTLB].use = IPT[ppn].entry.use;
+  machine->tlb[currentTLB].dirty = IPT[ppn].entry.dirty;
+  machine->tlb[currentTLB].readOnly = IPT[ppn].entry.readOnly;
+  currentTLB = ++currentTLB % TLBSize;
+  TLBLock->Release();
+}
+
+int HandleMemoryFull() {
+  int ppn = rand() % NumPhysPages;
+  //cout << "PPN to evict = " << ppn << endl;
+  if(IPT[ppn].owner == currentThread->space) {
+    TLBLock->Acquire();
+    for(int i = 0; i < TLBSize; i++) {
+      if(machine->tlb[i].physicalPage == ppn) {
+        machine->tlb[i].valid = false;
+        IPT[ppn].entry.dirty = machine->tlb[i].dirty;
+      }
+    }
+    TLBLock->Release();
+  }
+  if(IPT[ppn].entry.dirty) {
+    //cout << "PPN " << ppn << " is dirty" << endl;
+    swapFileLock->Acquire();
+    int swapLocation = swapFileBitMap->Find();
+    //cout << "SwapLocation is " << swapLocation << endl;
+    if(swapLocation == -1) {
+      cout << "SwapFile is full" << endl;
+      interrupt->Halt();
+    }
+    swapFile->WriteAt(&machine->mainMemory[ppn*PageSize], PageSize, swapLocation*PageSize);
+    IPT[ppn].owner->swappedPage(IPT[ppn].entry.virtualPage, swapLocation);
+    swapFileLock->Release();
+  }
+  else {
+    IPT[ppn].owner->evictedPage(IPT[ppn].entry.virtualPage);
+  }
+  return ppn;
+}
+
+int HandleIPTMiss(int vpn) {
+  //cout << "IPT Miss" << endl;
+  bitMapLock->Acquire();
+  int ppn = mainMemoryBitMap->Find();
+  if(ppn == -1) {
+    //cout << "Memory Full" << endl;
+    ppn = HandleMemoryFull();
+  }
+  //cout << "Memory not Full PPN = " << ppn << endl;
+  currentThread->space->IPTMiss(vpn, ppn);
+  bitMapLock->Release();
+  return ppn;
+}
+
 void HandlePageFault() {
+  //cout << "Page Fault" << endl;
+  IntStatus oldLevel = interrupt->SetLevel(IntOff);
   int vpn = machine->ReadRegister(BadVAddrReg)/PageSize;
-  currentThread->space->setTLB(vpn);
+  //cout << "Bad VPN = " << vpn << endl;
+  IPTLock->Acquire();
+  int ppn = -1;
+  for(int i = 0; i < NumPhysPages; i++) {
+    if(IPT[i].entry.virtualPage == vpn
+      && IPT[i].owner == currentThread->space
+      && IPT[i].entry.valid) {
+      ppn = IPT[i].entry.physicalPage;
+      //cout << "IPT Hit with PPN = " << ppn << endl;
+      break;
+    }
+  }
+  if(ppn == -1) {
+    ppn = HandleIPTMiss(vpn);
+  }
+  updateTLB(ppn);
+  IPTLock->Release();
+  //currentThread->space->setTLB(vpn);
+  (void) interrupt->SetLevel(oldLevel);
 }
 
 void ExceptionHandler(ExceptionType which) {

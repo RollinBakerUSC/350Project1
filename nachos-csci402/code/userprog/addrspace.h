@@ -23,9 +23,16 @@
 #define MaxOpenFiles 256
 #define MaxChildSpaces 256
 
+struct PageTableEntry {
+    TranslationEntry entry;
+    int location; // 0 for swapfile, 1 for executable, 2 for neither
+    int byteOffset;
+    int swapLocation; // page number within the swap file
+};
+
 class AddrSpace {
   public:
-    AddrSpace(OpenFile *executable);	// Create an address space,
+    AddrSpace(OpenFile *_executable);	// Create an address space,
 					// initializing it with the program
 					// stored in the file "executable"
     ~AddrSpace();			// De-allocate an address space
@@ -39,10 +46,13 @@ class AddrSpace {
     void SaveState();			// Save/restore address space-specific
     void RestoreState();		// info on a context switch
     void setTLB(int vpn);
+    void IPTMiss(int vpn, int ppn);
+    void swappedPage(int vpn, int swapLocation);
+    void evictedPage(int vpn);
     Table fileTable;			// Table of openfiles
 
  private:
-    TranslationEntry *pageTable;	// Assume linear page table translation
+    PageTableEntry *pageTable;	// Assume linear page table translation
 					// for now!
     Lock* pageLock; // so multiple threads in the same addrspace do not
                     // mess with the page table at the same time
@@ -50,6 +60,7 @@ class AddrSpace {
 					// address space
     std::queue<int>* numPageQueue;
     Lock* queueLock;
+    OpenFile* executable;
 };
 
 #endif // ADDRSPACE_H
