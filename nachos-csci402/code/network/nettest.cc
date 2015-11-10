@@ -145,13 +145,16 @@ int CreateLock(char* lockName) {
 }
 
 void DestroyLock(int index) {
-    cout << "Destroy Lock at index " << index << endl;
+    cout << "Attempting to Destroy Lock at index " << index << endl;
     if(index > -1 && (unsigned int)index < serverLockTable.size()) {
         ServerLock* toDelete = serverLockTable.at(index);
-        if(toDelete->numWaiters = 0 && toDelete->available) {
-            delete toDelete;
-        } else {
-            toDelete->toBeDeleted = true;
+        if(toDelete != NULL) {
+            if(toDelete->numWaiters == 0 && toDelete->available) {
+                cout << "Destroying Lock at index " << index << endl;
+                delete toDelete;
+            } else {
+                toDelete->toBeDeleted = true;
+            }
         }
     }
 }
@@ -160,7 +163,7 @@ bool Acquire(int index) {
     cout << "Attempting to acquire Lock at index " << index << endl;
     if(index > -1 && (unsigned int)index < serverLockTable.size()) {
         ServerLock* toAcquire = serverLockTable.at(index);
-        if(toAcquire->available) {
+        if(toAcquire != NULL && toAcquire->available) {
             toAcquire->available = false;
             return true;
         } else {
@@ -168,6 +171,38 @@ bool Acquire(int index) {
         }
     } else {
         return false;
+    }
+}
+
+void Release(int index) {
+    cout << "Attempting to Release Lock at index " << index << endl;
+    if(index > -1 && (unsigned int)index < serverLockTable.size()) {
+        ServerLock* toRelease = serverLockTable.at(index);
+        if(toRelease != NULL) {
+            cout << "Releasing Lock at index " << index << endl;
+            if(toRelease->numWaiters > 0) {
+                toRelease->numWaiters--;
+                ReplyMsg* newMsg = (ReplyMsg*) toRelease->waitQueue->Remove();
+                PacketHeader outPktHdr;
+                MailHeader outMailHdr;
+                outPktHdr.to = newMsg->idToSendTo;
+                toRelease->owner = newMsg->idToSendTo;
+                outMailHdr.to = newMsg->boxToSendTo;
+                outMailHdr.length = newMsg->msgLength;
+                bool success = postOffice->Send(outPktHdr, outMailHdr, newMsg->responseMsg);
+                if(!success) {
+                    cout << "Unable to send response to new owner thread on a Release of Lock at index " << index << endl;
+                }
+                delete newMsg->responseMsg;
+                delete newMsg;
+            } else if(toRelease->toBeDeleted) {
+                cout << "Destroying Lock at index " << index << " after a Release" << endl;
+                delete toRelease;
+            } else {
+                toRelease->owner = -1;
+                toRelease->available = true;
+            }
+        }
     }
 }
 
@@ -203,6 +238,7 @@ void Server() {
                 outMailHdr.to = inMailHdr.from;
                 outMailHdr.length = 1;
                 success = postOffice->Send(outPktHdr, outMailHdr, response);
+                delete response;
                 if(!success) {
                     cout << "Unable to deliver response to CreateLock syscall" << endl;
                 }
@@ -218,6 +254,7 @@ void Server() {
                     cout << "Acquiring Lock at index " << index << endl;
                     serverLockTable.at(index)->owner = outPktHdr.to;
                     success = postOffice->Send(outPktHdr, outMailHdr, response);
+                    delete response;
                     if(!success) {
                         cout << "Unable to deliver response to Acquire syscall" << endl;
                     }
@@ -229,6 +266,21 @@ void Server() {
                 }
                 break;
             case 2:
+                index = (int)request[1];
+                if(serverLockTable.at(index)->owner == inPktHdr.from) {
+                    Release(index);
+                } else {
+                    cout << "Non owner trying to release Lock at index " << index << endl;
+                }
+                response[0] = 255;
+                outPktHdr.to = inPktHdr.from;
+                outMailHdr.to = inMailHdr.from;
+                outMailHdr.length = 1;
+                success = postOffice->Send(outPktHdr, outMailHdr, response);
+                delete response;
+                if(!success) {
+                    cout << "Unable to deliver response to Release syscall" << endl;
+                }
                 break;
             case 3:
                 index = (int)request[1];
@@ -238,8 +290,9 @@ void Server() {
                 outMailHdr.to = inMailHdr.from;
                 outMailHdr.length = 1;
                 success = postOffice->Send(outPktHdr, outMailHdr, response);
+                delete response;
                 if(!success) {
-                    cout << "Unable to deliver response to CreateLock syscall" << endl;
+                    cout << "Unable to deliver response to DestroyLock syscall" << endl;
                 }
                 break;
             case 4:

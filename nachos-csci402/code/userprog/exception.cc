@@ -373,7 +373,8 @@ int CreateLock_Syscall(unsigned int vaddr, int size) {
   }
   postOffice->Receive(0, &inPktHdr, &intMailHdr, response);
   int index = (int)response[0];
-
+  delete request;
+  delete response;
   return index;
 }
 
@@ -412,6 +413,8 @@ void DestroyLock_Syscall(unsigned int index) {
   else {
     postOffice->Receive(0, &inPktHdr, &intMailHdr, response);
   }
+  delete request;
+  delete response;
 }
 
 void Acquire_Syscall(unsigned int index) {
@@ -443,16 +446,18 @@ void Acquire_Syscall(unsigned int index) {
   else {
     postOffice->Receive(0, &inPktHdr, &intMailHdr, response);
   }
+  delete request;
+  delete response;
 }
 
 void Release_Syscall(unsigned int index) {
-  kernelLockLock->Acquire();
+  /*kernelLockLock->Acquire();
   if(index < kernelLockTable->size()) {
     KernelLock* lock = kernelLockTable->at(index);
     if(currentThread->space == lock->addrspace && lock->valid) {
       lock->numThreads--;
       lock->lock->Release();
-      /* check if the lock has no one waiting for it and is to be deleted */
+      check if the lock has no one waiting for it and is to be deleted
       if(lock->numThreads == 0 && lock->isToBeDeleted) {
         lock->valid = false;
         lock->isToBeDeleted = false;
@@ -462,7 +467,26 @@ void Release_Syscall(unsigned int index) {
       }
     }
   }
-  kernelLockLock->Release();
+  kernelLockLock->Release();*/
+  char* request = new char[40];
+  char* response = new char[40];
+  request[0] = 2;
+  request[1] = index;
+  PacketHeader outPktHdr, inPktHdr;
+  MailHeader outMailHdr, intMailHdr;
+  outPktHdr.to = 0;
+  outMailHdr.to = 0;
+  outMailHdr.from = 0;
+  outMailHdr.length = 2;
+  bool success = postOffice->Send(outPktHdr, outMailHdr, request);
+  if(!success) {
+    cout << "Unable to send DestroyLock request" << endl;
+  }
+  else {
+    postOffice->Receive(0, &inPktHdr, &intMailHdr, response);
+  }
+  delete request;
+  delete response;
 }
 
 int CreateCondition_Syscall(unsigned int vaddr, int size) {
