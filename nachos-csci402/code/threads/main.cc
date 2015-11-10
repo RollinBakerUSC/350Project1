@@ -60,6 +60,7 @@ extern void ThreadTest(void), Copy(char *unixFile, char *nachosFile);
 extern void Print(char *file), PerformanceTest(void);
 extern void StartProcess(char *file), ConsoleTest(char *in, char *out);
 extern void MailTest(int networkID);
+extern void Server();
 
 #ifdef THREADS
 extern void Part2(void), TestSuite(void);
@@ -149,6 +150,9 @@ main(int argc, char **argv)
 						// start up another nachos
             MailTest(atoi(*(argv + 1)));
             argCount = 2;
+        }
+        if (!strcmp(*argv, "-server")) {
+        	Server();
         }
 #endif // NETWORK
     }

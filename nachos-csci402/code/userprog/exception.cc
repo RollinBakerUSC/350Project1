@@ -336,7 +336,7 @@ void Fork_Syscall(unsigned int addr, unsigned int vaddr, int size, int id) {
 }
 
 int CreateLock_Syscall(unsigned int vaddr, int size) {
-  char* buf = new char[size+1];
+  char* buf = new char[size];
 
   if(!buf) {
     return -1;
@@ -347,17 +347,38 @@ int CreateLock_Syscall(unsigned int vaddr, int size) {
     return -1;
   }
 
-  buf[size] = '\0';
-  KernelLock* newLock = new KernelLock(buf, currentThread->space);
+  //buf[size] = '\0';
+  /*KernelLock* newLock = new KernelLock(buf, currentThread->space);
   kernelLockLock->Acquire();
   kernelLockTable->push_back(newLock);
   int toReturn = kernelLockTable->size()-1;
-  kernelLockLock->Release();
-  return toReturn;
+  kernelLockLock->Release();*/
+  char* request = new char[40];
+  char* response = new char[40];
+  request[0] = 0;
+  request[1] = (char)size;
+  for(int i = 0; i < size; i++) {
+    request[2+i] = buf[i];
+  }
+  PacketHeader outPktHdr, inPktHdr;
+  MailHeader outMailHdr, intMailHdr;
+  outPktHdr.to = 0;
+  outMailHdr.to = 0;
+  outMailHdr.from = 0;
+  outMailHdr.length = 2+size;
+  bool success = postOffice->Send(outPktHdr, outMailHdr, request);
+  if(!success) {
+    cout << "Unable to send CreateLock request" << endl;
+    return -1;
+  }
+  postOffice->Receive(0, &inPktHdr, &intMailHdr, response);
+  int index = (int)response[0];
+
+  return index;
 }
 
 void DestroyLock_Syscall(unsigned int index) {
-  kernelLockLock->Acquire();
+  /*kernelLockLock->Acquire();
   if(index < kernelLockTable->size()) {
     KernelLock* lock = kernelLockTable->at(index);
     if(currentThread->space == lock->addrspace && lock->valid) {
@@ -373,7 +394,24 @@ void DestroyLock_Syscall(unsigned int index) {
       }
     }
   }
-  kernelLockLock->Release();
+  kernelLockLock->Release();*/
+  char* request = new char[40];
+  char* response = new char[40];
+  request[0] = 3;
+  request[1] = index;
+  PacketHeader outPktHdr, inPktHdr;
+  MailHeader outMailHdr, intMailHdr;
+  outPktHdr.to = 0;
+  outMailHdr.to = 0;
+  outMailHdr.from = 0;
+  outMailHdr.length = 2;
+  bool success = postOffice->Send(outPktHdr, outMailHdr, request);
+  if(!success) {
+    cout << "Unable to send DestroyLock request" << endl;
+  }
+  else {
+    postOffice->Receive(0, &inPktHdr, &intMailHdr, response);
+  }
 }
 
 void Acquire_Syscall(unsigned int index) {
