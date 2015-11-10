@@ -53,20 +53,28 @@ struct ServerCV {
         serverLockIndex = -1;
         waitQueue = new List();
         name = _name;
+        toBeDeleted = false;
+        numWaiters = 0;
     }
     int serverLockIndex;
     List* waitQueue;
     char* name;
+    bool toBeDeleted;
+    int numWaiters;
 };
 
 struct ServerMV {
-    ServerMV(int size) {
+    ServerMV(int size, char* _name) {
         values = new int[size];
         for(int i = 0; i < size; i++) {
             values[i] = 0;
         }
+        name = _name;
+        numElements = size;
     }
     int* values;
+    char* name;
+    int numElements;
 };
 
 struct ReplyMsg {
@@ -206,6 +214,41 @@ void Release(int index) {
     }
 }
 
+int CreateCV(char* cvName) {
+    cout << "Creating CV with name " << cvName << " at position " << serverCVTable.size() << endl;
+    ServerCV* newCV = new ServerCV(cvName);
+    serverCVTable.push_back(newCV);
+    return serverCVTable.size()-1;
+}
+
+void Signal(int condIndex, int lockIndex) {
+    cout << "Attempting to signal on CV at index " << condIndex << " with lock at index " << lockIndex << endl;
+    if(condIndex > -1 && (unsigned int)condIndex < serverCVTable.size()) {
+        if(serverCVTable.at(condIndex) != NULL) {
+            ServerCV* toSignal = serverCVTable.at(condIndex);
+            if(toSignal->serverLockIndex == lockIndex) {
+                if(toSignal->numWaiters > 0) {
+                    cout << "Signalling on CV at index " << condIndex << " with lock at index " << lockIndex << endl;
+                    toSignal->numWaiters--;
+                    ReplyMsg* newMsg = (ReplyMsg*) toSignal->waitQueue->Remove();
+                    ServerLock* lock = serverLockTable.at(lockIndex);
+                    lock->numWaiters++;
+                    lock->waitQueue->Append((void*) newMsg);
+                    if(toSignal->numWaiters == 0 && toSignal->toBeDeleted) {
+                        cout << "Destroying CV at index " << condIndex << " after a Signal" << endl;
+                        delete toSignal;
+                    }
+                } else if(toSignal->toBeDeleted) {
+                    cout << "Destroying CV at index " << condIndex << " after a Signal" << endl;
+                    delete toSignal;
+                }
+            } else {
+                cout << "Attempted to signal on CV with wrong lock" << endl;
+            }
+        }
+    }
+}
+
 void Server() {
     cout << "Starting Nachos Server" << endl;
 
@@ -213,8 +256,10 @@ void Server() {
     MailHeader outMailHdr, inMailHdr;
     char* request = new char[40];
     char* response = new char[40];
-    int machineID, index;
+    int machineID, index, length;
+    int condIndex, lockIndex;
     bool success;
+    char nameLength;
     
     while(true) {
         for(int i = 0; i < 40; i++) {
@@ -224,9 +269,9 @@ void Server() {
         postOffice->Receive(0, &inPktHdr, &inMailHdr, request);
         char opCode = request[0];
         switch(opCode) {
-            case 0:
-                char nameLength = request[1];
-                int length = (int)nameLength;
+            case 0: // create lock
+                nameLength = request[1];
+                length = (int)nameLength;
                 char* lockName = new char[length+1];
                 for(int i = 0; i < nameLength; i++) {
                     lockName[i] = request[i+2];
@@ -243,7 +288,7 @@ void Server() {
                     cout << "Unable to deliver response to CreateLock syscall" << endl;
                 }
                 break;
-            case 1:
+            case 1: // acquire lock
                 index = (int)request[1];
                 bool canAcquire = Acquire(index);
                 response[0] = 255;
@@ -265,9 +310,9 @@ void Server() {
                     toAcquire->waitQueue->Append((void*) reply);
                 }
                 break;
-            case 2:
+            case 2: // release lock
                 index = (int)request[1];
-                if(serverLockTable.at(index)->owner == inPktHdr.from) {
+                if(serverLockTable.at(index) != NULL && serverLockTable.at(index)->owner == inPktHdr.from) {
                     Release(index);
                 } else {
                     cout << "Non owner trying to release Lock at index " << index << endl;
@@ -282,7 +327,7 @@ void Server() {
                     cout << "Unable to deliver response to Release syscall" << endl;
                 }
                 break;
-            case 3:
+            case 3: // destroy lock
                 index = (int)request[1];
                 DestroyLock(index);
                 response[0] = 255;
@@ -295,23 +340,58 @@ void Server() {
                     cout << "Unable to deliver response to DestroyLock syscall" << endl;
                 }
                 break;
-            case 4:
+            case 4: // create cv
+                nameLength = request[1];
+                length = (int)nameLength;
+                char* cvName = new char[length+1];
+                for(int i = 0; i < nameLength; i++) {
+                    cvName[i] = request[i+2];
+                }
+                cvName[length] = '\0';
+                index = CreateCV(cvName);
+                response[0] = (char)index;
+                outPktHdr.to = inPktHdr.from;
+                outMailHdr.to = inMailHdr.from;
+                outMailHdr.length = 1;
+                success = postOffice->Send(outPktHdr, outMailHdr, response);
+                delete response;
+                if(!success) {
+                    cout << "Unable to deliver response to CreateCV syscall" << endl;
+                }
                 break;
-            case 5:
+            case 5: // signal cv
+                condIndex = (int)request[1];
+                lockIndex = (int)request[2];
+                if(lockIndex > -1 && (unsigned int)lockIndex < serverLockTable.size()
+                    && serverLockTable.at(lockIndex) != NULL 
+                    && serverLockTable.at(lockIndex)->owner == inPktHdr.from) {
+                    Signal(condIndex, lockIndex);
+                } else {
+                    cout << "Non owner trying to signal with Lock at index " << index << endl;
+                }
+                response[0] = 255;
+                outPktHdr.to = inPktHdr.from;
+                outMailHdr.to = inMailHdr.from;
+                outMailHdr.length = 1;
+                success = postOffice->Send(outPktHdr, outMailHdr, response);
+                delete response;
+                if(!success) {
+                    cout << "Unable to deliver response to Signal syscall" << endl;
+                }
                 break;
-            case 6:
+            case 6: // broadcast cv
                 break;
-            case 7:
+            case 7: // wait cv
                 break;
-            case 8:
+            case 8: // destroy cv
                 break;
-            case 9:
+            case 9: // create mv
                 break;
-            case 10:
+            case 10: // set mv
                 break;
-            case 11:
+            case 11: // get mv
                 break;
-            case 12:
+            case 12: // destroy mv
                 break;
         }
     }

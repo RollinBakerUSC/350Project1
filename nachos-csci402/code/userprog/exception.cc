@@ -490,7 +490,7 @@ void Release_Syscall(unsigned int index) {
 }
 
 int CreateCondition_Syscall(unsigned int vaddr, int size) {
-  char* buf = new char[size+1];
+  char* buf = new char[size];
 
   if(!buf) {
     return -1;
@@ -501,14 +501,37 @@ int CreateCondition_Syscall(unsigned int vaddr, int size) {
     return -1;
   }
 
-  buf[size] = '\0';
+  //buf[size] = '\0';
 
-  KernelCondition* newCondition = new KernelCondition(buf, currentThread->space);
+  /*KernelCondition* newCondition = new KernelCondition(buf, currentThread->space);
   kernelCVLock->Acquire();
   kernelCVTable->push_back(newCondition);
   int toReturn = kernelCVTable->size()-1;
   kernelCVLock->Release();
-  return toReturn;
+  return toReturn;*/
+  char* request = new char[40];
+  char* response = new char[40];
+  request[0] = 4;
+  request[1] = (char)size;
+  for(int i = 0; i < size; i++) {
+    request[2+i] = buf[i];
+  }
+  PacketHeader outPktHdr, inPktHdr;
+  MailHeader outMailHdr, intMailHdr;
+  outPktHdr.to = 0;
+  outMailHdr.to = 0;
+  outMailHdr.from = 0;
+  outMailHdr.length = 2+size;
+  bool success = postOffice->Send(outPktHdr, outMailHdr, request);
+  if(!success) {
+    cout << "Unable to send CreateCV request" << endl;
+    return -1;
+  }
+  postOffice->Receive(0, &inPktHdr, &intMailHdr, response);
+  int index = (int)response[0];
+  delete request;
+  delete response;
+  return index;
 }
 
 void DestroyCondition_Syscall(unsigned int index) {
@@ -554,7 +577,7 @@ void Wait_Syscall(unsigned int cvIndex, unsigned int lockIndex) {
 }
 
 void Signal_Syscall(unsigned int cvIndex, unsigned int lockIndex) {
-  kernelCVLock->Acquire();
+  /*kernelCVLock->Acquire();
   kernelLockLock->Acquire();
   if(cvIndex < kernelCVTable->size() && lockIndex < kernelLockTable->size()) {
     KernelCondition* cv = kernelCVTable->at(cvIndex);
@@ -566,7 +589,27 @@ void Signal_Syscall(unsigned int cvIndex, unsigned int lockIndex) {
     }
   }
   kernelCVLock->Release();
-  kernelLockLock->Release();
+  kernelLockLock->Release();*/
+  char* request = new char[40];
+  char* response = new char[40];
+  request[0] = 5;
+  request[1] = cvIndex;
+  request[2] = lockIndex;
+  PacketHeader outPktHdr, inPktHdr;
+  MailHeader outMailHdr, intMailHdr;
+  outPktHdr.to = 0;
+  outMailHdr.to = 0;
+  outMailHdr.from = 0;
+  outMailHdr.length = 3;
+  bool success = postOffice->Send(outPktHdr, outMailHdr, request);
+  if(!success) {
+    cout << "Unable to send Signal request" << endl;
+  }
+  else {
+    postOffice->Receive(0, &inPktHdr, &intMailHdr, response);
+  }
+  delete request;
+  delete response;
 }
 
 void Broadcast_Syscall(unsigned int cvIndex, unsigned int lockIndex) {
