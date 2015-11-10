@@ -10,7 +10,10 @@ int main () {
 	PrintInt(lock2);
 	PrintInt(lock3);*/
 	Acquire(lock1);
-	Signal(cv1, lock1);
+	/*Broadcast(cv1, lock1);
+	Wait(cv1, lock1);
+	Print("ERROR", 5);
+	Signal(cv1, lock1);*/
 	/*Acquire(lock2);
 	DestroyLock(lock1);
 	Acquire(lock3);*/
@@ -31,5 +34,6 @@ int main () {
 	lock4 = CreateLock("Lock4", 5);
 	PrintInt(lock4);*/
 	DestroyLock(lock1);
+	DestroyCondition(cv1);
 	Exit(0);
 }

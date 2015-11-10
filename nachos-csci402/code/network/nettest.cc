@@ -249,6 +249,110 @@ void Signal(int condIndex, int lockIndex) {
     }
 }
 
+void Broadcast(int condIndex, int lockIndex) {
+    cout << "Attempting to broadcast on CV at index " << condIndex << " with lock at index " << lockIndex << endl;
+    if(condIndex > -1 && (unsigned int)condIndex < serverCVTable.size()) {
+        if(serverCVTable.at(condIndex) != NULL) {
+            ServerCV* toSignal = serverCVTable.at(condIndex);
+            if(toSignal->serverLockIndex == lockIndex) {
+                while(toSignal->numWaiters > 0) {
+                    cout << "In Broadcast, Signalling on CV at index " << condIndex << " with lock at index " << lockIndex << endl;
+                    toSignal->numWaiters--;
+                    ReplyMsg* newMsg = (ReplyMsg*) toSignal->waitQueue->Remove();
+                    ServerLock* lock = serverLockTable.at(lockIndex);
+                    lock->numWaiters++;
+                    lock->waitQueue->Append((void*) newMsg);
+                }
+                if(toSignal->toBeDeleted) {
+                    cout << "Destroying CV at index " << condIndex << " after a Broadcast" << endl;
+                    delete toSignal;
+                }
+            } else {
+                cout << "Attempted to Broadcast on CV with wrong lock" << endl;
+            }
+        }
+    }
+}
+
+void Wait(int condIndex, int lockIndex) {
+    serverCVTable.at(condIndex)->serverLockIndex = lockIndex;
+    ServerLock* toRelease = serverLockTable.at(lockIndex);
+    cout << "Releasing Lock at index " << lockIndex << endl;
+    if(toRelease->numWaiters > 0) {
+        toRelease->numWaiters--;
+        ReplyMsg* newMsg = (ReplyMsg*) toRelease->waitQueue->Remove();
+        PacketHeader outPktHdr;
+        MailHeader outMailHdr;
+        outPktHdr.to = newMsg->idToSendTo;
+        toRelease->owner = newMsg->idToSendTo;
+        outMailHdr.to = newMsg->boxToSendTo;
+        outMailHdr.length = newMsg->msgLength;
+        bool success = postOffice->Send(outPktHdr, outMailHdr, newMsg->responseMsg);
+        if(!success) {
+            cout << "Unable to send response to new owner thread during Wait on a Release of Lock at index " << lockIndex << endl;
+        }
+        delete newMsg->responseMsg;
+        delete newMsg;
+    }
+    else {
+        toRelease->owner = -1;
+        toRelease->available = true;
+    }
+}
+
+void DestroyCV(int index) {
+    cout << "Attempting to Destroy CV at index " << index << endl;
+    if(index > -1 && (unsigned int)index < serverCVTable.size()) {
+        ServerCV* toDelete = serverCVTable.at(index);
+        if(toDelete != NULL) {
+            if(toDelete->numWaiters == 0) {
+                cout << "Destroying CV at index " << index << endl;
+                delete toDelete;
+            } else {
+                toDelete->toBeDeleted = true;
+            }
+        }
+    }
+}
+
+int CreateMV(char* mv_Name, int numElements){
+    cout << "Creating MV with name " << mv_Name << " at position " << serverMVTable.size() << endl;
+    ServerMV* newMV = new ServerMV(numElements, mv_Name);
+    serverMVTable.push_back(newMV);
+    return serverMVTable.size() - 1;
+}
+
+void SetMV(int index, int arrayIndex, int value){
+    cout << "Setting MV number " << index << " at array location " << arrayIndex << "to new value of " << value <<endl;
+    if(index > -1 && (unsigned int)index < serverMVTable.size()
+        && serverMVTable.at(index) != NULL){
+        int arraySize = serverMVTable.at(index)->numElements;
+        if(arrayIndex > -1 && arrayIndex < arraySize){
+            serverMVTable.at(index)->values[arrayIndex] = value;
+        }
+    }
+}
+
+int GetMV(int index, int arrayIndex){
+    cout << "Getting MV number " << index << " at array location " <<arrayIndex<<endl;
+    if(index > -1 && (unsigned int)index < serverMVTable.size()
+        && serverMVTable.at(index) != NULL){
+        int arraySize = serverMVTable.at(index)->numElements;
+        if(arrayIndex > -1 && arrayIndex < arraySize){
+            return serverMVTable.at(index)->values[arrayIndex];
+        }
+    }
+    return -1;
+}
+
+void DestroyMV(int index){
+    cout << "Destroying MV number " <<index<<endl;
+    if(index > -1 && (unsigned int)index < serverMVTable.size()
+        && serverMVTable.at(index) != NULL){
+        delete serverMVTable.at(index);
+    }
+}
+
 void Server() {
     cout << "Starting Nachos Server" << endl;
 
@@ -367,7 +471,7 @@ void Server() {
                     && serverLockTable.at(lockIndex)->owner == inPktHdr.from) {
                     Signal(condIndex, lockIndex);
                 } else {
-                    cout << "Non owner trying to signal with Lock at index " << index << endl;
+                    cout << "Trying to signal with bad Lock at index " << index << endl;
                 }
                 response[0] = 255;
                 outPktHdr.to = inPktHdr.from;
@@ -380,18 +484,134 @@ void Server() {
                 }
                 break;
             case 6: // broadcast cv
+                condIndex = (int)request[1];
+                lockIndex = (int)request[2];
+                if(lockIndex > -1 && (unsigned int)lockIndex < serverLockTable.size()
+                    && serverLockTable.at(lockIndex) != NULL 
+                    && serverLockTable.at(lockIndex)->owner == inPktHdr.from) {
+                    Broadcast(condIndex, lockIndex);
+                } else {
+                    cout << "Trying to Broadcast with bad Lock at index " << index << endl;
+                }
+                response[0] = 255;
+                outPktHdr.to = inPktHdr.from;
+                outMailHdr.to = inMailHdr.from;
+                outMailHdr.length = 1;
+                success = postOffice->Send(outPktHdr, outMailHdr, response);
+                delete response;
+                if(!success) {
+                    cout << "Unable to deliver response to Broadcast syscall" << endl;
+                }
                 break;
             case 7: // wait cv
+                condIndex = (int)request[1];
+                lockIndex = (int)request[2];
+                if(lockIndex > -1 && (unsigned int)lockIndex < serverLockTable.size()
+                    && serverLockTable.at(lockIndex) != NULL 
+                    && serverLockTable.at(lockIndex)->owner == inPktHdr.from) {
+                    if(condIndex > -1 && (unsigned int)condIndex < serverCVTable.size()
+                        && serverCVTable.at(condIndex) != NULL
+                        && (serverCVTable.at(condIndex)->serverLockIndex == lockIndex ||
+                            serverCVTable.at(condIndex)->serverLockIndex == -1)) {
+                        Wait(condIndex, lockIndex);
+                        cout << "Waiting on CV at index " << condIndex << " with lock at index " << lockIndex << endl;
+                        response[0] = 255;
+                        outPktHdr.to = inPktHdr.from;
+                        outMailHdr.to = inMailHdr.from;
+                        outMailHdr.length = 1;
+                        ReplyMsg* reply = new ReplyMsg(outPktHdr.to, outMailHdr.to, outMailHdr.length, response);
+                        ServerCV* toWait = serverCVTable.at(index);
+                        toWait->numWaiters++;
+                        toWait->waitQueue->Append((void*) reply);
+                    }
+                    else {
+                        cout << "Trying to wait on bad condition at index " << condIndex << endl;
+                    }   
+                } else {
+                    cout << "Trying to wait with bad Lock at index " << lockIndex << endl;
+                }
                 break;
             case 8: // destroy cv
+                index = (int)request[1];
+                DestroyCV(index);
+                response[0] = 255;
+                outPktHdr.to = inPktHdr.from;
+                outMailHdr.to = inMailHdr.from;
+                outMailHdr.length = 1;
+                success = postOffice->Send(outPktHdr, outMailHdr, response);
+                delete response;
+                if(!success) {
+                    cout << "Unable to deliver response to DestroyLock syscall" << endl;
+                }
                 break;
             case 9: // create mv
+                // Get length of name
+                length = (int)request[1];
+
+                // Allocate space for name
+                char* mv_Name = new char[length+1];
+
+                // Read name in
+                for(int i = 0; i < length; i++) {
+                    mv_Name[i] = request[i+2];
+                }
+                mv_Name[length] = '\0';
+
+                // Get number of elements
+                int numElements = (int)request[length + 2];
+
+                index = CreateMV(mv_Name, numElements);
+
+                response[0] = (char)index;
+                outPktHdr.to = inPktHdr.from;
+                outMailHdr.to = inMailHdr.from;
+                outMailHdr.length = 1;
+                success = postOffice->Send(outPktHdr, outMailHdr, response);
+                if(!success) {
+                    cout << "Unable to deliver response to CreateMV syscall" << endl;
+                }
                 break;
             case 10: // set mv
+                index = (int)request[1];
+                int arrayIndex = (int)request[2];
+                int value = (int)request[3];
+                SetMV(index, arrayIndex, value);
+
+                response[0] = 127;
+                outPktHdr.to = inPktHdr.from;
+                outMailHdr.to = inMailHdr.from;
+                outMailHdr.length = 1;
+                success = postOffice->Send(outPktHdr, outMailHdr, response);
+                if(!success) {
+                    cout << "Unable to deliver response to SetMV syscall" << endl;
+                }
                 break;
             case 11: // get mv
+                index = (int)request[1];
+                int mv_arrayIndex = (int)request[2];
+
+                int returnval = GetMV(index, mv_arrayIndex);
+
+                response[0] = (char) returnval;
+                outPktHdr.to = inPktHdr.from;
+                outMailHdr.to = inMailHdr.from;
+                outMailHdr.length = 1;
+                success = postOffice->Send(outPktHdr, outMailHdr, response);
+                if(!success) {
+                    cout << "Unable to deliver response to GetMV syscall" << endl;
+                }
                 break;
             case 12: // destroy mv
+                index = (int)request[1];
+                DestroyMV(index);
+                response[0] = 127;
+                outPktHdr.to = inPktHdr.from;
+                outMailHdr.to = inMailHdr.from;
+                outMailHdr.length = 1;
+                success = postOffice->Send(outPktHdr, outMailHdr, response);
+                if(!success) {
+                    cout << "Unable to deliver response to DestroyMV syscall" << endl;
+                }
                 break;
         }
     }

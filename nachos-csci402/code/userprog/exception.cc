@@ -535,7 +535,7 @@ int CreateCondition_Syscall(unsigned int vaddr, int size) {
 }
 
 void DestroyCondition_Syscall(unsigned int index) {
-  kernelCVLock->Acquire();
+  /*kernelCVLock->Acquire();
   if(index < kernelCVTable->size()) {
     KernelCondition* cv = kernelCVTable->at(index);
     if(currentThread->space == cv->addrspace && cv->valid) {
@@ -551,11 +551,30 @@ void DestroyCondition_Syscall(unsigned int index) {
       }
     }
   }
-  kernelCVLock->Release();
+  kernelCVLock->Release();*/
+  char* request = new char[40];
+  char* response = new char[40];
+  request[0] = 8;
+  request[1] = index;
+  PacketHeader outPktHdr, inPktHdr;
+  MailHeader outMailHdr, intMailHdr;
+  outPktHdr.to = 0;
+  outMailHdr.to = 0;
+  outMailHdr.from = 0;
+  outMailHdr.length = 2;
+  bool success = postOffice->Send(outPktHdr, outMailHdr, request);
+  if(!success) {
+    cout << "Unable to send DestroyCV request" << endl;
+  }
+  else {
+    postOffice->Receive(0, &inPktHdr, &intMailHdr, response);
+  }
+  delete request;
+  delete response;
 }
 
 void Wait_Syscall(unsigned int cvIndex, unsigned int lockIndex) {
-  kernelCVLock->Acquire();
+  /*kernelCVLock->Acquire();
   kernelLockLock->Acquire();
   if(cvIndex < kernelCVTable->size() && lockIndex < kernelLockTable->size()) {
     KernelCondition* cv = kernelCVTable->at(cvIndex);
@@ -573,7 +592,27 @@ void Wait_Syscall(unsigned int cvIndex, unsigned int lockIndex) {
     }
   }
   kernelCVLock->Release();
-  kernelLockLock->Release();
+  kernelLockLock->Release();*/
+  char* request = new char[40];
+  char* response = new char[40];
+  request[0] = 7;
+  request[1] = cvIndex;
+  request[2] = lockIndex;
+  PacketHeader outPktHdr, inPktHdr;
+  MailHeader outMailHdr, intMailHdr;
+  outPktHdr.to = 0;
+  outMailHdr.to = 0;
+  outMailHdr.from = 0;
+  outMailHdr.length = 3;
+  bool success = postOffice->Send(outPktHdr, outMailHdr, request);
+  if(!success) {
+    cout << "Unable to send Wait request" << endl;
+  }
+  else {
+    postOffice->Receive(0, &inPktHdr, &intMailHdr, response);
+  }
+  delete request;
+  delete response;
 }
 
 void Signal_Syscall(unsigned int cvIndex, unsigned int lockIndex) {
@@ -613,7 +652,7 @@ void Signal_Syscall(unsigned int cvIndex, unsigned int lockIndex) {
 }
 
 void Broadcast_Syscall(unsigned int cvIndex, unsigned int lockIndex) {
-  kernelCVLock->Acquire();
+  /*kernelCVLock->Acquire();
   kernelLockLock->Acquire();
   if(cvIndex < kernelCVTable->size() && lockIndex < kernelLockTable->size()) {
     KernelCondition* cv = kernelCVTable->at(cvIndex);
@@ -625,7 +664,27 @@ void Broadcast_Syscall(unsigned int cvIndex, unsigned int lockIndex) {
     }
   }
   kernelCVLock->Release();
-  kernelLockLock->Release();
+  kernelLockLock->Release();*/
+  char* request = new char[40];
+  char* response = new char[40];
+  request[0] = 6;
+  request[1] = cvIndex;
+  request[2] = lockIndex;
+  PacketHeader outPktHdr, inPktHdr;
+  MailHeader outMailHdr, intMailHdr;
+  outPktHdr.to = 0;
+  outMailHdr.to = 0;
+  outMailHdr.from = 0;
+  outMailHdr.length = 3;
+  bool success = postOffice->Send(outPktHdr, outMailHdr, request);
+  if(!success) {
+    cout << "Unable to send Signal request" << endl;
+  }
+  else {
+    postOffice->Receive(0, &inPktHdr, &intMailHdr, response);
+  }
+  delete request;
+  delete response;
 }
 
 void Print_Syscall(unsigned int vaddr, int size) {
@@ -654,20 +713,125 @@ int GetID_Syscall() {
   return id;
 }
 
-int CreateMV_Syscall(unsigned int vaddr, int length, int size) {
-  return 0;
+int CreateMV_Syscall(unsigned int vaddr, int size, int numElements) {
+  char* buf = new char[size];
+
+  if(!buf) {
+    return -1;
+  }
+  if(copyin(vaddr, size, buf) == -1) {
+    printf("Bad pointer passed to CreateLock.\n");
+    delete buf;
+    return -1;
+  }
+
+  char* request = new char[40];
+  char* response = new char[40];
+  request[0] = 9;
+  request[1] = (char)size;
+  for(int i = 0; i < size; i++) {
+    request[2+i] = buf[i];
+  }
+  request[size + 2] = (char) numElements;
+  PacketHeader outPktHdr, inPktHdr;
+  MailHeader outMailHdr, intMailHdr;
+  outPktHdr.to = 0;
+  outMailHdr.to = 0;
+  outMailHdr.from = 0;
+  outMailHdr.length = 3+size;
+  bool success = postOffice->Send(outPktHdr, outMailHdr, request);
+  if(!success) {
+    cout << "Unable to send CreateMV request" << endl;
+    return -1;
+  }
+  postOffice->Receive(0, &inPktHdr, &intMailHdr, response);
+  int index = (int)response[0];
+
+  delete request;
+  delete response;
+  return index;
 }
 
 void DestroyMV_Syscall(int index) {
+  char* request = new char[40];
+  char* response = new char[40];
+  request[0] = 12;
+  request[1] = (char) index;
 
+  PacketHeader outPktHdr, inPktHdr;
+  MailHeader outMailHdr, intMailHdr;
+  outPktHdr.to = 0;
+  outMailHdr.to = 0;
+  outMailHdr.from = 0;
+  outMailHdr.length = 2;
+
+  bool success = postOffice->Send(outPktHdr, outMailHdr, request);
+
+  if(!success) {
+    cout << "Unable to send DestroyMV request" << endl;
+    return;
+  }
+  delete request;
+  delete response;
+  postOffice->Receive(0, &inPktHdr, &intMailHdr, response);
 }
 
-void SetMV_Syscall(int index, int position, int var) {
+void SetMV_Syscall(int index, int position, int val) {
+  char* request = new char[40];
+  char* response = new char[40];
 
+  request[0] = 10;
+  request[1] = (char) index;
+  request[2] = (char) position;
+  request[3] = (char) val;
+
+  PacketHeader outPktHdr, inPktHdr;
+  MailHeader outMailHdr, intMailHdr;
+  outPktHdr.to = 0;
+  outMailHdr.to = 0;
+  outMailHdr.from = 0;
+  outMailHdr.length = 4;
+
+  bool success = postOffice->Send(outPktHdr, outMailHdr, request);
+
+  if(!success) {
+    cout << "Unable to send SetMV request" << endl;
+    return;
+  }
+
+  postOffice->Receive(0, &inPktHdr, &intMailHdr, response);
+  int ack = (int)response[0];
+  delete request;
+  delete response;
 }
 
 int GetMV_Syscall(int index, int position) {
-  return 0;
+  char* request = new char[40];
+  char* response = new char[40];
+
+  request[0] = 11;
+  request[1] = (char) index;
+  request[2] = (char) position;
+
+  PacketHeader outPktHdr, inPktHdr;
+  MailHeader outMailHdr, intMailHdr;
+  outPktHdr.to = 0;
+  outMailHdr.to = 0;
+  outMailHdr.from = 0;
+  outMailHdr.length = 3;
+
+  bool success = postOffice->Send(outPktHdr, outMailHdr, request);
+
+  if(!success) {
+    cout << "Unable to send GetMV request" << endl;
+    return -1;
+  }
+
+  postOffice->Receive(0, &inPktHdr, &intMailHdr, response);
+  int val = (int)response[0];
+  delete request;
+  delete response;
+  return val;
 }
 
 void Exit_Syscall(int status) {
