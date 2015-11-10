@@ -415,7 +415,7 @@ void DestroyLock_Syscall(unsigned int index) {
 }
 
 void Acquire_Syscall(unsigned int index) {
-  kernelLockLock->Acquire();
+  /*kernelLockLock->Acquire();
   if(index < kernelLockTable->size()) {
     KernelLock* lock = kernelLockTable->at(index);
     if(currentThread->space == lock->addrspace && lock->valid) {
@@ -425,7 +425,24 @@ void Acquire_Syscall(unsigned int index) {
       kernelLockLock->Acquire();
     }
   }
-  kernelLockLock->Release();
+  kernelLockLock->Release();*/
+  char* request = new char[40];
+  char* response = new char[40];
+  request[0] = 1;
+  request[1] = index;
+  PacketHeader outPktHdr, inPktHdr;
+  MailHeader outMailHdr, intMailHdr;
+  outPktHdr.to = 0;
+  outMailHdr.to = 0;
+  outMailHdr.from = 0;
+  outMailHdr.length = 2;
+  bool success = postOffice->Send(outPktHdr, outMailHdr, request);
+  if(!success) {
+    cout << "Unable to send DestroyLock request" << endl;
+  }
+  else {
+    postOffice->Receive(0, &inPktHdr, &intMailHdr, response);
+  }
 }
 
 void Release_Syscall(unsigned int index) {

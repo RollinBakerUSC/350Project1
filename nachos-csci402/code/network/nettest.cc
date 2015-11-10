@@ -69,6 +69,19 @@ struct ServerMV {
     int* values;
 };
 
+struct ReplyMsg {
+    ReplyMsg(int id, int box, int len, char* msg) {
+        idToSendTo = id;
+        boxToSendTo = box;
+        msgLength = len;
+        responseMsg = msg;
+    }
+    int idToSendTo;
+    int boxToSendTo;
+    int msgLength;
+    char* responseMsg;
+};
+
 std::vector<ServerLock*> serverLockTable;
 std::vector<ServerCV*> serverCVTable;
 std::vector<ServerMV*> serverMVTable;
@@ -143,6 +156,21 @@ void DestroyLock(int index) {
     }
 }
 
+bool Acquire(int index) {
+    cout << "Attempting to acquire Lock at index " << index << endl;
+    if(index > -1 && (unsigned int)index < serverLockTable.size()) {
+        ServerLock* toAcquire = serverLockTable.at(index);
+        if(toAcquire->available) {
+            toAcquire->available = false;
+            return true;
+        } else {
+            return false;
+        }
+    } else {
+        return false;
+    }
+}
+
 void Server() {
     cout << "Starting Nachos Server" << endl;
 
@@ -156,8 +184,8 @@ void Server() {
     while(true) {
         for(int i = 0; i < 40; i++) {
             request[i] = 0;
-            response[i] = 0;
         }
+        response = new char[40];
         postOffice->Receive(0, &inPktHdr, &inMailHdr, request);
         char opCode = request[0];
         switch(opCode) {
@@ -180,6 +208,25 @@ void Server() {
                 }
                 break;
             case 1:
+                index = (int)request[1];
+                bool canAcquire = Acquire(index);
+                response[0] = 255;
+                outPktHdr.to = inPktHdr.from;
+                outMailHdr.to = inMailHdr.from;
+                outMailHdr.length = 1;
+                if(canAcquire) {
+                    cout << "Acquiring Lock at index " << index << endl;
+                    serverLockTable.at(index)->owner = outPktHdr.to;
+                    success = postOffice->Send(outPktHdr, outMailHdr, response);
+                    if(!success) {
+                        cout << "Unable to deliver response to Acquire syscall" << endl;
+                    }
+                } else {
+                    ReplyMsg* reply = new ReplyMsg(outPktHdr.to, outMailHdr.to, outMailHdr.length, response);
+                    ServerLock* toAcquire = serverLockTable.at(index);
+                    toAcquire->numWaiters++;
+                    toAcquire->waitQueue->Append((void*) reply);
+                }
                 break;
             case 2:
                 break;

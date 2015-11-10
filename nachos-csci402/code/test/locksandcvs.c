@@ -8,6 +8,9 @@ int main () {
 	PrintInt(lock1);
 	PrintInt(lock2);
 	PrintInt(lock3);
+	Acquire(lock1);
+	Acquire(lock2);
+	Acquire(lock3);
 	/*int cv1 = CreateCondition("CV1", 3);
 	int cv2 = CreateCondition("CV2", 3);
 	Print("test ", 5);
@@ -20,5 +23,6 @@ int main () {
 	DestroyLock(lock3);
 	DestroyLock(lock1);
 	lock4 = CreateLock("Lock4", 5);
+	PrintInt(lock4);
 	Exit(0);
 }
