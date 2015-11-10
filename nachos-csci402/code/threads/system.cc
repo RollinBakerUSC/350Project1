@@ -43,6 +43,7 @@ Lock* TLBLock;
 OpenFile *swapFile;
 Lock* swapFileLock;
 BitMap* swapFileBitMap;
+char* swapName;
 
 #ifdef FILESYS_NEEDED
 FileSystem  *fileSystem;
@@ -116,8 +117,8 @@ Initialize(int argc, char **argv)
 #endif
 #ifdef NETWORK
     double rely = 1;		// network reliability
-    int netname = 0;		// UNIX socket name
 #endif
+    int netname = 0;        // UNIX socket name
     
     for (argc--, argv++; argc > 0; argc -= argCount, argv += argCount) {
 	argCount = 1;
@@ -198,14 +199,18 @@ Initialize(int argc, char **argv)
     currentTLB = 0;
     TLBLock = new Lock("TLB Lock");
 
-    swapFile = fileSystem->Open("swapFile");
+    swapName = "swapFile";
+    char* id = new char[10];
+    sprintf(id, "%d", netname);
+    strcat(swapName, id);
+    swapFile = fileSystem->Open(swapName);
     if(swapFile == NULL) {
-        fileSystem->Create("swapFile", 0);
-        swapFile = fileSystem->Open("swapFile");
+        fileSystem->Create(swapName, 0);
+        swapFile = fileSystem->Open(swapName);
     } else {
-        fileSystem->Remove("swapFile");
-        fileSystem->Create("swapFile", 0);
-        swapFile = fileSystem->Open("swapFile");
+        fileSystem->Remove(swapName);
+        fileSystem->Create(swapName, 0);
+        swapFile = fileSystem->Open(swapName);
     }
     swapFileBitMap = new BitMap(4096);
     swapFileLock = new Lock("Swap File Lock");
@@ -291,6 +296,8 @@ Cleanup()
     delete swapFileBitMap;
     delete swapFileLock;
     
+    fileSystem->Remove(swapName);
+
     Exit(0);
 }
 

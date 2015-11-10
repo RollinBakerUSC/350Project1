@@ -41,6 +41,10 @@
 #define SC_Print	20
 #define SC_PrintInt	21
 #define SC_GetID	22
+#define SC_CreateMV 23
+#define SC_DestroyMV 24
+#define SC_SetMV	25
+#define SC_GetMV	26
 
 #define MAXFILENAME 256
 
@@ -177,6 +181,18 @@ void PrintInt(int toPrint);
 
 /* return the ending int ID of a thread's name */
 int GetID();
+
+/* name is the name of the mv, length is the length of the name, size is the size of the array */
+int CreateMV(char* name, int length, int size);
+
+/* takes in the index of the mv to destroy */
+void DestroyMV(int index);
+
+/* index of the mv to set, position in the mv's array, and the variable to set it to */
+void SetMV(int index, int position, int var);
+
+/* index of the mv to get from, position in its array */
+int GetMV(int index, int position);
 
 #endif /* IN_ASM */
 

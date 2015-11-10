@@ -532,6 +532,22 @@ int GetID_Syscall() {
   return id;
 }
 
+int CreateMV_Syscall(unsigned int vaddr, int length, int size) {
+  return 0;
+}
+
+void DestroyMV_Syscall(int index) {
+
+}
+
+void SetMV_Syscall(int index, int position, int var) {
+
+}
+
+int GetMV_Syscall(int index, int position) {
+  return 0;
+}
+
 void Exit_Syscall(int status) {
   cout << "Exit with status " << status << endl;
   processLock->Acquire();
@@ -796,6 +812,27 @@ void ExceptionHandler(ExceptionType which) {
       case SC_GetID:
     DEBUG('a', "GetID syscall.\n");
     rv = GetID_Syscall();
+    break;
+      case SC_CreateMV:
+    DEBUG('a', "CreateMV syscall.\n");
+    rv = CreateMV_Syscall(machine->ReadRegister(4),
+                          machine->ReadRegister(5),
+                          machine->ReadRegister(6));
+    break;
+      case SC_DestroyMV:
+    DEBUG('a', "DestroyMV syscall.\n");
+    DestroyMV_Syscall(machine->ReadRegister(4));
+    break;
+      case SC_SetMV:
+    DEBUG('a', "SetMV syscall.\n");
+    SetMV_Syscall(machine->ReadRegister(4),
+                  machine->ReadRegister(5),
+                  machine->ReadRegister(6));
+    break;
+      case SC_GetMV:
+    DEBUG('a', "GetMV syscall.\n");
+    rv = GetMV_Syscall(machine->ReadRegister(4),
+                       machine->ReadRegister(5));
     break;
 	}
 

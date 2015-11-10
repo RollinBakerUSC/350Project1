@@ -106,6 +106,7 @@ extern Lock* TLBLock;
 extern OpenFile *swapFile;
 extern Lock* swapFileLock;
 extern BitMap* swapFileBitMap;
+extern char* swapName;
 
 #ifdef USER_PROGRAM
 #include "machine.h"
