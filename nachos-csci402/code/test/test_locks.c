@@ -4,9 +4,10 @@ int main() {
 	int i;
 	int lock = 0;
 	int cv = 0;
-	int mv = GetMV(0, 0);
-	SetMV(0, 0, mv+1);
+	int mv;
 	Acquire(lock);
+	mv = GetMV(0, 0);
+	SetMV(0, 0, mv+1);
 	Signal(cv, lock);
 	Wait(cv, lock);
 	Print("I have lock\n", 12);
@@ -21,4 +22,5 @@ int main() {
 		Signal(cv, lock);
 	}
 	Release(lock);
+	Exit(0);
 }
