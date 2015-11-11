@@ -167,51 +167,51 @@ void DestroyLock(int index) {
     }
 }
 
-bool Acquire(int index) {
+int Acquire(int index) {
     cout << "Attempting to acquire Lock at index " << index << endl;
     if(index > -1 && (unsigned int)index < serverLockTable.size()) {
         ServerLock* toAcquire = serverLockTable.at(index);
         if(toAcquire != NULL && toAcquire->available) {
             toAcquire->available = false;
-            return true;
+            return 0;
         } else {
-            return false;
+            return 1;
         }
     } else {
-        return false;
+        cout << "Attempted to acquire nonexistant lock" << endl;
+        return -1;
     }
 }
 
 void Release(int index) {
     cout << "Attempting to Release Lock at index " << index << endl;
-    if(index > -1 && (unsigned int)index < serverLockTable.size()) {
-        ServerLock* toRelease = serverLockTable.at(index);
-        if(toRelease != NULL) {
-            cout << "Releasing Lock at index " << index << endl;
-            if(toRelease->numWaiters > 0) {
-                toRelease->numWaiters--;
-                ReplyMsg* newMsg = (ReplyMsg*) toRelease->waitQueue->Remove();
-                PacketHeader outPktHdr;
-                MailHeader outMailHdr;
-                outPktHdr.to = newMsg->idToSendTo;
-                toRelease->owner = newMsg->idToSendTo;
-                outMailHdr.to = newMsg->boxToSendTo;
-                outMailHdr.length = newMsg->msgLength;
-                bool success = postOffice->Send(outPktHdr, outMailHdr, newMsg->responseMsg);
-                if(!success) {
-                    cout << "Unable to send response to new owner thread on a Release of Lock at index " << index << endl;
-                }
-                delete newMsg->responseMsg;
-                delete newMsg;
-            } else if(toRelease->toBeDeleted) {
-                cout << "Destroying Lock at index " << index << " after a Release" << endl;
-                delete toRelease;
-            } else {
-                toRelease->owner = -1;
-                toRelease->available = true;
+    ServerLock* toRelease = serverLockTable.at(index);
+    if(toRelease != NULL) {
+        cout << "Releasing Lock at index " << index << endl;
+        if(toRelease->numWaiters > 0) {
+            toRelease->numWaiters--;
+            ReplyMsg* newMsg = (ReplyMsg*) toRelease->waitQueue->Remove();
+            PacketHeader outPktHdr;
+            MailHeader outMailHdr;
+            outPktHdr.to = newMsg->idToSendTo;
+            toRelease->owner = newMsg->idToSendTo;
+            outMailHdr.to = newMsg->boxToSendTo;
+            outMailHdr.length = newMsg->msgLength;
+            bool success = postOffice->Send(outPktHdr, outMailHdr, newMsg->responseMsg);
+            if(!success) {
+                cout << "Unable to send response to new owner thread on a Release of Lock at index " << index << endl;
             }
+            delete newMsg->responseMsg;
+            delete newMsg;
+        } else if(toRelease->toBeDeleted) {
+            cout << "Destroying Lock at index " << index << " after a Release" << endl;
+            delete toRelease;
+        } else {
+            toRelease->owner = -1;
+            toRelease->available = true;
         }
     }
+    
 }
 
 int CreateCV(char* cvName) {
@@ -277,7 +277,7 @@ void Broadcast(int condIndex, int lockIndex) {
 void Wait(int condIndex, int lockIndex) {
     serverCVTable.at(condIndex)->serverLockIndex = lockIndex;
     ServerLock* toRelease = serverLockTable.at(lockIndex);
-    cout << "Releasing Lock at index " << lockIndex << endl;
+    cout << "Releasing Lock at index " << lockIndex << " as part of Wait" << endl;
     if(toRelease->numWaiters > 0) {
         toRelease->numWaiters--;
         ReplyMsg* newMsg = (ReplyMsg*) toRelease->waitQueue->Remove();
@@ -394,12 +394,12 @@ void Server() {
                 break;
             case 1: // acquire lock
                 index = (int)request[1];
-                bool canAcquire = Acquire(index);
+                int canAcquire = Acquire(index);
                 response[0] = 255;
                 outPktHdr.to = inPktHdr.from;
                 outMailHdr.to = inMailHdr.from;
                 outMailHdr.length = 1;
-                if(canAcquire) {
+                if(canAcquire == 0) {
                     cout << "Acquiring Lock at index " << index << endl;
                     serverLockTable.at(index)->owner = outPktHdr.to;
                     success = postOffice->Send(outPktHdr, outMailHdr, response);
@@ -407,19 +407,29 @@ void Server() {
                     if(!success) {
                         cout << "Unable to deliver response to Acquire syscall" << endl;
                     }
-                } else {
+                } else if(canAcquire == 1){
                     ReplyMsg* reply = new ReplyMsg(outPktHdr.to, outMailHdr.to, outMailHdr.length, response);
                     ServerLock* toAcquire = serverLockTable.at(index);
                     toAcquire->numWaiters++;
                     toAcquire->waitQueue->Append((void*) reply);
+                } else {
+                    success = postOffice->Send(outPktHdr, outMailHdr, response);
+                    delete response;
+                    if(!success) {
+                        cout << "Unable to deliver response to Acquire syscall" << endl;
+                    }
                 }
                 break;
             case 2: // release lock
                 index = (int)request[1];
-                if(serverLockTable.at(index) != NULL && serverLockTable.at(index)->owner == inPktHdr.from) {
-                    Release(index);
+                if(index > -1 && (unsigned int)index < serverLockTable.size()) {
+                    if(serverLockTable.at(index) != NULL && serverLockTable.at(index)->owner == inPktHdr.from) {
+                        Release(index);
+                    } else {
+                        cout << "Non owner trying to release Lock at index " << index << endl;
+                    }
                 } else {
-                    cout << "Non owner trying to release Lock at index " << index << endl;
+                    cout << "Trying to Release a nonexistant lock at index " << index << endl;
                 }
                 response[0] = 255;
                 outPktHdr.to = inPktHdr.from;
@@ -526,9 +536,27 @@ void Server() {
                     }
                     else {
                         cout << "Trying to wait on bad condition at index " << condIndex << endl;
+                        response[0] = 255;
+                        outPktHdr.to = inPktHdr.from;
+                        outMailHdr.to = inMailHdr.from;
+                        outMailHdr.length = 1;
+                        success = postOffice->Send(outPktHdr, outMailHdr, response);
+                        delete response;
+                        if(!success) {
+                            cout << "Unable to deliver response to Wait syscall" << endl;
+                        }
                     }   
                 } else {
                     cout << "Trying to wait with bad Lock at index " << lockIndex << endl;
+                    response[0] = 255;
+                    outPktHdr.to = inPktHdr.from;
+                    outMailHdr.to = inMailHdr.from;
+                    outMailHdr.length = 1;
+                    success = postOffice->Send(outPktHdr, outMailHdr, response);
+                    delete response;
+                    if(!success) {
+                        cout << "Unable to deliver response to Wait syscall" << endl;
+                    }
                 }
                 break;
             case 8: // destroy cv

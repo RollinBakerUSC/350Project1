@@ -441,7 +441,7 @@ void Acquire_Syscall(unsigned int index) {
   outMailHdr.length = 2;
   bool success = postOffice->Send(outPktHdr, outMailHdr, request);
   if(!success) {
-    cout << "Unable to send DestroyLock request" << endl;
+    cout << "Unable to send Acquire request" << endl;
   }
   else {
     postOffice->Receive(0, &inPktHdr, &intMailHdr, response);

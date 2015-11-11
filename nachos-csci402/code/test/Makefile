@@ -31,7 +31,7 @@ CPP = $(GCCDIR)cpp
 INCDIR =-I../userprog -I../threads
 CFLAGS = -G 0 -c $(INCDIR)
 
-all: halt matmult sort testfiles locksandcvs exec print fork passportoffice passexec mp_wait mp_signal mp_broadcast mp_lock testexec
+all: halt matmult sort testfiles locksandcvs exec print fork passportoffice passexec mp_wait mp_signal mp_broadcast mp_lock testexec test_locks test_broadcast test_broadcast_wait
 
 start.o: start.s ../userprog/syscall.h
 	$(CPP) $(CPPFLAGS) start.s > strt.s
@@ -127,6 +127,24 @@ testexec.o: testexec.c
 testexec: testexec.o start.o
 	$(LD) $(LDFLAGS) start.o testexec.o -o testexec.coff
 	../bin/coff2noff testexec.coff testexec
+
+test_locks.o: test_locks.c
+	$(CC) $(CFLAGS) -c test_locks.c
+test_locks: test_locks.o start.o
+	$(LD) $(LDFLAGS) start.o test_locks.o -o test_locks.coff
+	../bin/coff2noff test_locks.coff test_locks
+
+test_broadcast.o: test_broadcast.c
+	$(CC) $(CFLAGS) -c test_broadcast.c
+test_broadcast: test_broadcast.o start.o
+	$(LD) $(LDFLAGS) start.o test_broadcast.o -o test_broadcast.coff
+	../bin/coff2noff test_broadcast.coff test_broadcast
+
+test_broadcast_wait.o: test_broadcast_wait.c
+	$(CC) $(CFLAGS) -c test_broadcast_wait.c
+test_broadcast_wait: test_broadcast_wait.o start.o
+	$(LD) $(LDFLAGS) start.o test_broadcast_wait.o -o test_broadcast_wait.coff
+	../bin/coff2noff test_broadcast_wait.coff test_broadcast_wait
 
 clean:
 	rm -f *.o *.coff
