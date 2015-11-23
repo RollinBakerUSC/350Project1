@@ -377,7 +377,7 @@ void Server() {
                 nameLength = request[1];
                 length = (int)nameLength;
                 char* lockName = new char[length+1];
-                for(int i = 0; i < nameLength; i++) {
+                for(int i = 0; i < length; i++) {
                     lockName[i] = request[i+2];
                 }
                 lockName[length] = '\0';
@@ -458,7 +458,7 @@ void Server() {
                 nameLength = request[1];
                 length = (int)nameLength;
                 char* cvName = new char[length+1];
-                for(int i = 0; i < nameLength; i++) {
+                for(int i = 0; i < length; i++) {
                     cvName[i] = request[i+2];
                 }
                 cvName[length] = '\0';

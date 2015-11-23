@@ -82,6 +82,7 @@ class Thread {
 
   public:
     Thread(char* debugName);		// initialize a Thread 
+    Thread(char* debugName, int mailBoxNum);
     ~Thread(); 				// deallocate a Thread
 					// NOTE -- thread being deleted
 					// must not be running when delete 
@@ -100,6 +101,7 @@ class Thread {
 						// overflowed its stack
     void setStatus(ThreadStatus st) { status = st; }
     char* getName() { return (name); }
+    int getMailBox() {return mailBox;}
     void Print() { printf("%s, ", name); }
 
   private:
@@ -114,6 +116,7 @@ class Thread {
     void StackAllocate(VoidFunctionPtr func, int arg);
     					// Allocate a stack for thread.
 					// Used internally by Fork()
+    int mailBox;
 
 #ifdef USER_PROGRAM
 // A thread running a user program actually has *two* sets of CPU registers -- 

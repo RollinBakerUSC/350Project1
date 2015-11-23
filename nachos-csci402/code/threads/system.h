@@ -108,6 +108,9 @@ extern Lock* swapFileLock;
 extern BitMap* swapFileBitMap;
 extern char* swapName;
 
+extern int numMailBox;
+extern Lock* mailBoxLock;
+
 #ifdef USER_PROGRAM
 #include "machine.h"
 extern Machine* machine;	// user program memory and registers

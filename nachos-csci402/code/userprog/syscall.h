@@ -145,7 +145,7 @@ void Yield();
 /* Mutual Exclusion Syscalls, locks and condition variables */
 
 /* returns the index position of the lock in the kernelLockTable */
-int CreateLock(char *name, int size);
+int CreateLock(char *name, int size, int id);
 
 /* destroy the lock located at index in the kernelLockTable */
 void DestroyLock(int index);
@@ -157,7 +157,7 @@ void Acquire(int index);
 void Release(int index);
 
 /* create a condition and return its position in the kernelCVTable */
-int CreateCondition(char* name, int size);
+int CreateCondition(char* name, int size, int id);
 
 /* destroy the condition located at the index */
 void DestroyCondition(int index);
@@ -183,7 +183,7 @@ void PrintInt(int toPrint);
 int GetID();
 
 /* name is the name of the mv, length is the length of the name, size is the size of the array */
-int CreateMV(char* name, int length, int size);
+int CreateMV(char* name, int length, int size, int id);
 
 /* takes in the index of the mv to destroy */
 void DestroyMV(int index);

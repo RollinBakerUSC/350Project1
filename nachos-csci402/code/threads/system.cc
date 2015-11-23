@@ -45,6 +45,9 @@ Lock* swapFileLock;
 BitMap* swapFileBitMap;
 char* swapName;
 
+int numMailBox;
+Lock* mailBoxLock;
+
 #ifdef FILESYS_NEEDED
 FileSystem  *fileSystem;
 #endif
@@ -215,10 +218,14 @@ Initialize(int argc, char **argv)
     swapFileBitMap = new BitMap(4096);
     swapFileLock = new Lock("Swap File Lock");
 
+    numMailBox = 0;
+    mailBoxLock = new Lock("Mail Box Lock");
+
     // We didn't explicitly allocate the current thread we are running in.
     // But if it ever tries to give up the CPU, we better have a Thread
     // object to save its state. 
-    currentThread = new Thread("main");		
+    currentThread = new Thread("main", numMailBox);
+    numMailBox++;
     currentThread->setStatus(RUNNING);
 
     interrupt->Enable();
@@ -295,7 +302,9 @@ Cleanup()
     delete swapFile;
     delete swapFileBitMap;
     delete swapFileLock;
-    
+
+    delete mailBoxLock;
+
     fileSystem->Remove(swapName);
 
     Exit(0);

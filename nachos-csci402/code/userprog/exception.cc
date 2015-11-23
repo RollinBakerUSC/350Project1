@@ -266,7 +266,10 @@ int Exec_Syscall(unsigned int vaddr, int size) {
   processTable->push_back(newProcess);
   processLock->Release();
 
-  Thread* t = new Thread(buf);
+  mailBoxLock->Acquire();
+  Thread* t = new Thread(buf, numMailBox);
+  numMailBox++;
+  mailBoxLock->Release();
   t->space = space;
   
   unsigned int stack = space->getNumPages()*PageSize - 16;
@@ -335,7 +338,7 @@ void Fork_Syscall(unsigned int addr, unsigned int vaddr, int size, int id) {
   t->Fork((VoidFunctionPtr)Fork_Thread, addr);
 }
 
-int CreateLock_Syscall(unsigned int vaddr, int size) {
+int CreateLock_Syscall(unsigned int vaddr, int size, int id) {
   char* buf = new char[size];
 
   if(!buf) {
@@ -356,22 +359,34 @@ int CreateLock_Syscall(unsigned int vaddr, int size) {
   char* request = new char[40];
   char* response = new char[40];
   request[0] = 0;
-  request[1] = (char)size;
+  if(id != 0) {
+    request[1] = (char)(size + 2);
+  } else {
+    request[1] = (char)size;
+  }
   for(int i = 0; i < size; i++) {
     request[2+i] = buf[i];
+  }
+  if(id != 0) {
+    request[2+size] = ' ';
+    request[3+size] = id + '0';
   }
   PacketHeader outPktHdr, inPktHdr;
   MailHeader outMailHdr, intMailHdr;
   outPktHdr.to = 0;
   outMailHdr.to = 0;
-  outMailHdr.from = 0;
-  outMailHdr.length = 2+size;
+  outMailHdr.from = currentThread->getMailBox();
+  if(id != 0) {
+    outMailHdr.length = 4+size;
+  } else {
+    outMailHdr.length = 2+size;
+  }
   bool success = postOffice->Send(outPktHdr, outMailHdr, request);
   if(!success) {
     cout << "Unable to send CreateLock request" << endl;
     return -1;
   }
-  postOffice->Receive(0, &inPktHdr, &intMailHdr, response);
+  postOffice->Receive(currentThread->getMailBox(), &inPktHdr, &intMailHdr, response);
   int index = (int)response[0];
   delete request;
   delete response;
@@ -404,14 +419,14 @@ void DestroyLock_Syscall(unsigned int index) {
   MailHeader outMailHdr, intMailHdr;
   outPktHdr.to = 0;
   outMailHdr.to = 0;
-  outMailHdr.from = 0;
+  outMailHdr.from = currentThread->getMailBox();
   outMailHdr.length = 2;
   bool success = postOffice->Send(outPktHdr, outMailHdr, request);
   if(!success) {
     cout << "Unable to send DestroyLock request" << endl;
   }
   else {
-    postOffice->Receive(0, &inPktHdr, &intMailHdr, response);
+    postOffice->Receive(currentThread->getMailBox(), &inPktHdr, &intMailHdr, response);
   }
   delete request;
   delete response;
@@ -437,14 +452,14 @@ void Acquire_Syscall(unsigned int index) {
   MailHeader outMailHdr, intMailHdr;
   outPktHdr.to = 0;
   outMailHdr.to = 0;
-  outMailHdr.from = 0;
+  outMailHdr.from = currentThread->getMailBox();
   outMailHdr.length = 2;
   bool success = postOffice->Send(outPktHdr, outMailHdr, request);
   if(!success) {
     cout << "Unable to send Acquire request" << endl;
   }
   else {
-    postOffice->Receive(0, &inPktHdr, &intMailHdr, response);
+    postOffice->Receive(currentThread->getMailBox(), &inPktHdr, &intMailHdr, response);
   }
   delete request;
   delete response;
@@ -476,20 +491,20 @@ void Release_Syscall(unsigned int index) {
   MailHeader outMailHdr, intMailHdr;
   outPktHdr.to = 0;
   outMailHdr.to = 0;
-  outMailHdr.from = 0;
+  outMailHdr.from = currentThread->getMailBox();
   outMailHdr.length = 2;
   bool success = postOffice->Send(outPktHdr, outMailHdr, request);
   if(!success) {
     cout << "Unable to send DestroyLock request" << endl;
   }
   else {
-    postOffice->Receive(0, &inPktHdr, &intMailHdr, response);
+    postOffice->Receive(currentThread->getMailBox(), &inPktHdr, &intMailHdr, response);
   }
   delete request;
   delete response;
 }
 
-int CreateCondition_Syscall(unsigned int vaddr, int size) {
+int CreateCondition_Syscall(unsigned int vaddr, int size, int id) {
   char* buf = new char[size];
 
   if(!buf) {
@@ -512,22 +527,34 @@ int CreateCondition_Syscall(unsigned int vaddr, int size) {
   char* request = new char[40];
   char* response = new char[40];
   request[0] = 4;
-  request[1] = (char)size;
+  if(id != 0) {
+    request[1] = (char)(size + 2);
+  } else {
+    request[1] = (char)size;
+  }
   for(int i = 0; i < size; i++) {
     request[2+i] = buf[i];
+  }
+  if(id != 0) {
+    request[2+size] = ' ';
+    request[3+size] = id + '0';
   }
   PacketHeader outPktHdr, inPktHdr;
   MailHeader outMailHdr, intMailHdr;
   outPktHdr.to = 0;
   outMailHdr.to = 0;
-  outMailHdr.from = 0;
-  outMailHdr.length = 2+size;
+  outMailHdr.from = currentThread->getMailBox();
+  if(id != 0) {
+    outMailHdr.length = 4+size;
+  } else {
+    outMailHdr.length = 2+size;
+  }
   bool success = postOffice->Send(outPktHdr, outMailHdr, request);
   if(!success) {
     cout << "Unable to send CreateCV request" << endl;
     return -1;
   }
-  postOffice->Receive(0, &inPktHdr, &intMailHdr, response);
+  postOffice->Receive(currentThread->getMailBox(), &inPktHdr, &intMailHdr, response);
   int index = (int)response[0];
   delete request;
   delete response;
@@ -560,14 +587,14 @@ void DestroyCondition_Syscall(unsigned int index) {
   MailHeader outMailHdr, intMailHdr;
   outPktHdr.to = 0;
   outMailHdr.to = 0;
-  outMailHdr.from = 0;
+  outMailHdr.from = currentThread->getMailBox();
   outMailHdr.length = 2;
   bool success = postOffice->Send(outPktHdr, outMailHdr, request);
   if(!success) {
     cout << "Unable to send DestroyCV request" << endl;
   }
   else {
-    postOffice->Receive(0, &inPktHdr, &intMailHdr, response);
+    postOffice->Receive(currentThread->getMailBox(), &inPktHdr, &intMailHdr, response);
   }
   delete request;
   delete response;
@@ -602,14 +629,14 @@ void Wait_Syscall(unsigned int cvIndex, unsigned int lockIndex) {
   MailHeader outMailHdr, intMailHdr;
   outPktHdr.to = 0;
   outMailHdr.to = 0;
-  outMailHdr.from = 0;
+  outMailHdr.from = currentThread->getMailBox();
   outMailHdr.length = 3;
   bool success = postOffice->Send(outPktHdr, outMailHdr, request);
   if(!success) {
     cout << "Unable to send Wait request" << endl;
   }
   else {
-    postOffice->Receive(0, &inPktHdr, &intMailHdr, response);
+    postOffice->Receive(currentThread->getMailBox(), &inPktHdr, &intMailHdr, response);
   }
   delete request;
   delete response;
@@ -638,14 +665,14 @@ void Signal_Syscall(unsigned int cvIndex, unsigned int lockIndex) {
   MailHeader outMailHdr, intMailHdr;
   outPktHdr.to = 0;
   outMailHdr.to = 0;
-  outMailHdr.from = 0;
+  outMailHdr.from = currentThread->getMailBox();
   outMailHdr.length = 3;
   bool success = postOffice->Send(outPktHdr, outMailHdr, request);
   if(!success) {
     cout << "Unable to send Signal request" << endl;
   }
   else {
-    postOffice->Receive(0, &inPktHdr, &intMailHdr, response);
+    postOffice->Receive(currentThread->getMailBox(), &inPktHdr, &intMailHdr, response);
   }
   delete request;
   delete response;
@@ -674,14 +701,14 @@ void Broadcast_Syscall(unsigned int cvIndex, unsigned int lockIndex) {
   MailHeader outMailHdr, intMailHdr;
   outPktHdr.to = 0;
   outMailHdr.to = 0;
-  outMailHdr.from = 0;
+  outMailHdr.from = currentThread->getMailBox();
   outMailHdr.length = 3;
   bool success = postOffice->Send(outPktHdr, outMailHdr, request);
   if(!success) {
     cout << "Unable to send Signal request" << endl;
   }
   else {
-    postOffice->Receive(0, &inPktHdr, &intMailHdr, response);
+    postOffice->Receive(currentThread->getMailBox(), &inPktHdr, &intMailHdr, response);
   }
   delete request;
   delete response;
@@ -713,7 +740,7 @@ int GetID_Syscall() {
   return id;
 }
 
-int CreateMV_Syscall(unsigned int vaddr, int size, int numElements) {
+int CreateMV_Syscall(unsigned int vaddr, int size, int numElements, int id) {
   char* buf = new char[size];
 
   if(!buf) {
@@ -728,23 +755,35 @@ int CreateMV_Syscall(unsigned int vaddr, int size, int numElements) {
   char* request = new char[40];
   char* response = new char[40];
   request[0] = 9;
-  request[1] = (char)size;
+  if(id != 0) {
+    request[1] = (char)(size + 2);
+  } else {
+    request[1] = (char)size;
+  }
   for(int i = 0; i < size; i++) {
     request[2+i] = buf[i];
+  }
+  if(id != 0) {
+    request[2+size] = ' ';
+    request[3+size] = id + '0';
   }
   request[size + 2] = (char) numElements;
   PacketHeader outPktHdr, inPktHdr;
   MailHeader outMailHdr, intMailHdr;
   outPktHdr.to = 0;
   outMailHdr.to = 0;
-  outMailHdr.from = 0;
-  outMailHdr.length = 3+size;
+  outMailHdr.from = currentThread->getMailBox();
+  if(id != 0) {
+    outMailHdr.length = 5+size;
+  } else {
+    outMailHdr.length = 3+size;
+  }
   bool success = postOffice->Send(outPktHdr, outMailHdr, request);
   if(!success) {
     cout << "Unable to send CreateMV request" << endl;
     return -1;
   }
-  postOffice->Receive(0, &inPktHdr, &intMailHdr, response);
+  postOffice->Receive(currentThread->getMailBox(), &inPktHdr, &intMailHdr, response);
   int index = (int)response[0];
 
   delete request;
@@ -762,7 +801,7 @@ void DestroyMV_Syscall(int index) {
   MailHeader outMailHdr, intMailHdr;
   outPktHdr.to = 0;
   outMailHdr.to = 0;
-  outMailHdr.from = 0;
+  outMailHdr.from = currentThread->getMailBox();
   outMailHdr.length = 2;
 
   bool success = postOffice->Send(outPktHdr, outMailHdr, request);
@@ -773,7 +812,7 @@ void DestroyMV_Syscall(int index) {
   }
   delete request;
   delete response;
-  postOffice->Receive(0, &inPktHdr, &intMailHdr, response);
+  postOffice->Receive(currentThread->getMailBox(), &inPktHdr, &intMailHdr, response);
 }
 
 void SetMV_Syscall(int index, int position, int val) {
@@ -789,7 +828,7 @@ void SetMV_Syscall(int index, int position, int val) {
   MailHeader outMailHdr, intMailHdr;
   outPktHdr.to = 0;
   outMailHdr.to = 0;
-  outMailHdr.from = 0;
+  outMailHdr.from = currentThread->getMailBox();
   outMailHdr.length = 4;
 
   bool success = postOffice->Send(outPktHdr, outMailHdr, request);
@@ -799,7 +838,7 @@ void SetMV_Syscall(int index, int position, int val) {
     return;
   }
 
-  postOffice->Receive(0, &inPktHdr, &intMailHdr, response);
+  postOffice->Receive(currentThread->getMailBox(), &inPktHdr, &intMailHdr, response);
   int ack = (int)response[0];
   delete request;
   delete response;
@@ -817,7 +856,7 @@ int GetMV_Syscall(int index, int position) {
   MailHeader outMailHdr, intMailHdr;
   outPktHdr.to = 0;
   outMailHdr.to = 0;
-  outMailHdr.from = 0;
+  outMailHdr.from = currentThread->getMailBox();
   outMailHdr.length = 3;
 
   bool success = postOffice->Send(outPktHdr, outMailHdr, request);
@@ -827,7 +866,7 @@ int GetMV_Syscall(int index, int position) {
     return -1;
   }
 
-  postOffice->Receive(0, &inPktHdr, &intMailHdr, response);
+  postOffice->Receive(currentThread->getMailBox(), &inPktHdr, &intMailHdr, response);
   int val = (int)response[0];
   delete request;
   delete response;
@@ -1053,7 +1092,8 @@ void ExceptionHandler(ExceptionType which) {
       case SC_CreateLock:
     DEBUG('a', "CreateLock syscall.\n");
     rv = CreateLock_Syscall(machine->ReadRegister(4),
-                machine->ReadRegister(5));
+                machine->ReadRegister(5),
+                machine->ReadRegister(6));
     break;
       case SC_DestroyLock:
     DEBUG('a', "DestroyLock syscall.\n");
@@ -1069,7 +1109,9 @@ void ExceptionHandler(ExceptionType which) {
     break;
       case SC_CreateCondition:
     DEBUG('a', "CreateCondition syscall.\n");
-    rv = CreateCondition_Syscall(machine->ReadRegister(4), machine->ReadRegister(5));
+    rv = CreateCondition_Syscall(machine->ReadRegister(4),
+              machine->ReadRegister(5),
+              machine->ReadRegister(6));
     break;
       case SC_DestroyCondition:
     DEBUG('a', "DestroyCondition syscall.\n");
@@ -1103,7 +1145,8 @@ void ExceptionHandler(ExceptionType which) {
     DEBUG('a', "CreateMV syscall.\n");
     rv = CreateMV_Syscall(machine->ReadRegister(4),
                           machine->ReadRegister(5),
-                          machine->ReadRegister(6));
+                          machine->ReadRegister(6),
+                          machine->ReadRegister(7));
     break;
       case SC_DestroyMV:
     DEBUG('a', "DestroyMV syscall.\n");

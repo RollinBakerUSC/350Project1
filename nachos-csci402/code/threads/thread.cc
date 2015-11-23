@@ -41,6 +41,19 @@ Thread::Thread(char* threadName)
 #ifdef USER_PROGRAM
     space = NULL;
 #endif
+    mailBox = 0;
+}
+
+Thread::Thread(char* threadName, int mailBoxNum)
+{
+    name = threadName;
+    stackTop = NULL;
+    stack = NULL;
+    status = JUST_CREATED;
+#ifdef USER_PROGRAM
+    space = NULL;
+#endif
+    mailBox = mailBoxNum;
 }
 
 //----------------------------------------------------------------------
