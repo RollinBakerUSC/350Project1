@@ -766,8 +766,10 @@ int CreateMV_Syscall(unsigned int vaddr, int size, int numElements, int id) {
   if(id != 0) {
     request[2+size] = ' ';
     request[3+size] = id + '0';
+    request[4+size] = (char) numElements;
+  } else {
+    request[size + 2] = (char) numElements;
   }
-  request[size + 2] = (char) numElements;
   PacketHeader outPktHdr, inPktHdr;
   MailHeader outMailHdr, intMailHdr;
   outPktHdr.to = 0;

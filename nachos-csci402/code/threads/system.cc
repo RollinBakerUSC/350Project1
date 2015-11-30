@@ -48,6 +48,8 @@ char* swapName;
 int numMailBox;
 Lock* mailBoxLock;
 
+int numServers;
+
 #ifdef FILESYS_NEEDED
 FileSystem  *fileSystem;
 #endif
@@ -143,6 +145,10 @@ Initialize(int argc, char **argv)
         if(!strcmp(*(argv + 1), "RAND")) {
             PRand = true;
         }
+    } else if(!strcmp(*argv, "-server")) {
+        ASSERT(argc > 1);
+        numServers = atoi(*(argv + 1));
+        argCount = 2;
     }
 #ifdef USER_PROGRAM
 	if (!strcmp(*argv, "-s"))

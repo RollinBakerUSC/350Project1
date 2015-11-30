@@ -341,7 +341,7 @@ int CreateMV(char* mv_Name, int numElements) {
 }
 
 void SetMV(int index, int arrayIndex, int value){
-    cout << "Setting MV number " << index << " at array location " << arrayIndex << "to new value of " << value <<endl;
+    cout << "Setting MV number " << index << " at array location " << arrayIndex << " to new value of " << value <<endl;
     if(index > -1 && (unsigned int)index < serverMVTable.size()
         && serverMVTable.at(index) != NULL){
         int arraySize = serverMVTable.at(index)->numElements;
