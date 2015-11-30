@@ -146,6 +146,12 @@ MailTest(int farAddr)
 }
 
 int CreateLock(char* lockName) {
+    for(unsigned int i = 0; i < serverLockTable.size(); i++) {
+        if(strcmp(lockName, serverLockTable[i]->name) == 0) {
+            cout << "Lock with name " << lockName << " already created at position " << i << endl;
+            return i;
+        }
+    }
     cout << "Creating Lock with name " << lockName << " at position " << serverLockTable.size() << endl;
     ServerLock* newLock = new ServerLock(lockName);
     serverLockTable.push_back(newLock);
@@ -215,6 +221,12 @@ void Release(int index) {
 }
 
 int CreateCV(char* cvName) {
+    for(unsigned int i = 0; i < serverCVTable.size(); i++) {
+        if(strcmp(cvName, serverCVTable[i]->name) == 0) {
+            cout << "CV with name " << cvName << " already created at position " << i << endl;
+            return i;
+        }
+    }
     cout << "Creating CV with name " << cvName << " at position " << serverCVTable.size() << endl;
     ServerCV* newCV = new ServerCV(cvName);
     serverCVTable.push_back(newCV);
@@ -315,7 +327,13 @@ void DestroyCV(int index) {
     }
 }
 
-int CreateMV(char* mv_Name, int numElements){
+int CreateMV(char* mv_Name, int numElements) {
+    for(unsigned int i = 0; i < serverMVTable.size(); i++) {
+        if(strcmp(mv_Name, serverMVTable[i]->name) == 0) {
+            cout << "MV with name " << mv_Name << " already created at position " << i << endl;
+            return i;
+        }
+    }
     cout << "Creating MV with name " << mv_Name << " at position " << serverMVTable.size() << endl;
     ServerMV* newMV = new ServerMV(numElements, mv_Name);
     serverMVTable.push_back(newMV);
