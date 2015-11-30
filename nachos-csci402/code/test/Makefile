@@ -31,7 +31,7 @@ CPP = $(GCCDIR)cpp
 INCDIR =-I../userprog -I../threads
 CFLAGS = -G 0 -c $(INCDIR)
 
-all: halt matmult sort testfiles locksandcvs exec print fork passportoffice passexec mp_wait mp_signal mp_broadcast mp_lock testexec test_locks test_broadcast test_broadcast_wait
+all: halt matmult sort testfiles locksandcvs exec print fork passportoffice passexec mp_wait mp_signal mp_broadcast mp_lock testexec test_locks test_broadcast test_broadcast_wait customer appclerk picclerk passclerk cashier manager
 
 start.o: start.s ../userprog/syscall.h
 	$(CPP) $(CPPFLAGS) start.s > strt.s
@@ -145,6 +145,42 @@ test_broadcast_wait.o: test_broadcast_wait.c
 test_broadcast_wait: test_broadcast_wait.o start.o
 	$(LD) $(LDFLAGS) start.o test_broadcast_wait.o -o test_broadcast_wait.coff
 	../bin/coff2noff test_broadcast_wait.coff test_broadcast_wait
+
+customer.o: customer.c
+	$(CC) $(CFLAGS) -c customer.c
+customer: customer.o start.o
+	$(LD) $(LDFLAGS) start.o customer.o -o customer.coff
+	../bin/coff2noff customer.coff customer
+
+appclerk.o: appclerk.c
+	$(CC) $(CFLAGS) -c appclerk.c
+appclerk: appclerk.o start.o
+	$(LD) $(LDFLAGS) start.o appclerk.o -o appclerk.coff
+	../bin/coff2noff appclerk.coff appclerk
+
+picclerk.o: picclerk.c
+	$(CC) $(CFLAGS) -c picclerk.c
+picclerk: picclerk.o start.o
+	$(LD) $(LDFLAGS) start.o picclerk.o -o picclerk.coff
+	../bin/coff2noff picclerk.coff picclerk
+
+passclerk.o: passclerk.c
+	$(CC) $(CFLAGS) -c passclerk.c
+passclerk: passclerk.o start.o
+	$(LD) $(LDFLAGS) start.o passclerk.o -o passclerk.coff
+	../bin/coff2noff passclerk.coff passclerk
+
+cashier.o: cashier.c
+	$(CC) $(CFLAGS) -c cashier.c
+cashier: cashier.o start.o
+	$(LD) $(LDFLAGS) start.o cashier.o -o cashier.coff
+	../bin/coff2noff cashier.coff cashier
+
+manager.o: manager.c
+	$(CC) $(CFLAGS) -c manager.c
+manager: manager.o start.o
+	$(LD) $(LDFLAGS) start.o manager.o -o manager.coff
+	../bin/coff2noff manager.coff manager
 
 clean:
 	rm -f *.o *.coff
