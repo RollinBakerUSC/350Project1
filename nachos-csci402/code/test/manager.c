@@ -97,7 +97,7 @@ void ManagerCountMoney(int* appMoney, int* picMoney, int* passMoney, int* cashMo
 	}
 	Acquire(outputLock);
 	Print("Manager has counted a total of $", 32);
-	PrintInt(*appMoney);
+	PrintInt((*appMoney) * 10);
 	Print(" for Application Clerks.\n", 25);
 	Release(outputLock);
 	for(i = 0; i < NUM_PICCLERKS; i++) {
@@ -106,7 +106,7 @@ void ManagerCountMoney(int* appMoney, int* picMoney, int* passMoney, int* cashMo
 	}
 	Acquire(outputLock);
 	Print("Manager has counted a total of $", 32);
-	PrintInt(*picMoney);
+	PrintInt((*picMoney) * 10);
 	Print(" for Picture Clerks.\n", 21);
 	Release(outputLock);
 	for(i = 0; i < NUM_PASSCLERKS; i++) {
@@ -115,7 +115,7 @@ void ManagerCountMoney(int* appMoney, int* picMoney, int* passMoney, int* cashMo
 	}
 	Acquire(outputLock);
 	Print("Manager has counted a total of $", 32);
-	PrintInt(*passMoney);
+	PrintInt((*passMoney) * 10);
 	Print(" for Passport Clerks.\n", 22);
 	Release(outputLock);
 	for(i = 0; i < NUM_CASHIERS; i++) {
@@ -124,13 +124,13 @@ void ManagerCountMoney(int* appMoney, int* picMoney, int* passMoney, int* cashMo
 	}
 	Acquire(outputLock);
 	Print("Manager has counted a total of $", 32);
-	PrintInt(*cashMoney);
+	PrintInt((*cashMoney) * 10);
 	Print(" for Cashiers.\n", 15);
 	Release(outputLock);
 	total = *appMoney + *picMoney + *passMoney + *cashMoney;
 	Acquire(outputLock);
 	Print("Manager has counted a total of $", 32);
-	PrintInt(total);
+	PrintInt(total*10);
 	Print(" for the Passport Office.\n", 26);
 	Release(outputLock);
 	Release(moneyLock);
@@ -263,6 +263,27 @@ int main() {
 		}
 		ManagerCountMoney(&appMoney, &picMoney, &passMoney, &cashMoney);
 		if(ManagerCheckClose() == true) {
+			SetMV(doneFlag, 0, 1);
+			for(i = 0; i < NUM_APPCLERKS; i++) {
+				Acquire(appClerkMutex[i].clerkLock);
+				Signal(appClerkMutex[i].clerkCV, appClerkMutex[i].clerkLock);
+				Release(appClerkMutex[i].clerkLock);
+			}
+			for(i = 0; i < NUM_PICCLERKS; i++) {
+				Acquire(picClerkMutex[i].clerkLock);
+				Signal(picClerkMutex[i].clerkCV, picClerkMutex[i].clerkLock);
+				Release(picClerkMutex[i].clerkLock);
+			}
+			for(i = 0; i < NUM_PASSCLERKS; i++) {
+				Acquire(passClerkMutex[i].clerkLock);
+				Signal(passClerkMutex[i].clerkCV, passClerkMutex[i].clerkLock);
+				Release(passClerkMutex[i].clerkLock);
+			}
+			for(i = 0; i < NUM_CASHIERS; i++) {
+				Acquire(cashierMutex[i].clerkLock);
+				Signal(cashierMutex[i].clerkCV, cashierMutex[i].clerkLock);
+				Release(cashierMutex[i].clerkLock);
+			}
 			break;
 		}
 	}

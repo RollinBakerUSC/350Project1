@@ -81,9 +81,9 @@ void passClerkInteract(int id, bool sen) {
 }
 
 void passClerkRun(int id) {
-	while(1) {
+	while(GetMV(doneFlag, 0) == 0) {
 		Acquire(lineLock);
-		if(senatorFlag == true) { /* if a senator is in the building */
+		if(GetMV(senatorFlag, 0) == 1) { /* if a senator is in the building */
 			if(GetMV(passClerkLineCount, id) > 0) {
 				/* wake up the customers so they leave the office */
 				Broadcast(passClerkMutex[id].lineCV, lineLock);

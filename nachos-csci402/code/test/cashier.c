@@ -79,7 +79,7 @@ void cashierInteract(int id, bool sen) {
 		SetMV(customerPaid, custID, 1);
 	}
 	Acquire(moneyLock);
-	SetMV(cashierMoney, id, GetMV(cashierMoney, id) + 100);
+	SetMV(cashierMoney, id, GetMV(cashierMoney, id) + 10);
 	Release(moneyLock);
 	/* alert the customer that they can leave */
 	Signal(cashierMutex[id].clerkCV, cashierMutex[id].clerkLock);
@@ -107,7 +107,7 @@ void cashierInteract(int id, bool sen) {
 }
 
 void cashierRun(int id) {
-	while(1) {
+	while(GetMV(doneFlag, 0) == 0) {
 		Acquire(lineLock);
 		if(GetMV(senatorFlag, 0) == 1) { /* if a senator is in the building */
 			if(GetMV(cashierLineCount, id) > 0) {

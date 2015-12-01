@@ -101,12 +101,13 @@ void picClerkInteract(int id, bool sen) {
 	} else {
 		SetMV(customerPicture, custID, 1);
 	}
+	SetMV(picClerkPicLiked, id, 0);
 	Release(picClerkMutex[id].clerkLock);
 	SetMV(picClerkState, id, 0);
 }
 
 void picClerkRun(int id) {
-	while(1) {
+	while(GetMV(doneFlag, 0) == 0) {
 		Acquire(lineLock);
 		if(GetMV(senatorFlag, 0) == 1) { /* if a senator is in the building */
 			if(GetMV(picClerkLineCount, id) > 0) {

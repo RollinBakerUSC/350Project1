@@ -549,9 +549,7 @@ void goToCashier(int id) {
 	Acquire(outputLock);
 	Print("Customer ", 9);
 	PrintInt(id);
-	Print(" has given $100 ", 16);
-	PrintInt(id);
-	Print(" to Cashier ", 12);
+	Print(" has given $100 to Cashier ", 27);
 	PrintInt(myLine);
 	Print(".\n", 2);
 	Release(outputLock);
@@ -571,6 +569,7 @@ int main() {
 
 	checkSenator(id);
 	SetMV(customerArrived, id, 1); /* mark that the customer has arrived */
+	SetMV(customerMoney, id, 60);
 	goToAppClerk(id);
 	checkSenator(id);
 	goToPicClerk(id);

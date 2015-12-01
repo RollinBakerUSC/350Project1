@@ -1,12 +1,12 @@
 #ifndef SETUP_H
 #define SETUP_H
 
-#define NUM_CUSTOMERS 1
-#define NUM_APPCLERKS 1
-#define NUM_PICCLERKS 1
-#define NUM_PASSCLERKS 1
-#define NUM_CASHIERS 1
-#define NUM_SENATORS 0
+#define NUM_CUSTOMERS 5
+#define NUM_APPCLERKS 3
+#define NUM_PICCLERKS 3
+#define NUM_PASSCLERKS 3
+#define NUM_CASHIERS 3
+#define NUM_SENATORS 2
 
 typedef enum {false, true} bool;
 
@@ -45,6 +45,7 @@ int picClerkPicLiked;
 int custLock, senLock, appLock, picLock, passLock, cashLock;
 int customerIndex, senatorIndex, appClerkIndex, picClerkIndex, passClerkIndex, cashierIndex;
 int senatorFlag; /* true if senator is present, false if senator is not present */
+int doneFlag; /* 1 if done, 0 if not done */
 
 int lineLock; /* lock to be used when customer is choosing a line */
 int moneyLock; /* lock to be used when clerks take money and the manager counts money */
@@ -83,6 +84,7 @@ void Setup() {
 	customerCV = CreateCondition("CustomerCV", 10, 0);
 
 	senatorFlag = CreateMV("SenatorFlag", 11, 1, 0);
+	doneFlag = CreateMV("DoneFlag", 8, 1, 0);
 
 	customerMoney = CreateMV("CustomerMoney", 13, NUM_CUSTOMERS, 0);
 	customerArrived = CreateMV("CustomerArrived", 15, NUM_CUSTOMERS, 0);

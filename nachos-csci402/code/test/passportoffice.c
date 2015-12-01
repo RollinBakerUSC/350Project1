@@ -1,5 +1,5 @@
 #include "syscall.h"
-
+/*
 #define NUM_CUSTOMERS 15
 #define NUM_APPCLERKS 3
 #define NUM_PICCLERKS 3
@@ -23,9 +23,9 @@ struct Clerk
 	int money;
 	int lineCount;
 	int bribeLineCount;
-	int toFile; /* Social Security of Customer to be filed */
+	int toFile; /* Social Security of Customer to be filed 
 
-	bool senatorInLine; /* Set to true if senator is in line */
+	bool senatorInLine; /* Set to true if senator is in line 
 	bool picLiked;
 	clerkState state;
 };
@@ -41,12 +41,12 @@ struct ClerkMutex
 
 struct CustomerData
 {
-	bool arrived; /* true if the customer has arrived to the passport office */
-	bool outside; /* true if the customer is waiting outside the passport office */
-	bool social; /* true if the customer has gone through the appClerk */
-	bool picture; /* true if the customer has gone through the picClerk */
-	bool passport; /* true if the customer has gone through the passClerk */
-	bool paid; /* true if the customer has gone through the cashier and is done */
+	bool arrived; /* true if the customer has arrived to the passport office 
+	bool outside; /* true if the customer is waiting outside the passport office 
+	bool social; /* true if the customer has gone through the appClerk 
+	bool picture; /* true if the customer has gone through the picClerk 
+	bool passport; /* true if the customer has gone through the passClerk 
+	bool paid; /* true if the customer has gone through the cashier and is done 
 };
 
 void initializeOffice();
@@ -77,7 +77,7 @@ void ManagerCheckLines();
 void ManagerCountMoney(int* appMoney, int* picMoney, int* passMoney, int* cashMoney);
 bool ManagerCheckClose();
 
-/* GLOBAL VARIABLES */
+/* GLOBAL VARIABLES 
 struct Customer customer[NUM_CUSTOMERS];
 struct Customer senator[NUM_SENATORS];
 struct Clerk appClerk[NUM_APPCLERKS];
@@ -92,26 +92,26 @@ struct ClerkMutex cashierMutex[NUM_CASHIERS];
 struct CustomerData customerData[NUM_CUSTOMERS];
 struct CustomerData senatorData[NUM_SENATORS];
 
-bool senatorFlag; /* true if senator is present, false if senator is not present */
+bool senatorFlag; /* true if senator is present, false if senator is not present 
 
-int lineLock; /* lock to be used when customer is choosing a line */
-int moneyLock; /* lock to be used when clerks take money and the manager counts money */
-int senatorLock; /* lock to be used to ensure only one senator is present at a given time */
-int outsideLock; /* lock to be used by customers to check if the outside door is open, meaning if a senator is present */
-int outputLock; /* lock used when outputting since thread can be switched in between Print and PrintInt */
+int lineLock; /* lock to be used when customer is choosing a line 
+int moneyLock; /* lock to be used when clerks take money and the manager counts money 
+int senatorLock; /* lock to be used to ensure only one senator is present at a given time 
+int outsideLock; /* lock to be used by customers to check if the outside door is open, meaning if a senator is present 
+int outputLock; /* lock used when outputting since thread can be switched in between Print and PrintInt 
 
-int senatorCV; /* CV for customers to wait on while a senator is present */
-int customerCV; /* CV for senators to wait on while customers are still interacting with clerks */
-
+int senatorCV; /* CV for customers to wait on while a senator is present 
+int customerCV; /* CV for senators to wait on while customers are still interacting with clerks 
+*/
 int main() {
-	initializeOffice();
-	startOffice();
+	/*initializeOffice();
+	startOffice();*/
 
 	Exit(0);
 }
-
+/*
 void initializeOffice() {
-	int i; /* int to be used for loops */
+	int i; /* int to be used for loops 
 
 	senatorFlag = false;
 	lineLock = CreateLock("lineLock", 8);
@@ -123,7 +123,7 @@ void initializeOffice() {
 	senatorCV = CreateCondition("SenatorCV", 9);
 	customerCV = CreateCondition("CustomerCV", 10);
 
-	/* initialize customerData and then customers */
+	/* initialize customerData and then customers 
 	for(i = 0; i < NUM_CUSTOMERS; i++) {
 		customerData[i].arrived = false;
 		customerData[i].outside = false;
@@ -134,11 +134,11 @@ void initializeOffice() {
 
 		customer[i].socialSecurity = i;
 		customer[i].money = 600;
-		/* customer[i].money = ((Rand() % 4) * 500) + 100; */
+		/* customer[i].money = ((Rand() % 4) * 500) + 100; 
 		customer[i].name = "Customer";
 	}
 
-	/* initialized senatorData and then senators */
+	/* initialized senatorData and then senators 
 	for(i = 0; i < NUM_SENATORS; i++) {
 		senatorData[i].arrived = false;
 		senatorData[i].outside = false;
@@ -152,7 +152,7 @@ void initializeOffice() {
 		senator[i].name = "Senator";
 	}
 
-	/* initialize appClerks */
+	/* initialize appClerks 
 	for(i = 0; i < NUM_APPCLERKS; i++) {
 		appClerk[i].id = i;
 		appClerk[i].money = 0;
@@ -170,7 +170,7 @@ void initializeOffice() {
 		appClerk[i].state = CLERK_FREE;
 	}
 
-	/* initialize picClerks */
+	/* initialize picClerks 
 	for(i = 0; i < NUM_PICCLERKS; i++) {
 		picClerk[i].id = i;
 		picClerk[i].money = 0;
@@ -188,7 +188,7 @@ void initializeOffice() {
 		picClerk[i].state = CLERK_FREE;
 	}
 
-	/* initialized passClerks */
+	/* initialized passClerks 
 	for(i = 0; i < NUM_PASSCLERKS; i++) {
 		passClerk[i].id = i;
 		passClerk[i].money = 0;
@@ -206,7 +206,7 @@ void initializeOffice() {
 		passClerk[i].state = CLERK_FREE;
 	}
 
-	/* initialize cashiers */
+	/* initialize cashiers 
 	for(i = 0; i < NUM_CASHIERS; i++) {
 		cashier[i].id = i;
 		cashier[i].money = 0;
@@ -226,7 +226,7 @@ void initializeOffice() {
 }
 
 void startOffice() {
-	int i; /* for loops */
+	int i; /* for loops 
 	Fork((void*)Manager, "Manager", 7, 0);
 	for(i = 0; i < NUM_APPCLERKS; i++) {
 		Fork((void*)appClerkRun, "Application Clerk", 17, i);
@@ -259,24 +259,24 @@ void appClerkRun() {
 
 	while(1) {
 		Acquire(lineLock);
-		if(senatorFlag == true) { /* if a senator is in the building */
+		if(senatorFlag == true) { /* if a senator is in the building 
 			if(appClerk[id].lineCount > 0) {
-				/* wake up the customers so they leave the office */
+				/* wake up the customers so they leave the office 
 				Broadcast(appClerkMutex[id].lineCV, lineLock);
 			}
 			if(appClerk[id].bribeLineCount > 0) {
-				/* wake up the customers so they leave the office */
+				/* wake up the customers so they leave the office 
 				Broadcast(appClerkMutex[id].bribeLineCV, lineLock);
 			}
 			if(appClerk[id].senatorInLine == true) {
-			Signal(appClerkMutex[id].senatorLineCV, lineLock); /* wake the sleeping senator thread */
+			Signal(appClerkMutex[id].senatorLineCV, lineLock); /* wake the sleeping senator thread 
 			Acquire(outputLock);
 			Print("Application Clerk ", 18);
 			PrintInt(id);
 			Print(" has signalled a Senator to come to their counter.\n", 51);
 			Release(outputLock);
 			appClerkInteract(id, true);
-			} else { /* else if a senator is here and not in this line */
+			} else { /* else if a senator is here and not in this line 
 				appClerk[id].state = CLERK_BREAK;
 				Release(lineLock);
 				Acquire(appClerkMutex[id].clerkLock);
@@ -285,7 +285,7 @@ void appClerkRun() {
 				PrintInt(id);
 				Print(" is going on break.\n", 20);
 				Release(outputLock);
-				/* wait/go on break until the manager wakes this clerk */
+				/* wait/go on break until the manager wakes this clerk 
 				Wait(appClerkMutex[id].clerkCV, appClerkMutex[id].clerkLock);
 				Acquire(outputLock);
 				Print("Application Clerk ", 18);
@@ -314,7 +314,7 @@ void appClerkRun() {
 			Release(outputLock);
 			appClerkInteract(id, false);
 		}
-		else { /* go on break */
+		else { /* go on break 
 			appClerk[id].state = CLERK_BREAK;
 			Release(lineLock);
 			Acquire(appClerkMutex[id].clerkLock);
@@ -323,7 +323,7 @@ void appClerkRun() {
 			PrintInt(id);
 			Print(" is going on break.\n", 20);
 			Release(outputLock);
-			/* wait/go on break until the manager wakes this clerk */
+			/* wait/go on break until the manager wakes this clerk 
 			Wait(appClerkMutex[id].clerkCV, appClerkMutex[id].clerkLock);
 			Acquire(outputLock);
 			Print("Application Clerk ", 18);
@@ -338,13 +338,13 @@ void appClerkRun() {
 
 void appClerkInteract(int id, bool sen) {
 	int custID;
-	int k; /* for looping */
+	int k; /* for looping 
 
 	appClerk[id].state = CLERK_BUSY;
-	Acquire(appClerkMutex[id].clerkLock); /* get lock to ensure interaction order */
-	Release(lineLock); /* no need to hold this lock anymore */
-	Wait(appClerkMutex[id].clerkCV, appClerkMutex[id].clerkLock); /* wait for the customer to give me their social */
-	/* customer has now given me his ssn */
+	Acquire(appClerkMutex[id].clerkLock); /* get lock to ensure interaction order 
+	Release(lineLock); /* no need to hold this lock anymore 
+	Wait(appClerkMutex[id].clerkCV, appClerkMutex[id].clerkLock); /* wait for the customer to give me their social 
+	/* customer has now given me his ssn 
 	custID = appClerk[id].toFile;
 	if(sen == true) {
 		Acquire(outputLock);
@@ -368,9 +368,9 @@ void appClerkInteract(int id, bool sen) {
 		Release(outputLock);
 	}
 	for(k = 0; k < 20; k++) {
-		Yield(); /* make filing the ssn take some time */
+		Yield(); /* make filing the ssn take some time 
 	}
-	/* mark that the senator has filed his social */
+	/* mark that the senator has filed his social 
 	if(sen == true) {
 		senatorData[custID].social = true;
 		Acquire(outputLock);
@@ -390,9 +390,9 @@ void appClerkInteract(int id, bool sen) {
 		Print(".\n", 2);
 		Release(outputLock);
 	}
-	/* alert the customer that they can leave */
+	/* alert the customer that they can leave 
 	Signal(appClerkMutex[id].clerkCV, appClerkMutex[id].clerkLock);
-	/* wait for the customer to leave */
+	/* wait for the customer to leave 
 	Wait(appClerkMutex[id].clerkCV, appClerkMutex[id].clerkLock);
 	Release(appClerkMutex[id].clerkLock);
 	appClerk[id].state = CLERK_FREE;
@@ -403,24 +403,24 @@ void picClerkRun() {
 
 	while(1) {
 		Acquire(lineLock);
-		if(senatorFlag == true) { /* if a senator is in the building */
+		if(senatorFlag == true) { /* if a senator is in the building 
 			if(picClerk[id].lineCount > 0) {
-				/* wake up the customers so they leave the office */
+				/* wake up the customers so they leave the office 
 				Broadcast(picClerkMutex[id].lineCV, lineLock);
 			}
 			if(picClerk[id].bribeLineCount > 0) {
-				/* wake up the customers so they leave the office */
+				/* wake up the customers so they leave the office 
 				Broadcast(picClerkMutex[id].bribeLineCV, lineLock);
 			}
 			if(picClerk[id].senatorInLine == true) {
-			Signal(picClerkMutex[id].senatorLineCV, lineLock); /* wake the sleeping senator thread */
+			Signal(picClerkMutex[id].senatorLineCV, lineLock); /* wake the sleeping senator thread 
 			Acquire(outputLock);
 			Print("Picture Clerk ", 14);
 			PrintInt(id);
 			Print(" has signalled a Senator to come to their counter.\n", 51);
 			Release(outputLock);
 			picClerkInteract(id, true);
-			} else { /* else if a senator is here and not in this line */
+			} else { /* else if a senator is here and not in this line 
 				picClerk[id].state = CLERK_BREAK;
 				Release(lineLock);
 				Acquire(picClerkMutex[id].clerkLock);
@@ -429,7 +429,7 @@ void picClerkRun() {
 				PrintInt(id);
 				Print(" is going on break.\n", 20);
 				Release(outputLock);
-				/* wait/go on break until the manager wakes this clerk */
+				/* wait/go on break until the manager wakes this clerk 
 				Wait(picClerkMutex[id].clerkCV, picClerkMutex[id].clerkLock);
 				Acquire(outputLock);
 				Print("Picture Clerk ", 14);
@@ -458,7 +458,7 @@ void picClerkRun() {
 			Release(outputLock);
 			picClerkInteract(id, false);
 		}
-		else { /* go on break */
+		else { /* go on break 
 			picClerk[id].state = CLERK_BREAK;
 			Release(lineLock);
 			Acquire(picClerkMutex[id].clerkLock);
@@ -467,7 +467,7 @@ void picClerkRun() {
 			PrintInt(id);
 			Print(" is going on break.\n", 20);
 			Release(outputLock);
-			/* wait/go on break until the manager wakes this clerk */
+			/* wait/go on break until the manager wakes this clerk 
 			Wait(picClerkMutex[id].clerkCV, picClerkMutex[id].clerkLock);
 			Acquire(outputLock);
 			Print("Picture Clerk ", 14);
@@ -482,14 +482,14 @@ void picClerkRun() {
 
 void picClerkInteract(int id, bool sen) {
 	int custID;
-	int k; /* for looping */
+	int k; /* for looping 
 	picClerk[id].picLiked = false;
 
 	picClerk[id].state = CLERK_BUSY;
-	Acquire(picClerkMutex[id].clerkLock); /* get lock to ensure interaction order */
-	Release(lineLock); /* no need to hold this lock anymore */
-	Wait(picClerkMutex[id].clerkCV, picClerkMutex[id].clerkLock); /* wait for the customer to give me their social */
-	/* customer has now given me his ssn */
+	Acquire(picClerkMutex[id].clerkLock); /* get lock to ensure interaction order 
+	Release(lineLock); /* no need to hold this lock anymore 
+	Wait(picClerkMutex[id].clerkCV, picClerkMutex[id].clerkLock); /* wait for the customer to give me their social 
+	/* customer has now given me his ssn 
 	custID = picClerk[id].toFile;
 	while(picClerk[id].picLiked == false) {
 		if(sen == true) {
@@ -514,7 +514,7 @@ void picClerkInteract(int id, bool sen) {
 			Release(outputLock);
 		}
 		for(k = 0; k < 20; k++) {
-			Yield(); /* make taking the picture take some time */
+			Yield(); /* make taking the picture take some time 
 		}
 		if(sen == true) {
 			Acquire(outputLock);
@@ -575,7 +575,7 @@ void picClerkInteract(int id, bool sen) {
 		}
 		Signal(picClerkMutex[id].clerkCV, picClerkMutex[id].clerkLock);
 	}
-	/* mark that the senator has filed his social */
+	/* mark that the senator has filed his social 
 	if(sen == true) {
 		senatorData[custID].picture = true;
 	} else {
@@ -590,24 +590,24 @@ void passClerkRun() {
 
 	while(1) {
 		Acquire(lineLock);
-		if(senatorFlag == true) { /* if a senator is in the building */
+		if(senatorFlag == true) { /* if a senator is in the building 
 			if(passClerk[id].lineCount > 0) {
-				/* wake up the customers so they leave the office */
+				/* wake up the customers so they leave the office 
 				Broadcast(passClerkMutex[id].lineCV, lineLock);
 			}
 			if(passClerk[id].bribeLineCount > 0) {
-				/* wake up the customers so they leave the office */
+				/* wake up the customers so they leave the office 
 				Broadcast(passClerkMutex[id].bribeLineCV, lineLock);
 			}
 			if(passClerk[id].senatorInLine == true) {
-			Signal(passClerkMutex[id].senatorLineCV, lineLock); /* wake the sleeping senator thread */
+			Signal(passClerkMutex[id].senatorLineCV, lineLock); /* wake the sleeping senator thread 
 			Acquire(outputLock);
 			Print("Passport Clerk ", 15);
 			PrintInt(id);
 			Print(" has signalled a Senator to come to their counter.\n", 51);
 			Release(outputLock);
 			passClerkInteract(id, true);
-			} else { /* else if a senator is here and not in this line */
+			} else { /* else if a senator is here and not in this line 
 				passClerk[id].state = CLERK_BREAK;
 				Release(lineLock);
 				Acquire(passClerkMutex[id].clerkLock);
@@ -616,7 +616,7 @@ void passClerkRun() {
 				PrintInt(id);
 				Print(" is going on break.\n", 20);
 				Release(outputLock);
-				/* wait/go on break until the manager wakes this clerk */
+				/* wait/go on break until the manager wakes this clerk 
 				Wait(passClerkMutex[id].clerkCV, passClerkMutex[id].clerkLock);
 				Acquire(outputLock);
 				Print("Passport Clerk ", 15);
@@ -645,7 +645,7 @@ void passClerkRun() {
 			Release(outputLock);
 			passClerkInteract(id, false);
 		}
-		else { /* go on break */
+		else { /* go on break 
 			passClerk[id].state = CLERK_BREAK;
 			Release(lineLock);
 			Acquire(passClerkMutex[id].clerkLock);
@@ -654,7 +654,7 @@ void passClerkRun() {
 			PrintInt(id);
 			Print(" is going on break.\n", 20);
 			Release(outputLock);
-			/* wait/go on break until the manager wakes this clerk */
+			/* wait/go on break until the manager wakes this clerk 
 			Wait(passClerkMutex[id].clerkCV, passClerkMutex[id].clerkLock);
 			Acquire(outputLock);
 			Print("Passport Clerk ", 15);
@@ -669,13 +669,13 @@ void passClerkRun() {
 
 void passClerkInteract(int id, bool sen) {
 	int custID;
-	int k; /* for looping */
+	int k; /* for looping 
 
 	passClerk[id].state = CLERK_BUSY;
-	Acquire(passClerkMutex[id].clerkLock); /* get lock to ensure interaction order */
-	Release(lineLock); /* no need to hold this lock anymore */
-	Wait(passClerkMutex[id].clerkCV, passClerkMutex[id].clerkLock); /* wait for the customer to give me their social */
-	/* customer has now given me his ssn */
+	Acquire(passClerkMutex[id].clerkLock); /* get lock to ensure interaction order 
+	Release(lineLock); /* no need to hold this lock anymore 
+	Wait(passClerkMutex[id].clerkCV, passClerkMutex[id].clerkLock); /* wait for the customer to give me their social 
+	/* customer has now given me his ssn 
 	custID = passClerk[id].toFile;
 	if(sen == true) {
 		Acquire(outputLock);
@@ -699,9 +699,9 @@ void passClerkInteract(int id, bool sen) {
 		Release(outputLock);
 	}
 	for(k = 0; k < 20; k++) {
-		Yield(); /* make filing the ssn take some time */
+		Yield(); /* make filing the ssn take some time 
 	}
-	/* mark that the senator has filed his social */
+	/* mark that the senator has filed his social 
 	if(sen == true) {
 		senatorData[custID].passport = true;
 		Acquire(outputLock);
@@ -721,7 +721,7 @@ void passClerkInteract(int id, bool sen) {
 		Print(" has both their application and picture completed.\n", 51);
 		Release(outputLock);
 	}
-	/* alert the customer that they can leave */
+	/* alert the customer that they can leave 
 	Signal(passClerkMutex[id].clerkCV, passClerkMutex[id].clerkLock);
 	if(sen == true) {
 		Acquire(outputLock);
@@ -740,7 +740,7 @@ void passClerkInteract(int id, bool sen) {
 		Print(" has both their application and picture completed.\n", 51);
 		Release(outputLock);
 	}
-	/* wait for the customer to leave */
+	/* wait for the customer to leave 
 	Wait(passClerkMutex[id].clerkCV, passClerkMutex[id].clerkLock);
 	Release(passClerkMutex[id].clerkLock);
 	passClerk[id].state = CLERK_FREE;
@@ -751,24 +751,24 @@ void cashierRun() {
 
 	while(1) {
 		Acquire(lineLock);
-		if(senatorFlag == true) { /* if a senator is in the building */
+		if(senatorFlag == true) { /* if a senator is in the building 
 			if(cashier[id].lineCount > 0) {
-				/* wake up the customers so they leave the office */
+				/* wake up the customers so they leave the office 
 				Broadcast(cashierMutex[id].lineCV, lineLock);
 			}
 			if(cashier[id].bribeLineCount > 0) {
-				/* wake up the customers so they leave the office */
+				/* wake up the customers so they leave the office 
 				Broadcast(cashierMutex[id].bribeLineCV, lineLock);
 			}
 			if(cashier[id].senatorInLine == true) {
-			Signal(cashierMutex[id].senatorLineCV, lineLock); /* wake the sleeping senator thread */
+			Signal(cashierMutex[id].senatorLineCV, lineLock); /* wake the sleeping senator thread 
 			Acquire(outputLock);
 			Print("Cashier ", 8);
 			PrintInt(id);
 			Print(" has signalled a Senator to come to their counter.\n", 51);
 			Release(outputLock);
 			cashierInteract(id, true);
-			} else { /* else if a senator is here and not in this line */
+			} else { /* else if a senator is here and not in this line 
 				cashier[id].state = CLERK_BREAK;
 				Release(lineLock);
 				Acquire(cashierMutex[id].clerkLock);
@@ -777,7 +777,7 @@ void cashierRun() {
 				PrintInt(id);
 				Print(" is going on break.\n", 20);
 				Release(outputLock);
-				/* wait/go on break until the manager wakes this clerk */
+				/* wait/go on break until the manager wakes this clerk 
 				Wait(cashierMutex[id].clerkCV, cashierMutex[id].clerkLock);
 				Acquire(outputLock);
 				Print("Cashier ", 8);
@@ -806,7 +806,7 @@ void cashierRun() {
 			Release(outputLock);
 			cashierInteract(id, false);
 		}
-		else { /* go on break */
+		else { /* go on break 
 			cashier[id].state = CLERK_BREAK;
 			Release(lineLock);
 			Acquire(cashierMutex[id].clerkLock);
@@ -815,7 +815,7 @@ void cashierRun() {
 			PrintInt(id);
 			Print(" is going on break.\n", 20);
 			Release(outputLock);
-			/* wait/go on break until the manager wakes this clerk */
+			/* wait/go on break until the manager wakes this clerk 
 			Wait(cashierMutex[id].clerkCV, cashierMutex[id].clerkLock);
 			Acquire(outputLock);
 			Print("Cashier ", 8);
@@ -830,13 +830,13 @@ void cashierRun() {
 
 void cashierInteract(int id, bool sen) {
 	int custID;
-	int k; /* for looping */
+	int k; /* for looping 
 
 	cashier[id].state = CLERK_BUSY;
-	Acquire(cashierMutex[id].clerkLock); /* get lock to ensure interaction order */
-	Release(lineLock); /* no need to hold this lock anymore */
-	Wait(cashierMutex[id].clerkCV, cashierMutex[id].clerkLock); /* wait for the customer to give me their social */
-	/* customer has now given me his ssn */
+	Acquire(cashierMutex[id].clerkLock); /* get lock to ensure interaction order 
+	Release(lineLock); /* no need to hold this lock anymore 
+	Wait(cashierMutex[id].clerkCV, cashierMutex[id].clerkLock); /* wait for the customer to give me their social 
+	/* customer has now given me his ssn 
 	custID = cashier[id].toFile;
 	if(sen == true) {
 		Acquire(outputLock);
@@ -884,7 +884,7 @@ void cashierInteract(int id, bool sen) {
 		Release(outputLock);
 	}
 	for(k = 0; k < 20; k++) {
-		Yield(); /* make filing the ssn take some time */
+		Yield(); /* make filing the ssn take some time 
 	}
 	if(sen == true) {
 		Acquire(outputLock);
@@ -908,7 +908,7 @@ void cashierInteract(int id, bool sen) {
 	Acquire(moneyLock);
 	cashier[id].money += 100;
 	Release(moneyLock);
-	/* alert the customer that they can leave */
+	/* alert the customer that they can leave 
 	Signal(cashierMutex[id].clerkCV, cashierMutex[id].clerkLock);
 	if(sen == true) {
 		Acquire(outputLock);
@@ -928,20 +928,20 @@ void cashierInteract(int id, bool sen) {
 		Print(" has been given their completed passport.\n", 42);
 		Release(outputLock);
 	}
-	/* wait for the customer to leave */
+	/* wait for the customer to leave 
 	Wait(cashierMutex[id].clerkCV, cashierMutex[id].clerkLock);
 	Release(cashierMutex[id].clerkLock);
 	cashier[id].state = CLERK_FREE;
 }
 
 void Manager() {
-	int i, k; /* for loops */
+	int i, k; /* for loops 
 	int appMoney = 0, picMoney = 0, passMoney = 0, cashMoney = 0;
 	while(1) {
 		for(k = 0; k < 60; k++) {
 			ManagerCheckLines();
 			for(i = 0; i < 70; i++) {
-				Yield(); /* slow down the manager */
+				Yield(); /* slow down the manager 
 			}
 		}
 		ManagerCountMoney(&appMoney, &picMoney, &passMoney, &cashMoney);
@@ -953,7 +953,7 @@ void Manager() {
 }
 
 void ManagerCheckLines() {
-	int i; /* for loops */
+	int i; /* for loops 
 	bool customersGone = true;
 
 	for(i = 0; i < NUM_APPCLERKS; i++) {
@@ -1031,15 +1031,15 @@ void ManagerCheckLines() {
 	}
 	if(customersGone == true && senatorFlag == true) {
 		Acquire(outsideLock);
-		/* tell the senator that all customers are outside */
+		/* tell the senator that all customers are outside 
 		Signal(customerCV, outsideLock);
 		Release(outsideLock);
 	}
 }
 
 void ManagerCountMoney(int* appMoney, int* picMoney, int* passMoney, int* cashMoney) {
-	int i; /* for loops */
-	int total; /* total money */
+	int i; /* for loops 
+	int total; /* total money 
 
 	Acquire(moneyLock);
 	for(i = 0; i < NUM_APPCLERKS; i++) {
@@ -1088,7 +1088,7 @@ void ManagerCountMoney(int* appMoney, int* picMoney, int* passMoney, int* cashMo
 }
 
 bool ManagerCheckClose() {
-	int i; /* for loops */
+	int i; /* for loops 
 	bool doneFlag = true, allHereFlag = true, breakFlag = true;
 	for(i = 0; i < NUM_SENATORS; i++) {
 		if(senatorData[i].arrived == false) {
@@ -1229,21 +1229,21 @@ void checkSenator(int id) {
 		Print(" is going outside the office because there is a Senator present.\n", 65);
 		Release(outputLock);
 		Acquire(outsideLock);
-		customerData[id].outside = true; /* mark that this customer is outside */
-		Wait(senatorCV, outsideLock); /* wait until the senator is all done */
+		customerData[id].outside = true; /* mark that this customer is outside 
+		Wait(senatorCV, outsideLock); /* wait until the senator is all done 
 		Release(outsideLock);
 	}
 }
 
 void goToAppClerk(int id) {
 	int myLine, lineSize;
-	int i; /* for loops */
+	int i; /* for loops 
 	bool hasBribed = false, chooseLine = true;
 	while(chooseLine == true) {
-		/* first acquire the line lock */
+		/* first acquire the line lock 
 		Acquire(lineLock);
 		myLine = -1;
-		lineSize = NUM_CUSTOMERS+1; /* more than the max number of customers */
+		lineSize = NUM_CUSTOMERS+1; /* more than the max number of customers 
 		hasBribed = false;
 		for(i = 0; i < NUM_APPCLERKS; i++) {
 			if(appClerk[i].state == CLERK_FREE &&
@@ -1285,7 +1285,7 @@ void goToAppClerk(int id) {
 			Acquire(moneyLock);
 			appClerk[myLine].money += 500;
 			Release(moneyLock);
-			/* wait in line now */
+			/* wait in line now 
 			appClerk[myLine].bribeLineCount++;
 			Acquire(outputLock);
 			Print("Customer ", 9);
@@ -1341,7 +1341,7 @@ void goToAppClerk(int id) {
 		}
 	}
 
-	/* now I am with the clerk */
+	/* now I am with the clerk 
 	Acquire(appClerkMutex[myLine].clerkLock);
 	Release(lineLock);
 	appClerk[myLine].toFile = id;
@@ -1362,13 +1362,13 @@ void goToAppClerk(int id) {
 
 void goToPicClerk(int id) {
 	int myLine, lineSize, random = 1;
-	int i; /* for loops */
+	int i; /* for loops 
 	bool hasBribed = false, chooseLine = true, picLiked = false;
 	while(chooseLine == true) {
-		/* first acquire the line lock */
+		/* first acquire the line lock 
 		Acquire(lineLock);
 		myLine = -1;
-		lineSize = NUM_CUSTOMERS+1; /* more than the max number of customers */
+		lineSize = NUM_CUSTOMERS+1; /* more than the max number of customers 
 		hasBribed = false;
 		for(i = 0; i < NUM_PICCLERKS; i++) {
 			if(picClerk[i].state == CLERK_FREE &&
@@ -1410,7 +1410,7 @@ void goToPicClerk(int id) {
 			Acquire(moneyLock);
 			picClerk[myLine].money += 500;
 			Release(moneyLock);
-			/* wait in line now */
+			/* wait in line now 
 			picClerk[myLine].bribeLineCount++;
 			Acquire(outputLock);
 			Print("Customer ", 9);
@@ -1466,7 +1466,7 @@ void goToPicClerk(int id) {
 		}
 	}
 
-	/* now I am with the clerk */
+	/* now I am with the clerk 
 	Acquire(picClerkMutex[myLine].clerkLock);
 	Release(lineLock);
 	picClerk[myLine].toFile = id;
@@ -1482,7 +1482,7 @@ void goToPicClerk(int id) {
 	while(picLiked == false) {
 		Signal(picClerkMutex[myLine].clerkCV, picClerkMutex[myLine].clerkLock);
 		Wait(picClerkMutex[myLine].clerkCV, picClerkMutex[myLine].clerkLock);
-		/* random = Rand() % 10; */
+		/* random = Rand() % 10; 
 		if(random == 0) {
 			Acquire(outputLock);
 			Print("Customer ", 9);
@@ -1511,13 +1511,13 @@ void goToPicClerk(int id) {
 
 void goToPassClerk(int id) {
 	int myLine, lineSize;
-	int i; /* for loops */
+	int i; /* for loops 
 	bool hasBribed = false, chooseLine = true;
 	while(chooseLine == true) {
-		/* first acquire the line lock */
+		/* first acquire the line lock 
 		Acquire(lineLock);
 		myLine = -1;
-		lineSize = NUM_CUSTOMERS+1; /* more than the max number of customers */
+		lineSize = NUM_CUSTOMERS+1; /* more than the max number of customers 
 		hasBribed = false;
 		for(i = 0; i < NUM_PASSCLERKS; i++) {
 			if(passClerk[i].state == CLERK_FREE &&
@@ -1559,7 +1559,7 @@ void goToPassClerk(int id) {
 			Acquire(moneyLock);
 			passClerk[myLine].money += 500;
 			Release(moneyLock);
-			/* wait in line now */
+			/* wait in line now 
 			passClerk[myLine].bribeLineCount++;
 			Acquire(outputLock);
 			Print("Customer ", 9);
@@ -1615,7 +1615,7 @@ void goToPassClerk(int id) {
 		}
 	}
 
-	/* now I am with the clerk */
+	/* now I am with the clerk 
 	Acquire(passClerkMutex[myLine].clerkLock);
 	Release(lineLock);
 	passClerk[myLine].toFile = id;
@@ -1636,13 +1636,13 @@ void goToPassClerk(int id) {
 
 void goToCashier(int id) {
 	int myLine, lineSize;
-	int i; /* for loops */
+	int i; /* for loops 
 	bool hasBribed = false, chooseLine = true;
 	while(chooseLine == true) {
-		/* first acquire the line lock */
+		/* first acquire the line lock 
 		Acquire(lineLock);
 		myLine = -1;
-		lineSize = NUM_CUSTOMERS+1; /* more than the max number of customers */
+		lineSize = NUM_CUSTOMERS+1; /* more than the max number of customers 
 		hasBribed = false;
 		for(i = 0; i < NUM_CASHIERS; i++) {
 			if(cashier[i].state == CLERK_FREE &&
@@ -1684,7 +1684,7 @@ void goToCashier(int id) {
 			Acquire(moneyLock);
 			cashier[myLine].money += 500;
 			Release(moneyLock);
-			/* wait in line now */
+			/* wait in line now 
 			cashier[myLine].bribeLineCount++;
 			Acquire(outputLock);
 			Print("Customer ", 9);
@@ -1740,7 +1740,7 @@ void goToCashier(int id) {
 		}
 	}
 
-	/* now I am with the clerk */
+	/* now I am with the clerk 
 	Acquire(cashierMutex[myLine].clerkLock);
 	Release(lineLock);
 	cashier[myLine].toFile = id;
@@ -1781,7 +1781,7 @@ void senatorRun() {
 	PrintInt(id);
 	Print(" is waiting to enter the Passport Office.\n", 42);
 	Release(outputLock);
-	/* wait until all the customers are outside */
+	/* wait until all the customers are outside 
 	Wait(customerCV, outsideLock);
 	senatorData[id].arrived = true;
 	Release(outsideLock);
@@ -1790,7 +1790,7 @@ void senatorRun() {
 	senGoToPass(id);
 	senGoToCashier(id);
 	Acquire(outsideLock);
-	/* wake up all the customers outside */
+	/* wake up all the customers outside 
 	Broadcast(senatorCV, outsideLock);
 	Release(outsideLock);
 	senatorFlag = false;
@@ -1813,7 +1813,7 @@ void senGoToApp(int id) {
 	Print(" has gotten in regular line for Application Clerk 0.\n", 53);
 	Release(outputLock);
 	Wait(appClerkMutex[0].senatorLineCV, lineLock);
-	/* now the senator is with the clerk */
+	/* now the senator is with the clerk 
 	appClerk[0].senatorInLine = false;
 	Acquire(appClerkMutex[0].clerkLock);
 	Release(lineLock);
@@ -1843,7 +1843,7 @@ void senGoToPic(int id) {
 	Print(" has gotten in regular line for Picture Clerk 0.\n", 49);
 	Release(outputLock);
 	Wait(picClerkMutex[0].senatorLineCV, lineLock);
-	/* now the senator is with the clerk */
+	/* now the senator is with the clerk 
 	picClerk[0].senatorInLine = false;
 	Acquire(picClerkMutex[0].clerkLock);
 	Release(lineLock);
@@ -1858,7 +1858,7 @@ void senGoToPic(int id) {
 	while(picLiked == false) {
 		Signal(picClerkMutex[0].clerkCV, picClerkMutex[0].clerkLock);
 		Wait(picClerkMutex[0].clerkCV, picClerkMutex[0].clerkLock);
-		/* random = Rand() % 10; */
+		/* random = Rand() % 10; 
 		random = 1;
 		if(random == 0) {
 			Acquire(outputLock);
@@ -1892,7 +1892,7 @@ void senGoToPass(int id){
 	Print(" has gotten in regular line for Passport Clerk 0.\n", 50);
 	Release(outputLock);
 	Wait(passClerkMutex[0].senatorLineCV, lineLock);
-	/* now the senator is with the clerk */
+	/* now the senator is with the clerk 
 	passClerk[0].senatorInLine = false;
 	Acquire(passClerkMutex[0].clerkLock);
 	Release(lineLock);
@@ -1920,7 +1920,7 @@ void senGoToCashier(int id) {
 	Print(" has gotten in regular line for Cashier 0.\n", 43);
 	Release(outputLock);
 	Wait(cashierMutex[0].senatorLineCV, lineLock);
-	/* now the senator is with the clerk */
+	/* now the senator is with the clerk 
 	cashier[0].senatorInLine = false;
 	Acquire(cashierMutex[0].clerkLock);
 	Release(lineLock);
@@ -1943,3 +1943,4 @@ void senGoToCashier(int id) {
 	Signal(cashierMutex[0].clerkCV, cashierMutex[0].clerkLock);
 	Release(cashierMutex[0].clerkLock);
 }
+*/

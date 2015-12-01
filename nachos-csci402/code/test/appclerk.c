@@ -64,7 +64,7 @@ void appClerkInteract(int id, bool sen) {
 }
 
 void appClerkRun(int id) {
-	while(1) {
+	while(GetMV(doneFlag, 0) == 0) {
 		Acquire(lineLock);
 		if(GetMV(senatorFlag, 0) == 1) { /* if a senator is in the building */
 			if(GetMV(appClerkLineCount, id) > 0) {
