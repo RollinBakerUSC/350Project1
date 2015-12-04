@@ -112,6 +112,7 @@ extern int numMailBox;
 extern Lock* mailBoxLock;
 
 extern int numServers;
+extern int serverID;
 
 #ifdef USER_PROGRAM
 #include "machine.h"

@@ -49,6 +49,7 @@ int numMailBox;
 Lock* mailBoxLock;
 
 int numServers;
+int serverID;
 
 #ifdef FILESYS_NEEDED
 FileSystem  *fileSystem;
@@ -113,6 +114,8 @@ Initialize(int argc, char **argv)
     int argCount;
     char* debugArgs = "";
     bool randomYield = FALSE;
+    numServers = 1;
+    serverID = 0;
 
 #ifdef USER_PROGRAM
     bool debugUserProg = FALSE;	// single step user program
@@ -145,7 +148,7 @@ Initialize(int argc, char **argv)
         if(!strcmp(*(argv + 1), "RAND")) {
             PRand = true;
         }
-    } else if(!strcmp(*argv, "-server")) {
+    } else if(!strcmp(*argv, "-ns")) {
         ASSERT(argc > 1);
         numServers = atoi(*(argv + 1));
         argCount = 2;
@@ -166,6 +169,7 @@ Initialize(int argc, char **argv)
 	} else if (!strcmp(*argv, "-m")) {
 	    ASSERT(argc > 1);
 	    netname = atoi(*(argv + 1));
+        serverID = netname;
 	    argCount = 2;
 	}
 #endif

@@ -1,12 +1,12 @@
 #ifndef SETUP_H
 #define SETUP_H
 
-#define NUM_CUSTOMERS 5
+#define NUM_CUSTOMERS 7
 #define NUM_APPCLERKS 3
 #define NUM_PICCLERKS 3
 #define NUM_PASSCLERKS 3
 #define NUM_CASHIERS 3
-#define NUM_SENATORS 2
+#define NUM_SENATORS 1
 
 typedef enum {false, true} bool;
 

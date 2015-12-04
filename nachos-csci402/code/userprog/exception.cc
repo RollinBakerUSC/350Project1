@@ -373,7 +373,8 @@ int CreateLock_Syscall(unsigned int vaddr, int size, int id) {
   }
   PacketHeader outPktHdr, inPktHdr;
   MailHeader outMailHdr, intMailHdr;
-  outPktHdr.to = 0;
+  outPktHdr.to = rand() % numServers;
+  cout << "Sending create lock request to server " << outPktHdr.to << endl;
   outMailHdr.to = 0;
   outMailHdr.from = currentThread->getMailBox();
   if(id != 0) {
@@ -387,7 +388,7 @@ int CreateLock_Syscall(unsigned int vaddr, int size, int id) {
     return -1;
   }
   postOffice->Receive(currentThread->getMailBox(), &inPktHdr, &intMailHdr, response);
-  int index = (int)response[0];
+  int index = (unsigned int)response[0];
   delete request;
   delete response;
   return index;
@@ -417,7 +418,7 @@ void DestroyLock_Syscall(unsigned int index) {
   request[1] = index;
   PacketHeader outPktHdr, inPktHdr;
   MailHeader outMailHdr, intMailHdr;
-  outPktHdr.to = 0;
+  outPktHdr.to = rand() % numServers;
   outMailHdr.to = 0;
   outMailHdr.from = currentThread->getMailBox();
   outMailHdr.length = 2;
@@ -450,7 +451,7 @@ void Acquire_Syscall(unsigned int index) {
   request[1] = index;
   PacketHeader outPktHdr, inPktHdr;
   MailHeader outMailHdr, intMailHdr;
-  outPktHdr.to = 0;
+  outPktHdr.to = rand() % numServers;
   outMailHdr.to = 0;
   outMailHdr.from = currentThread->getMailBox();
   outMailHdr.length = 2;
@@ -489,7 +490,7 @@ void Release_Syscall(unsigned int index) {
   request[1] = index;
   PacketHeader outPktHdr, inPktHdr;
   MailHeader outMailHdr, intMailHdr;
-  outPktHdr.to = 0;
+  outPktHdr.to = rand() % numServers;
   outMailHdr.to = 0;
   outMailHdr.from = currentThread->getMailBox();
   outMailHdr.length = 2;
@@ -541,7 +542,7 @@ int CreateCondition_Syscall(unsigned int vaddr, int size, int id) {
   }
   PacketHeader outPktHdr, inPktHdr;
   MailHeader outMailHdr, intMailHdr;
-  outPktHdr.to = 0;
+  outPktHdr.to = rand() % numServers;
   outMailHdr.to = 0;
   outMailHdr.from = currentThread->getMailBox();
   if(id != 0) {
@@ -555,7 +556,7 @@ int CreateCondition_Syscall(unsigned int vaddr, int size, int id) {
     return -1;
   }
   postOffice->Receive(currentThread->getMailBox(), &inPktHdr, &intMailHdr, response);
-  int index = (int)response[0];
+  int index = (unsigned int)response[0];
   delete request;
   delete response;
   return index;
@@ -585,7 +586,7 @@ void DestroyCondition_Syscall(unsigned int index) {
   request[1] = index;
   PacketHeader outPktHdr, inPktHdr;
   MailHeader outMailHdr, intMailHdr;
-  outPktHdr.to = 0;
+  outPktHdr.to = rand() % numServers;
   outMailHdr.to = 0;
   outMailHdr.from = currentThread->getMailBox();
   outMailHdr.length = 2;
@@ -627,7 +628,7 @@ void Wait_Syscall(unsigned int cvIndex, unsigned int lockIndex) {
   request[2] = lockIndex;
   PacketHeader outPktHdr, inPktHdr;
   MailHeader outMailHdr, intMailHdr;
-  outPktHdr.to = 0;
+  outPktHdr.to = rand() % numServers;
   outMailHdr.to = 0;
   outMailHdr.from = currentThread->getMailBox();
   outMailHdr.length = 3;
@@ -663,7 +664,7 @@ void Signal_Syscall(unsigned int cvIndex, unsigned int lockIndex) {
   request[2] = lockIndex;
   PacketHeader outPktHdr, inPktHdr;
   MailHeader outMailHdr, intMailHdr;
-  outPktHdr.to = 0;
+  outPktHdr.to = rand() % numServers;
   outMailHdr.to = 0;
   outMailHdr.from = currentThread->getMailBox();
   outMailHdr.length = 3;
@@ -699,7 +700,7 @@ void Broadcast_Syscall(unsigned int cvIndex, unsigned int lockIndex) {
   request[2] = lockIndex;
   PacketHeader outPktHdr, inPktHdr;
   MailHeader outMailHdr, intMailHdr;
-  outPktHdr.to = 0;
+  outPktHdr.to = rand() % numServers;
   outMailHdr.to = 0;
   outMailHdr.from = currentThread->getMailBox();
   outMailHdr.length = 3;
@@ -772,7 +773,7 @@ int CreateMV_Syscall(unsigned int vaddr, int size, int numElements, int id) {
   }
   PacketHeader outPktHdr, inPktHdr;
   MailHeader outMailHdr, intMailHdr;
-  outPktHdr.to = 0;
+  outPktHdr.to = rand() % numServers;
   outMailHdr.to = 0;
   outMailHdr.from = currentThread->getMailBox();
   if(id != 0) {
@@ -786,7 +787,7 @@ int CreateMV_Syscall(unsigned int vaddr, int size, int numElements, int id) {
     return -1;
   }
   postOffice->Receive(currentThread->getMailBox(), &inPktHdr, &intMailHdr, response);
-  int index = (int)response[0];
+  int index = (unsigned int)response[0];
 
   delete request;
   delete response;
@@ -801,7 +802,7 @@ void DestroyMV_Syscall(int index) {
 
   PacketHeader outPktHdr, inPktHdr;
   MailHeader outMailHdr, intMailHdr;
-  outPktHdr.to = 0;
+  outPktHdr.to = rand() % numServers;
   outMailHdr.to = 0;
   outMailHdr.from = currentThread->getMailBox();
   outMailHdr.length = 2;
@@ -828,7 +829,7 @@ void SetMV_Syscall(int index, int position, int val) {
 
   PacketHeader outPktHdr, inPktHdr;
   MailHeader outMailHdr, intMailHdr;
-  outPktHdr.to = 0;
+  outPktHdr.to = rand() % numServers;
   outMailHdr.to = 0;
   outMailHdr.from = currentThread->getMailBox();
   outMailHdr.length = 4;
@@ -841,7 +842,7 @@ void SetMV_Syscall(int index, int position, int val) {
   }
 
   postOffice->Receive(currentThread->getMailBox(), &inPktHdr, &intMailHdr, response);
-  int ack = (int)response[0];
+  int ack = (unsigned int)response[0];
   delete request;
   delete response;
 }
@@ -856,7 +857,7 @@ int GetMV_Syscall(int index, int position) {
 
   PacketHeader outPktHdr, inPktHdr;
   MailHeader outMailHdr, intMailHdr;
-  outPktHdr.to = 0;
+  outPktHdr.to = rand() % numServers;
   outMailHdr.to = 0;
   outMailHdr.from = currentThread->getMailBox();
   outMailHdr.length = 3;
@@ -869,7 +870,7 @@ int GetMV_Syscall(int index, int position) {
   }
 
   postOffice->Receive(currentThread->getMailBox(), &inPktHdr, &intMailHdr, response);
-  int val = (int)response[0];
+  int val = (unsigned int)response[0];
   delete request;
   delete response;
   return val;

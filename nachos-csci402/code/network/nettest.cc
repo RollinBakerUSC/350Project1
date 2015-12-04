@@ -30,7 +30,7 @@
 //	4. wait for an acknowledgement from the other machine to our 
 //	    original message
 struct ServerLock {
-    ServerLock(char* _name) {
+    ServerLock(char* _name, unsigned int _id) {
         owner = -1;
         available = true;
         ownerMailBoxNum = -1;
@@ -38,8 +38,10 @@ struct ServerLock {
         name = _name;
         numWaiters = 0;
         toBeDeleted = false;
+        id = _id;
     }
     int owner;
+    unsigned int id;
     bool available;
     int ownerMailBoxNum;
     List* waitQueue;
@@ -49,14 +51,16 @@ struct ServerLock {
 };
 
 struct ServerCV {
-    ServerCV(char* _name) {
+    ServerCV(char* _name, unsigned int _id) {
         serverLockIndex = -1;
         waitQueue = new List();
         name = _name;
         toBeDeleted = false;
         numWaiters = 0;
+        id = _id;
     }
     int serverLockIndex;
+    unsigned int id;
     List* waitQueue;
     char* name;
     bool toBeDeleted;
@@ -64,15 +68,17 @@ struct ServerCV {
 };
 
 struct ServerMV {
-    ServerMV(int size, char* _name) {
+    ServerMV(int size, char* _name, unsigned int _id) {
         values = new int[size];
         for(int i = 0; i < size; i++) {
             values[i] = 0;
         }
         name = _name;
         numElements = size;
+        id = _id;
     }
     int* values;
+    unsigned int id;
     char* name;
     int numElements;
 };
@@ -90,9 +96,26 @@ struct ReplyMsg {
     char* responseMsg;
 };
 
+struct PendingRequest {
+    PendingRequest(char _opCode, int _clientID, int _clientMail, char* _name) {
+        noCount = 0;
+        opCode = _opCode;
+        clientID = _clientID;
+        clientMail = _clientMail;
+        name = _name;
+    }
+    int noCount;
+    char opCode;
+    int clientID;
+    int clientMail;
+    char* name;
+};
+
 std::vector<ServerLock*> serverLockTable;
 std::vector<ServerCV*> serverCVTable;
 std::vector<ServerMV*> serverMVTable;
+std::vector<PendingRequest*> pendingRequestTable;
+
 
 void
 MailTest(int farAddr)
@@ -145,17 +168,27 @@ MailTest(int farAddr)
     interrupt->Halt();
 }
 
+int updatePendingRequestTable(int requestID) {
+    pendingRequestTable[requestID]->noCount += 1;
+    return pendingRequestTable[requestID]->noCount;
+}
+
 int CreateLock(char* lockName) {
+    unsigned int uniqueID = serverLockTable.size()+serverID*50;
+    cout << "Creating Lock with name " << lockName << " with unique id " << uniqueID << " at position " << serverLockTable.size() << endl;
+    ServerLock* newLock = new ServerLock(lockName, uniqueID);
+    serverLockTable.push_back(newLock);
+    return (int)uniqueID;
+}
+
+int getLockFromTable(char* lockName) {
     for(unsigned int i = 0; i < serverLockTable.size(); i++) {
         if(strcmp(lockName, serverLockTable[i]->name) == 0) {
             cout << "Lock with name " << lockName << " already created at position " << i << endl;
-            return i;
+            return (int)serverLockTable[i]->id;
         }
     }
-    cout << "Creating Lock with name " << lockName << " at position " << serverLockTable.size() << endl;
-    ServerLock* newLock = new ServerLock(lockName);
-    serverLockTable.push_back(newLock);
-    return serverLockTable.size()-1;
+    return -1;
 }
 
 void DestroyLock(int index) {
@@ -228,9 +261,10 @@ int CreateCV(char* cvName) {
         }
     }
     cout << "Creating CV with name " << cvName << " at position " << serverCVTable.size() << endl;
-    ServerCV* newCV = new ServerCV(cvName);
+    unsigned int uniqueID = serverCVTable.size()+serverID*50;
+    ServerCV* newCV = new ServerCV(cvName, uniqueID);
     serverCVTable.push_back(newCV);
-    return serverCVTable.size()-1;
+    return uniqueID;
 }
 
 void Signal(int condIndex, int lockIndex) {
@@ -335,9 +369,10 @@ int CreateMV(char* mv_Name, int numElements) {
         }
     }
     cout << "Creating MV with name " << mv_Name << " at position " << serverMVTable.size() << endl;
-    ServerMV* newMV = new ServerMV(numElements, mv_Name);
+    unsigned int uniqueID = serverMVTable.size()+serverID*50;
+    ServerMV* newMV = new ServerMV(numElements, mv_Name, uniqueID);
     serverMVTable.push_back(newMV);
-    return serverMVTable.size() - 1;
+    return uniqueID;
 }
 
 void SetMV(int index, int arrayIndex, int value){
@@ -374,6 +409,7 @@ void DestroyMV(int index){
 void Server() {
     cout << "Starting Nachos Server" << endl;
 
+    PendingRequest* newPendingRequest;
     PacketHeader outPktHdr, inPktHdr;
     MailHeader outMailHdr, inMailHdr;
     char* request = new char[40];
@@ -382,6 +418,8 @@ void Server() {
     int condIndex, lockIndex;
     bool success;
     char nameLength;
+    int requestingClientID, requestingClientMail;
+    int responseID;
     
     while(true) {
         for(int i = 0; i < 40; i++) {
@@ -399,12 +437,47 @@ void Server() {
                     lockName[i] = request[i+2];
                 }
                 lockName[length] = '\0';
-                index = CreateLock(lockName);
-                response[0] = (char)index;
-                outPktHdr.to = inPktHdr.from;
-                outMailHdr.to = inMailHdr.from;
-                outMailHdr.length = 1;
-                success = postOffice->Send(outPktHdr, outMailHdr, response);
+                // check if the lock already exists in our table
+                index = getLockFromTable(lockName);
+                if(index != -1) {
+                    response[0] = (char)index;
+                    outPktHdr.to = inPktHdr.from;
+                    outMailHdr.to = inMailHdr.from;
+                    outMailHdr.length = 1;
+                    success = postOffice->Send(outPktHdr, outMailHdr, response);
+                } else if(numServers == 1) { // if we are the only server we just create the lock
+                    cout << "Creating lock as only server" << endl;
+                    index = CreateLock(lockName);
+                    response[0] = (char)index;
+                    outPktHdr.to = inPktHdr.from;
+                    outMailHdr.to = inMailHdr.from;
+                    outMailHdr.length = 1;
+                    success = postOffice->Send(outPktHdr, outMailHdr, response);
+                } else { // if there are other servers we have to ask if they have the lock
+                    response[0] = 13; // opcode for server 
+                    response[1] = (char)inPktHdr.from; // client machine id
+                    response[2] = (char)inMailHdr.from; // client mailbox
+                    response[3] = nameLength;
+                    response[4] = (char)pendingRequestTable.size();
+                    newPendingRequest = new PendingRequest(opCode, inPktHdr.from, inMailHdr.from, lockName);
+                    pendingRequestTable.push_back(newPendingRequest);
+                    for(int i = 0; i < length; i++) {
+                        response[5+i] = lockName[i];
+                    }
+                    for(int i = 0; i < numServers; i++) {
+                        if(i != serverID) {
+                            outPktHdr.to = i;
+                            outMailHdr.to = 0;
+                            outMailHdr.from = 0;
+                            outMailHdr.length = 5+length;
+                            success = postOffice->Send(outPktHdr, outMailHdr, response);
+                            cout << "Asking server " << i << " if they have lock" << endl;
+                            if(!success) {
+                                cout << "Unable to forward CreateLock syscall" << endl;
+                            }
+                        }
+                    }
+                }
                 delete response;
                 if(!success) {
                     cout << "Unable to deliver response to CreateLock syscall" << endl;
@@ -499,7 +572,7 @@ void Server() {
                     && serverLockTable.at(lockIndex)->owner == inPktHdr.from) {
                     Signal(condIndex, lockIndex);
                 } else {
-                    cout << "Trying to signal with bad Lock at index " << index << endl;
+                    cout << "Trying to signal with bad Lock at index " << lockIndex << endl;
                 }
                 response[0] = 255;
                 outPktHdr.to = inPktHdr.from;
@@ -519,7 +592,7 @@ void Server() {
                     && serverLockTable.at(lockIndex)->owner == inPktHdr.from) {
                     Broadcast(condIndex, lockIndex);
                 } else {
-                    cout << "Trying to Broadcast with bad Lock at index " << index << endl;
+                    cout << "Trying to Broadcast with bad Lock at index " << lockIndex << endl;
                 }
                 response[0] = 255;
                 outPktHdr.to = inPktHdr.from;
@@ -548,7 +621,7 @@ void Server() {
                         outMailHdr.to = inMailHdr.from;
                         outMailHdr.length = 1;
                         ReplyMsg* reply = new ReplyMsg(outPktHdr.to, outMailHdr.to, outMailHdr.length, response);
-                        ServerCV* toWait = serverCVTable.at(index);
+                        ServerCV* toWait = serverCVTable.at(condIndex);
                         toWait->numWaiters++;
                         toWait->waitQueue->Append((void*) reply);
                     }
@@ -657,6 +730,69 @@ void Server() {
                 success = postOffice->Send(outPktHdr, outMailHdr, response);
                 if(!success) {
                     cout << "Unable to deliver response to DestroyMV syscall" << endl;
+                }
+                break;
+            case 13: // server create lock request
+                requestingClientID = (int)request[1];
+                requestingClientMail = (int)request[2];
+                length = (int)request[3];
+                responseID = (int)request[4];
+                char* locksName = new char[length+1];
+                for(int i = 0; i < length; i++) {
+                    locksName[i] = request[5+i];
+                }
+                locksName[length] = '\0';
+                index = getLockFromTable(locksName);
+                if(index != -1) { // we have the lock the client wants to create
+                    response[0] = 14; // op code for responding to a create lock request
+                    response[1] = 1;
+                    response[2] = (char)responseID;
+                    outPktHdr.to = inPktHdr.from;
+                    outMailHdr.to = inMailHdr.from;
+                    outMailHdr.length = 3;
+                    success = postOffice->Send(outPktHdr, outMailHdr, response);
+                    if(!success) {
+                        cout << "Unable to deliver response to server create lock" << endl;
+                    }
+                    response[0] = (char)index;
+                    outPktHdr.to = requestingClientID;
+                    outMailHdr.to = requestingClientMail;
+                    outMailHdr.length = 1;
+                    success = postOffice->Send(outPktHdr, outMailHdr, response);
+                    if(!success) {
+                        cout << "Unable to deliver response to client create lock" << endl;
+                    }
+                } else { // we do not have the lock the client wants to create
+                    response[0] = 14; // op code for responding to a create lock request
+                    response[1] = 0;
+                    response[2] = (char)responseID;
+                    outPktHdr.to = inPktHdr.from;
+                    outMailHdr.to = inMailHdr.from;
+                    outMailHdr.length = 3;
+                    cout << "Telling server " << outPktHdr.to << " that we do not have lock" << endl;
+                    success = postOffice->Send(outPktHdr, outMailHdr, response);
+                    if(!success) {
+                        cout << "Unable to deliver response to server create lock" << endl;
+                    }
+                }
+                break;
+            case 14: // response from server create lock
+                if(request[1] == 0) {
+                    responseID = (int)response[2];
+                    int numNos = updatePendingRequestTable(responseID);
+                    if(numNos == numServers-1) {
+                        PendingRequest* pr = pendingRequestTable[responseID];
+                        index = CreateLock(pr->name);
+                        response[0] = (char)index;
+                        outPktHdr.to = pr->clientID;
+                        outMailHdr.to = pr->clientMail;
+                        outMailHdr.length = 1;
+                        success = postOffice->Send(outPktHdr, outMailHdr, response);
+                        if(!success) {
+                            cout << "Unable to deliver response to client create lock" << endl;
+                        }
+                    }
+
                 }
                 break;
         }
